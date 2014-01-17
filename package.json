@@ -1,0 +1,25 @@
+{
+  "name": "inchi",
+  "version": "0.0.0",
+  "description": "International Chemical Identifier (InChI) for node.js programs",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smikes/inchi.git"
+  },
+  "keywords": [
+    "chemistry",
+    "InChI",
+    "node.js",
+    "InChIKey"
+  ],
+  "author": "Sam Mikes",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/smikes/inchi/issues"
+  },
+  "homepage": "https://github.com/smikes/inchi"
+}
