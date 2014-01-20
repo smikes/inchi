@@ -29,6 +29,7 @@
     "istanbul": "~0.2.1",
     "jslint": "~0.2.6",
     "should": "~3.0.0",
-    "yuidocjs": "~0.3.47"
+    "yuidocjs": "~0.3.47",
+    "node-cpplint": "~0.1.5"
   }
 }
