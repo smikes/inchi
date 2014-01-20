@@ -3,7 +3,7 @@ JSSOURCES=index.js $(shell find bin lib -name '*.js' -print)
 install:
 	(unset tmp temp; npm i)
 
-prepublish: jslint cpplint no-dos-endings check-coverage
+prepublish: lint test no-dos-endings check-coverage
 
 lint: jslint cpplint
 
