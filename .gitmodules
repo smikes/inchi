@@ -1,0 +1,3 @@
+[submodule "CppUnitLite"]
+	path = CppUnitLite
+	url = https://github.com/smikes/CppUnitLite.git
