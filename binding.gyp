@@ -6,13 +6,16 @@
       "sources": [
         "CppUnitLite/StackTest.cpp",
         "CppUnitLite/StackMain.cpp",
-        "src/test/hello.cc"
+        "src/test/*.cc",
+        "src/*.cc"
       ],
       "libraries": [
          "Release/libCppUnitLite"
       ],
       "include_dirs": [
-        "."
+        ".",
+        "INCHI-1-API/INCHI_API",
+        "src"
       ],
       "dependencies": [
         'libCppUnitLite'
@@ -33,8 +36,11 @@
     },
     {
       "target_name": "libinchi",
+      "include_dirs": [
+        "./INCHI-1-API/INCHI_API"
+      ],
       "sources": [
-      "src/node-inchi.cc",
+      "src/*.cc",
 
       "INCHI-1-API/INCHI_API/inchi_dll/ichi_bns.c",
       "INCHI-1-API/INCHI_API/inchi_dll/ichi_io.c",
