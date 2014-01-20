@@ -4,6 +4,7 @@
   "description": "International Chemical Identifier (InChI) for node.js programs",
   "main": "index.js",
   "scripts": {
+    "install": "node-gyp rebuild",
     "test": "mocha"
   },
   "repository": {
@@ -21,5 +22,11 @@
   "bugs": {
     "url": "https://github.com/smikes/inchi/issues"
   },
-  "homepage": "https://github.com/smikes/inchi"
+  "homepage": "https://github.com/smikes/inchi",
+  "devDependencies": {
+    "mocha": "~1.16.2",
+    "istanbul": "~0.2.1",
+    "jslint": "~0.2.6",
+    "should": "~3.0.0"
+  }
 }
