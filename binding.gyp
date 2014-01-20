@@ -5,7 +5,8 @@
       "type": "executable",
       "sources": [
         "CppUnitLite/StackTest.cpp",
-        "CppUnitLite/StackMain.cpp"
+        "CppUnitLite/StackMain.cpp",
+        "src/test/hello.cc"
       ],
       "libraries": [
          "Release/libCppUnitLite"

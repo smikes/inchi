@@ -13,8 +13,16 @@ cpplint:
 jslint:
 	./node_modules/.bin/jslint --terse $(JSSOURCES); echo
 
-test:
+test: cpptest jstest
+
+jstest:
 	./node_modules/.bin/mocha
+
+build:
+	(unset tmp temp; npm run-script build)
+
+cpptest: build
+	./build/Release/test
 
 no-dos-endings:
 	file $(JSSOURCES) | grep -v CRLF > /dev/null
@@ -25,4 +33,4 @@ cover: $(JSSOURCES)
 check-coverage: cover
 	./node_modules/.bin/istanbul check-coverage --statements 90 --branches 90 --functions 90 --lines 90
 
-.PHONY: install jslint cpplint test doc no-dos-endings check-coverage
+.PHONY: install jslint cpplint cpptest jstest doc no-dos-endings check-coverage build
