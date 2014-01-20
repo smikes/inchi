@@ -217,4 +217,3 @@ node_modules
 *.o
 INCHI-1-API/INCHI_API/gcc_so_makefile/result
 coverage
-CppUnitLite
