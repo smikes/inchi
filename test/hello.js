@@ -15,9 +15,21 @@ describe('inchilib', function () {
             (inchi.version).should.be.a.Function;
             var version = inchi.version();
 
-            version.wrapperVersion.should.be.exactly('0.0.1');
             version.algorithmVersion.should.be.exactly('1');
             version.libraryVersion.should.be.exactly('1.04');
+        });
+        it('should have a version matching package.json', function (done) {
+            var fs = require('fs');
+            
+            function afterRead(err, data) {
+                var package = JSON.parse(data);
+                var version = inchi.version();
+
+                (version.wrapperVersion).should.be.exactly(package.version);
+                done();
+            }
+
+            fs.readFile('package.json', afterRead);
         });
     });
 });
