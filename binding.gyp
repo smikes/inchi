@@ -1,6 +1,36 @@
 {
   "targets": [
     {
+      "target_name": "test",
+      "type": "executable",
+      "sources": [
+        "CppUnitLite/StackTest.cpp",
+        "CppUnitLite/StackMain.cpp"
+      ],
+      "libraries": [
+         "Release/libCppUnitLite"
+      ],
+      "include_dirs": [
+        "."
+      ],
+      "dependencies": [
+        'libCppUnitLite'
+      ]
+      # sample unit test
+    },
+    {
+      # unit testing library
+      "target_name": "libCppUnitLite",
+      "type": "static_library",
+      "sources": [
+         "CppUnitLite/Failure.cpp",
+         "CppUnitLite/SimpleString.cpp",
+         "CppUnitLite/Test.cpp",
+         "CppUnitLite/TestResult.cpp",
+         "CppUnitLite/TestRegistry.cpp"
+      ]
+    },
+    {
       "target_name": "libinchi",
       "sources": [
       "src/node-inchi.cc",
