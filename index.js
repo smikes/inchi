@@ -1,1 +1,1 @@
-exports = require('lib/inchi.js');
+exports = require('./lib/inchi.js');
