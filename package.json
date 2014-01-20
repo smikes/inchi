@@ -1,6 +1,6 @@
 {
   "name": "inchi",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "International Chemical Identifier (InChI) for node.js programs",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,6 @@
   "keywords": [
     "chemistry",
     "InChI",
-    "node.js",
     "InChIKey"
   ],
   "author": "Sam Mikes",
