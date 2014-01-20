@@ -2,7 +2,7 @@
   "name": "inchi",
   "version": "0.0.1",
   "description": "International Chemical Identifier (InChI) for node.js programs",
-  "main": "index.js",
+  "main": "lib/inchi.js",
   "scripts": {
     "install": "node-gyp rebuild",
     "build": "node-gyp build",
