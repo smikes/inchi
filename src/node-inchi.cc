@@ -7,10 +7,13 @@
 
 using namespace v8;
 
-Handle<Value> Method(const Arguments& args) {
-  HandleScope scope;
-  return scope.Close(String::New("world"));
-}
+/**
+ * this is the direct wrapper of the low-level C++ api
+ * 
+ * @module InChI
+ * @class  InChILib
+ */
+
 
 Handle<Value> StructureToInChI(const Arguments& args) {
   HandleScope scope;
@@ -29,8 +32,6 @@ Handle<Value> getAlgorithmVersion(const Arguments& args) {
 
 
 void init(Handle<Object> exports) {
-  exports->Set(String::NewSymbol("hello"),
-               FunctionTemplate::New(Method)->GetFunction());
   exports->Set(String::NewSymbol("getAlgorithmVersion"),
                FunctionTemplate::New(getAlgorithmVersion)->GetFunction());
 }
