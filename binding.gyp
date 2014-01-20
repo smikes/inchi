@@ -6,8 +6,10 @@
       "sources": [
         "CppUnitLite/StackTest.cpp",
         "CppUnitLite/StackMain.cpp",
-        "src/test/*.cc",
-        "src/*.cc"
+        "src/test/hello.cc",
+        "src/test/test_inchi_input.cc",
+        "src/node-inchi.cc",
+        "src/inchi_input.cc"
       ],
       "libraries": [
          "Release/libCppUnitLite"
@@ -40,7 +42,9 @@
         "./INCHI-1-API/INCHI_API"
       ],
       "sources": [
-      "src/*.cc",
+      "src/node-inchi.cc",
+      "src/inchi_input.cc",
+
 
       "INCHI-1-API/INCHI_API/inchi_dll/ichi_bns.c",
       "INCHI-1-API/INCHI_API/inchi_dll/ichi_io.c",
