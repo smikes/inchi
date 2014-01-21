@@ -1,15 +1,20 @@
 #!/bin/sh
 set -e
 
+# test of local install
 unset tmp temp
-npm link
 
+echo Making local install directory -n
 cd ..
+rm -fr inchi-test-install
 mkdir inchi-test-install
 cd inchi-test-install
-npm install ../inchi
-cp ../inchi/install-test/test.js .
 
+echo Staring installation
+npm install ../inchi
+
+echo Running test
+cp ../inchi/install-test/test.js .
 node test.js
 
 cd ..
