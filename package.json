@@ -6,7 +6,6 @@
   "scripts": {
     "install": "node-gyp rebuild",
     "build": "node-gyp build",
-    "prepublish": "make test",
     "test": "mocha"
   },
   "repository": {
