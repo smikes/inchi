@@ -34,4 +34,18 @@ describe('inchilib', function () {
         (result.message).should.equal(''); // no error message
         (result.log).should.equal('Generating standard InChI\nInput format: MOLfile\nOutput format: Plain text\nFull Aux. info\nNo timeoutUp to 1024 atoms per structure');
     });
+    it('should not leak memory when converting molecules', function() {
+
+        var methanol = {
+            atom: [
+                { elname: 'C', neighbor: [1] },
+                { elname: 'O', neighbor: [0] }
+            ]
+        },
+            i;
+
+        for (i = 0; i < 10000; i += 1) {
+            inchilib.GetINCHISync(methanol);
+        }
+    });
 });
