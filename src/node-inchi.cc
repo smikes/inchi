@@ -92,7 +92,7 @@ Handle<Value> getAlgorithmVersion(const Arguments& args) {
 
 void populate_atom(const Handle<Object> atom, inchi_Atom* target) {
   // initialize atom
-  memset(target, 0, sizeof(target));
+  memset(target, 0, sizeof(*target));
 
   // atom.name is required
   Handle<String> elname = atom->Get(String::NewSymbol("elname"))->ToString();
@@ -116,7 +116,7 @@ void populate_atom(const Handle<Object> atom, inchi_Atom* target) {
   target->num_iso_H[0] = -1;
 }
 
-void populate_input(const Arguments& args, inchi_Input& in) {
+void populate_input(Handle<Value> val, inchi_Input& in) {
   // TODO(SOM): support validation, possibly return error code
 
   // expect args[0] to be an Object, call it 'mol'
@@ -124,7 +124,7 @@ void populate_input(const Arguments& args, inchi_Input& in) {
   // expect mol.options to be a string
   // expect mol.stereo0D to be an Array
 
-  Handle<Object> mol = args[0]->ToObject();
+  Handle<Object> mol = val->ToObject();
 
   Handle<Array> atom = Handle<Array>::Cast(mol->Get(String::NewSymbol("atom")));
 
@@ -159,7 +159,7 @@ Handle<Value> GetINCHISync(const Arguments& args) {
 
   try {
     // TODO(SOM): populate inchi_Input
-    populate_input(args, in);
+    populate_input(args[0], in);
 
     result = GetINCHI(&in, &out);
   } catch(...) {
