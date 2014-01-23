@@ -7,6 +7,7 @@
  */
 
 using v8::Arguments;
+using v8::Array;
 using v8::Exception;
 using v8::Function;
 using v8::FunctionTemplate;
