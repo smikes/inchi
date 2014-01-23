@@ -14,7 +14,7 @@
   },
   "targets": [
     {
-      "target_name": "libinchi",
+      "target_name": "inchi",
       "msvs_guid": "F1B917E2-75AB-A243-6D62-3C7938A1EF68",
       "include_dirs": [
         "./INCHI-1-API/INCHI_API"
