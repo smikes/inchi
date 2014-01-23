@@ -1,5 +1,68 @@
 {
+  "target_defaults": {
+    "configurations": {
+      "Release": {
+        "msvs_settings": {
+          "VCCLCompilerTool": {
+            "AdditionalOptions": [
+              "/MP"
+            ]
+          }
+        }
+      }
+    }
+  },
   "targets": [
+    {
+      "target_name": "libinchi",
+      "msvs_guid": "F1B917E2-75AB-A243-6D62-3C7938A1EF68",
+      "include_dirs": [
+        "./INCHI-1-API/INCHI_API"
+      ],
+      "dependencies": [
+        "libINCHIAPI"
+      ],
+      "sources": [
+        "src/node-inchi.cc",
+        "src/inchi_input.cc"
+      ],
+      "conditions": [
+        ['OS=="win"', {
+          'msvs_settings': {
+            'VCCLCompilerTool': {
+              'WholeProgramOptimization': 'true', # /GL, whole program optimization, needed for LTCG
+              'OmitFramePointers': 'true',
+              'EnableFunctionLevelLinking': 'true',
+              'EnableIntrinsicFunctions': 'true',
+              'RuntimeTypeInfo': 'false',
+              'ExceptionHandling': '1',
+              'AdditionalOptions': [
+                '/MP'
+              ]
+            },
+            'VCLibrarianTool': {
+              'AdditionalOptions': [
+                '/LTCG', # link time code generation
+              ],
+            },
+            'VCLinkerTool': {
+              'LinkTimeCodeGeneration': 1, # link-time code generation
+              'OptimizeReferences': 2, # /OPT:REF
+              'EnableCOMDATFolding': 2, # /OPT:ICF
+              'LinkIncremental': 1, # disable incremental linking
+            },
+          },
+          'sources': [
+          ],
+          'defines': [
+          ],
+          'link_settings': {
+            'libraries': [
+            ],
+          },
+        }]
+      ],
+    },
     {
       "target_name": "test",
       "type": "executable",
@@ -11,17 +74,15 @@
         "src/node-inchi.cc",
         "src/inchi_input.cc"
       ],
-      "libraries": [
-         "Release/libCppUnitLite"
-      ],
       "include_dirs": [
         ".",
         "INCHI-1-API/INCHI_API",
         "src"
       ],
       "dependencies": [
-        'libCppUnitLite'
-      ]
+        "libCppUnitLite",
+        "libINCHIAPI"
+      ],
       # sample unit test
     },
     {
@@ -37,15 +98,9 @@
       ]
     },
     {
-      "target_name": "libinchi",
-      "include_dirs": [
-        "./INCHI-1-API/INCHI_API"
-      ],
+      "target_name": "libINCHIAPI",
+      "type": "static_library",
       "sources": [
-      "src/node-inchi.cc",
-      "src/inchi_input.cc",
-
-
       "INCHI-1-API/INCHI_API/inchi_dll/ichi_bns.c",
       "INCHI-1-API/INCHI_API/inchi_dll/ichi_io.c",
       "INCHI-1-API/INCHI_API/inchi_dll/ichican2.c",
