@@ -32,7 +32,7 @@ describe('inchilib', function () {
         (result.auxinfo).should.startWith('AuxInfo=1/0/N:1,2/rA:2CO');
         (result.code).should.be.exactly(inchilib.inchi_Ret_OKAY);
         (result.message).should.equal(''); // no error message
-        (result.log).should.equal('Generating standard InChI\nInput format: MOLfile\nOutput format: Plain text\nFull Aux. info\nNo timeoutUp to 1024 atoms per structure');
+        (result.log).should.startWith('Generating standard InChI\nInput format: MOLfile\nOutput format: Plain text\nFull Aux. info\nNo timeoutUp to 1024 atoms per structure');
     });
     it('should not leak memory when converting molecules', function() {
 
