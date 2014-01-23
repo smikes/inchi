@@ -2,11 +2,28 @@
   "target_defaults": {
     "configurations": {
       "Release": {
-        "msvs_settings": {
-          "VCCLCompilerTool": {
-            "AdditionalOptions": [
-              "/MP"
+        'msvs_settings': {
+          'VCCLCompilerTool': {
+            'WholeProgramOptimization': 'true', # /GL, whole program optimization, needed for LTCG
+            'OmitFramePointers': 'true',
+            'EnableFunctionLevelLinking': 'true',
+            'EnableIntrinsicFunctions': 'true',
+            'RuntimeTypeInfo': 'false',
+            'ExceptionHandling': '1',
+            'AdditionalOptions': [
+              '/MP'
             ]
+          },
+          'VCLibrarianTool': {
+            'AdditionalOptions': [
+              '/LTCG', # link time code generation
+            ],
+          },
+          'VCLinkerTool': {
+            'LinkTimeCodeGeneration': 1, # link-time code generation
+            'OptimizeReferences': 2, # /OPT:REF
+            'EnableCOMDATFolding': 2, # /OPT:ICF
+            'LinkIncremental': 1, # disable incremental linking
           }
         }
       }
@@ -29,38 +46,6 @@
       ],
       "conditions": [
         ['OS=="win"', {
-          'msvs_settings': {
-            'VCCLCompilerTool': {
-              'WholeProgramOptimization': 'true', # /GL, whole program optimization, needed for LTCG
-              'OmitFramePointers': 'true',
-              'EnableFunctionLevelLinking': 'true',
-              'EnableIntrinsicFunctions': 'true',
-              'RuntimeTypeInfo': 'false',
-              'ExceptionHandling': '1',
-              'AdditionalOptions': [
-                '/MP'
-              ]
-            },
-            'VCLibrarianTool': {
-              'AdditionalOptions': [
-                '/LTCG', # link time code generation
-              ],
-            },
-            'VCLinkerTool': {
-              'LinkTimeCodeGeneration': 1, # link-time code generation
-              'OptimizeReferences': 2, # /OPT:REF
-              'EnableCOMDATFolding': 2, # /OPT:ICF
-              'LinkIncremental': 1, # disable incremental linking
-            },
-          },
-          'sources': [
-          ],
-          'defines': [
-          ],
-          'link_settings': {
-            'libraries': [
-            ],
-          },
         }]
       ],
     },
