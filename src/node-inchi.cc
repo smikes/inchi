@@ -3,11 +3,13 @@
  *
  * Released under the MIT license -- see MIT-LICENSE for details
  */
-#include <node.h>
-#include <v8.h>
-#include <uv.h>
-
 #include <algorithm>
+
+#include "v8.h"
+#include "uv.h"
+
+#include "node.h"
+#include "nan.h"
 
 #include "inchi_dll/inchi_api.h"
 #include "inchi_dll/mode.h"
@@ -85,9 +87,10 @@ void register_GetINCHI_return_codes(Handle<Object> exports) {
  * @method getAlgorithmVersion
  * @return {String} current algorithm version (from INCHI_VERSION)
  */
-Handle<Value> getAlgorithmVersion(const Arguments& args) {
-  HandleScope scope;
-  return scope.Close(String::New(INCHI_VERSION));
+NAN_METHOD(getAlgorithmVersion) {
+  NanScope();
+
+  NanReturnValue(String::New(INCHI_VERSION));
 }
 
 void populate_atom(const Handle<Object> atom, inchi_Atom* target) {
@@ -95,13 +98,15 @@ void populate_atom(const Handle<Object> atom, inchi_Atom* target) {
   memset(target, 0, sizeof(*target));
 
   // atom.name is required
-  Handle<String> elname = atom->Get(String::NewSymbol("elname"))->ToString();
+  Handle<String> elname = atom->Get(NanSymbol("elname"))->ToString();
+
+  NanCString(elname, 0, target->elname, ATOM_EL_LEN);
   elname->WriteAscii(target->elname, 0, ATOM_EL_LEN);
   target->elname[ATOM_EL_LEN-1] = '\0';  // ensure termination
 
   // populate neighbor array
   Handle<Array> neighbor =
-    Handle<Array>::Cast(atom->Get(String::NewSymbol("neighbor")));
+    Handle<Array>::Cast(atom->Get(NanSymbol("neighbor")));
 
   target->num_bonds = neighbor->Length();
   for (int i = 0; i < target->num_bonds; ++i) {
@@ -116,7 +121,7 @@ void populate_atom(const Handle<Object> atom, inchi_Atom* target) {
   target->num_iso_H[0] = -1;
 }
 
-void populate_input(Handle<Value> val, inchi_Input& in) {
+void populate_input(Handle<Value> val, inchi_Input* in) {
   // TODO(SOM): support validation, possibly return error code
 
   // expect args[0] to be an Object, call it 'mol'
@@ -126,21 +131,21 @@ void populate_input(Handle<Value> val, inchi_Input& in) {
 
   Handle<Object> mol = val->ToObject();
 
-  Handle<Array> atom = Handle<Array>::Cast(mol->Get(String::NewSymbol("atom")));
+  Handle<Array> atom = Handle<Array>::Cast(mol->Get(NanSymbol("atom")));
 
-  in.num_atoms = atom->Length();
-  in.atom = new inchi_Atom[in.num_atoms];
+  in->num_atoms = atom->Length();
+  in->atom = new inchi_Atom[in->num_atoms];
 
-  for (int i = 0; i < in.num_atoms; i += 1) {
-    populate_atom(atom->Get(i)->ToObject(), &(in.atom[i]));
+  for (int i = 0; i < in->num_atoms; i += 1) {
+    populate_atom(atom->Get(i)->ToObject(), &(in->atom[i]));
   }
 }
 
 void addstring(Handle<Object> ret, const char * name, const char * value) {
   if (value) {
-    ret->Set(String::NewSymbol(name), String::New(value));
+    ret->Set(NanSymbol(name), String::New(value));
   } else {
-    ret->Set(String::NewSymbol(name), String::New(""));
+    ret->Set(NanSymbol(name), String::New(""));
   }
 }
 
@@ -149,8 +154,8 @@ void addstring(Handle<Object> ret, const char * name, const char * value) {
  * @method GetINCHI
  * @return {inchi_Output}
  */
-Handle<Value> GetINCHISync(const Arguments& args) {
-  HandleScope scope;
+NAN_METHOD(GetINCHISync) {
+  NanScope();
 
   inchi_Input in = {0};
   inchi_Output out = {0};
@@ -159,7 +164,7 @@ Handle<Value> GetINCHISync(const Arguments& args) {
 
   try {
     // TODO(SOM): populate inchi_Input
-    populate_input(args[0], in);
+    populate_input(args[0], &in);
 
     result = GetINCHI(&in, &out);
   } catch(...) {
@@ -172,13 +177,13 @@ Handle<Value> GetINCHISync(const Arguments& args) {
   addstring(ret, "auxinfo", out.szAuxInfo);
   addstring(ret, "message", out.szMessage);
   addstring(ret, "log", out.szLog);
-  ret->Set(String::NewSymbol("code"), Number::New(result));
+  ret->Set(NanSymbol("code"), Number::New(result));
 
   delete[] in.atom;
 
   FreeINCHI(&out);
 
-  return scope.Close(ret);
+  NanReturnValue(ret);
 };
 
 
