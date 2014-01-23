@@ -6,11 +6,16 @@
  * Released under the MIT license -- see MIT-LICENSE for details
  */
 
+#include <vector>
+
 #include "inchi_dll/inchi_api.h"
 
-struct InchiInput : public tagINCHI_Input {
+struct InchiInput {
   InchiInput();
   ~InchiInput();
+
+  std::vector<inchi_Atom> atoms_;
+  std::vector<inchi_Stereo0D> stereo0D_;
 };
 
 #endif  // SRC_INCHI_INPUT_H_
