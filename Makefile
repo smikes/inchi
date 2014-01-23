@@ -26,7 +26,7 @@ jstest:
 build:
 	(unset tmp temp; npm run-script build)
 
-cpptest: build
+cpptest:
 	./build/Release/test
 
 
