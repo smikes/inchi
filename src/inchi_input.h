@@ -19,10 +19,18 @@ struct InchiInput {
   InchiInput();
   ~InchiInput();
 
+  inchi_Input in_;
+  inchi_Output out_;
+
+  int result_;
+
   std::vector<inchi_Atom> atoms_;
   std::vector<inchi_Stereo0D> stereo0D_;
 
-  static InchiInput * Construct(Handle<Value> val);
+  static InchiInput * Create(Handle<Value> val);
+  int GetInchi();
+
+  Handle<Object> GetResult();
 };
 
 #endif  // SRC_INCHI_INPUT_H_
