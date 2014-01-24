@@ -53,36 +53,24 @@
       "target_name": "test",
       "type": "executable",
       "sources": [
-        "CppUnitLite/StackTest.cpp",
-        "CppUnitLite/StackMain.cpp",
+        "src/test/TestMain.cc",
         "src/test/hello.cc",
         "src/test/test_inchi_input.cc",
         "src/node-inchi.cc",
-        "src/inchi_input.cc"
+        "src/inchi_input.cc",
       ],
       "include_dirs": [
         ".",
         "INCHI-1-API/INCHI_API",
         "src",
+        "<!(node -e \"require('cppunitlite')\")",
         "<!(node -e \"require('nan')\")"
       ],
       "dependencies": [
-        "libCppUnitLite",
-        "libINCHIAPI"
+        "node_modules/cppunitlite/binding.gyp:CppUnitLite",
+        "libINCHIAPI",
       ],
       # sample unit test
-    },
-    {
-      # unit testing library
-      "target_name": "libCppUnitLite",
-      "type": "static_library",
-      "sources": [
-         "CppUnitLite/Failure.cpp",
-         "CppUnitLite/SimpleString.cpp",
-         "CppUnitLite/Test.cpp",
-         "CppUnitLite/TestResult.cpp",
-         "CppUnitLite/TestRegistry.cpp"
-      ]
     },
     {
       "target_name": "libINCHIAPI",
