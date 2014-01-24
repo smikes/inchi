@@ -32,8 +32,9 @@ static void addstring(Handle<Object> ret, const char * name, const char * value)
  * @method InchiInput
  * @constructor
  */
-InchiInput::InchiInput() :
-  in_({0}), out_({0}) {
+InchiInput::InchiInput() {
+  memset(&in_, 0, sizeof(in_));
+  memset(&out_, 0, sizeof(out_));
 }
 
 /**
