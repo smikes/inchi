@@ -40,7 +40,6 @@ cover: $(JSSOURCES)
 check-coverage: cover
 	./node_modules/.bin/istanbul check-coverage --statements 90 --branches 90 --functions 90 --lines 90
 
-
 doc:
 	./node_modules/.bin/yuidoc $(DOCDIRS)
 
