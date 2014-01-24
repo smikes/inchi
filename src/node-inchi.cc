@@ -5,16 +5,18 @@
  */
 #include <algorithm>
 
+#include "node.h"
 #include "v8.h"
 #include "uv.h"
 
-#include "node.h"
 #include "nan.h"
 
 #include "inchi_dll/inchi_api.h"
 #include "inchi_dll/mode.h"
 
 #include "./using_v8.h"
+
+#include "inchi_input.h"
 
 
 void register_GetINCHI_return_codes(Handle<Object> exports) {
@@ -93,61 +95,6 @@ NAN_METHOD(getAlgorithmVersion) {
   NanReturnValue(String::New(INCHI_VERSION));
 }
 
-void populate_atom(const Handle<Object> atom, inchi_Atom* target) {
-  // initialize atom
-  memset(target, 0, sizeof(*target));
-
-  // atom.name is required
-  Handle<String> elname = atom->Get(NanSymbol("elname"))->ToString();
-
-  NanCString(elname, 0, target->elname, ATOM_EL_LEN);
-  elname->WriteAscii(target->elname, 0, ATOM_EL_LEN);
-  target->elname[ATOM_EL_LEN-1] = '\0';  // ensure termination
-
-  // populate neighbor array
-  Handle<Array> neighbor =
-    Handle<Array>::Cast(atom->Get(NanSymbol("neighbor")));
-
-  target->num_bonds = neighbor->Length();
-  for (int i = 0; i < target->num_bonds; ++i) {
-    target->neighbor[i]    = neighbor->Get(i)->ToNumber()->Value();
-
-    // TODO(SOM): bond types & stero too
-    target->bond_type[i]   = INCHI_BOND_TYPE_SINGLE;
-    target->bond_stereo[i] = INCHI_BOND_STEREO_NONE;
-  }
-
-  // default fill atoms with default isotopes
-  target->num_iso_H[0] = -1;
-}
-
-void populate_input(Handle<Value> val, inchi_Input* in) {
-  // TODO(SOM): support validation, possibly return error code
-
-  // expect args[0] to be an Object, call it 'mol'
-  // expect mol.atom to be an Array
-  // expect mol.options to be a string
-  // expect mol.stereo0D to be an Array
-
-  Handle<Object> mol = val->ToObject();
-
-  Handle<Array> atom = Handle<Array>::Cast(mol->Get(NanSymbol("atom")));
-
-  in->num_atoms = atom->Length();
-  in->atom = new inchi_Atom[in->num_atoms];
-
-  for (int i = 0; i < in->num_atoms; i += 1) {
-    populate_atom(atom->Get(i)->ToObject(), &(in->atom[i]));
-  }
-}
-
-void addstring(Handle<Object> ret, const char * name, const char * value) {
-  if (value) {
-    ret->Set(NanSymbol(name), String::New(value));
-  } else {
-    ret->Set(NanSymbol(name), String::New(""));
-  }
-}
 
 /**
  * calls the "classic" GetINCHI function
@@ -157,31 +104,25 @@ void addstring(Handle<Object> ret, const char * name, const char * value) {
 NAN_METHOD(GetINCHISync) {
   NanScope();
 
-  inchi_Input in = {0};
-  inchi_Output out = {0};
-
-  int result = inchi_Ret_OKAY;
+  InchiInput * input = NULL;
+  Handle<Object> ret;
 
   try {
-    // TODO(SOM): populate inchi_Input
-    populate_input(args[0], &in);
+    // TODO(SOM): validate args
+    Handle<Value> mol = args[0];
 
-    result = GetINCHI(&in, &out);
+    input = InchiInput::Create(mol);
+
+    input->GetInchi();
+
+    ret = input->GetResult();
   } catch(...) {
-    result = inchi_Ret_UNKNOWN;
+    ret = Object::New();
+
+    ret->Set(NanSymbol("code"), Number::New(inchi_Ret_UNKNOWN));
   }
 
-  Local<Object> ret = Object::New();
-
-  addstring(ret, "inchi", out.szInChI);
-  addstring(ret, "auxinfo", out.szAuxInfo);
-  addstring(ret, "message", out.szMessage);
-  addstring(ret, "log", out.szLog);
-  ret->Set(NanSymbol("code"), Number::New(result));
-
-  delete[] in.atom;
-
-  FreeINCHI(&out);
+  delete input;
 
   NanReturnValue(ret);
 };
