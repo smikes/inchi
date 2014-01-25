@@ -30,10 +30,10 @@
     "should": "~3.0.0",
     "yuidocjs": "~0.3.47",
     "node-cpplint": "~0.1.5",
-    "cppunitlite": "*"
   },
   "dependencies": {
     "bindings": "~1.1.1",
-    "nan": "~0.8.0"
+    "nan": "~0.8.0",
+    "cppunitlite": "*"
   }
 }
