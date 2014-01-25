@@ -6,7 +6,7 @@
 #include "node.h"
 #include "v8.h"
 #include "uv.h"
-#include "Nan.h"
+#include "nan.h"
 
 #include "./inchi_input.h"
 
