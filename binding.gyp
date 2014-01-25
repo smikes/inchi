@@ -49,7 +49,8 @@
       ],
       "sources": [
         "src/node-inchi.cc",
-        "src/inchi_input.cc"
+        "src/inchi_input.cc",
+        "src/inchi_input_native.cc"
       ],
       "conditions": [
         ['OS=="win"', {
@@ -67,8 +68,7 @@
         "src/test/TestMain.cc",
         "src/test/hello.cc",
         "src/test/test_inchi_input.cc",
-        "src/node-inchi.cc",
-        "src/inchi_input.cc",
+        "src/inchi_input_native.cc"
       ],
       "include_dirs": [
         ".",
