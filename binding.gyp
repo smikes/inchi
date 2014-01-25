@@ -81,6 +81,13 @@
         "node_modules/cppunitlite/binding.gyp:CppUnitLite",
         "libINCHIAPI",
       ],
+      "conditions": [
+        ['OS=="win"', {
+          }, {
+            'cflags_cc': [ '-fexceptions' ]
+          }
+        ]
+      ],
       # sample unit test
     },
     {
