@@ -1,5 +1,13 @@
 {
   "target_defaults": {
+    "conditions": [
+      ['OS=="win"', {
+      }, {
+        'cflags_cc' : [
+          "-fexceptions"
+        ]
+      } ]
+    ],
     "configurations": {
       "Release": {
         'msvs_settings': {
@@ -46,7 +54,11 @@
       ],
       "conditions": [
         ['OS=="win"', {
-        }]
+        }, {
+          'cflags_cc' : [
+            "-fexceptions"
+          ]
+        } ]
       ],
     },
     {
