@@ -87,14 +87,14 @@
     {
       "target_name": "libINCHIAPI",
       "type": "static_library",
-      'conditions': [ 
-        ['OS=="mac"', 
-          { 
-	    'xcode_settings': {
-              'OTHER_CFLAGS': [ '-w' ]
+      'conditions': [
+        ['OS=="mac"',
+          {
+            'xcode_settings': {
+              'OTHER_CFLAGS': [ '-w' ] # disable warnings
             }
           }
-        ]
+        ],
       ],
       "sources": [
       "INCHI-1-API/INCHI_API/inchi_dll/ichi_bns.c",
