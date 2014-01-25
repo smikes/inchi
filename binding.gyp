@@ -3,9 +3,8 @@
     "conditions": [
       ['OS=="win"', {
       }, {
-        'cflags_cc' : [
-          "-fexceptions"
-        ]
+        'cflags'    : [ "-fexceptions" ],
+        'cflags_cc' : [ "-fexceptions" ]
       } ]
     ],
     "configurations": {
@@ -95,6 +94,14 @@
             }
           }
         ],
+        ['OS=="linux"',
+          {
+            'cflags': [
+              '-w',
+              '-fexceptions'
+            ]
+          }
+        ]
       ],
       "sources": [
       "INCHI-1-API/INCHI_API/inchi_dll/ichi_bns.c",
