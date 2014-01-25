@@ -6,7 +6,6 @@
  * Released under the MIT license -- see MIT-LICENSE for details
  */
 
-using v8::Arguments;
 using v8::Array;
 using v8::Exception;
 using v8::Function;
