@@ -70,7 +70,6 @@ void populate_atom(const Handle<Object> atom, inchi_Atom* target) {
   Handle<String> elname = atom->Get(NanSymbol("elname"))->ToString();
 
   NanCString(elname, 0, target->elname, ATOM_EL_LEN);
-  elname->WriteAscii(target->elname, 0, ATOM_EL_LEN);
   target->elname[ATOM_EL_LEN-1] = '\0';  // ensure termination
 
   // populate neighbor array
