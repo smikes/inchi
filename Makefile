@@ -43,4 +43,8 @@ check-coverage: cover
 doc:
 	./node_modules/.bin/yuidoc $(DOCDIRS)
 
-.PHONY: install jslint cpplint cpptest jstest doc no-dos-endings check-coverage build
+tags:
+	find src deps | egrep "\.(c|h|cc|cpp)$\" | xargs etags
+	find src deps | egrep "\.(c|h|cc|cpp)$\" | xargs ebrowse
+
+.PHONY: install jslint cpplint cpptest jstest doc no-dos-endings check-coverage build tags

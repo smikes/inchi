@@ -32,8 +32,7 @@ static void addstring(Handle<Object> ret, const char * name, const char * value)
  * JavaScript object
  *
  * @method Create
- * @param {Handle<Object>} input Object handle that parallels an inchi_Input
- * @param
+ * @param {Handle<Object>} val Object handle that parallels an inchi_Input
  */
 InchiInput * InchiInput::Create(Handle<Value> val) {
   // validation

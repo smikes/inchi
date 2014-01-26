@@ -218,3 +218,5 @@ node_modules
 INCHI-1-API/INCHI_API/gcc_so_makefile/result
 coverage
 doc
+BROWSE
+TAGS

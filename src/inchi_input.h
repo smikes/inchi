@@ -15,6 +15,8 @@
 
 #include "inchi_dll/inchi_api.h"
 
+#include "./inchi_atom.h"
+
 struct InchiInput {
   InchiInput();
   ~InchiInput();
@@ -24,11 +26,16 @@ struct InchiInput {
 
   int result_;
 
-  std::vector<inchi_Atom> atoms_;
+  std::vector<InchiAtom> atoms_;
   std::vector<inchi_Stereo0D> stereo0D_;
 
-  static InchiInput * Create(Handle<Value> val);
+  /* native api */
+  int addAtom(const char * element);
   int GetInchi();
+
+  InchiAtom& getAtom(int i);
+
+  static InchiInput * Create(Handle<Value> val);
 
   Handle<Object> GetResult();
 };
