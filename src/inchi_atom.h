@@ -19,7 +19,9 @@ struct InchiAtom {
   /* constructors */
   explicit InchiAtom(const char * name = "");
 
+  /* accessors */
   const std::string getName();
+  void setName(const char *name);
 };
 
 #endif  // SRC_INCHI_ATOM_H_

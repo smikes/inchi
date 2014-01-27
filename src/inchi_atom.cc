@@ -21,15 +21,25 @@
  * @param {const char *} [name=""] element name
  */
 InchiAtom::InchiAtom(const char * name) {
+  this->setName(name);
+}
+
+/**
+ * Set the atom's element name
+ *
+ * @method setName
+ * @param {const char *} name element name
+ */
+void InchiAtom::setName(const char * name) {
   strncpy(this->elname, name, ELNAME_LEN);
   this->elname[ELNAME_LEN - 1] = '\0';
 }
 
 /**
- * get the atom name
+ * Get the atom's element name
  *
  * @method getName
- * @return {const std::string} atom name
+ * @return {const std::string} element name
  */
 const std::string InchiAtom::getName() {
   return elname;

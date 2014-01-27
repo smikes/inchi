@@ -22,7 +22,7 @@ TEST(InchiAtom, atomsHaveNames)
 {
   InchiAtom a("C");
 
-  CHECK_EQUAL(a.getName(), "C");
+  CHECK_EQUAL("C", a.getName());
 }
 
 TEST(InchiAtom, canSetName)
@@ -31,5 +31,14 @@ TEST(InchiAtom, canSetName)
 
   a.setName("Tc");
 
-  CHECK_EQUAL(a.getName(), "Tc");
+  CHECK_EQUAL("Tc", a.getName());
+}
+
+TEST(InchiAtom, shouldTruncateTooLongName)
+{
+  InchiAtom a;
+
+  a.setName("AVeryLongName");
+
+  CHECK_EQUAL("AVery", a.getName());
 }
