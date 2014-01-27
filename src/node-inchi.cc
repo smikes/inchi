@@ -3,20 +3,20 @@
  *
  * Released under the MIT license -- see MIT-LICENSE for details
  */
+#include <node.h>
+#include <v8.h>
+#include <uv.h>
+
+#include <nan.h>
+
 #include <algorithm>
-
-#include "node.h"
-#include "v8.h"
-#include "uv.h"
-
-#include "nan.h"
 
 #include "inchi_dll/inchi_api.h"
 #include "inchi_dll/mode.h"
 
 #include "./using_v8.h"
 
-#include "inchi_input.h"
+#include "./inchi_input.h"
 
 
 void register_GetINCHI_return_codes(Handle<Object> exports) {

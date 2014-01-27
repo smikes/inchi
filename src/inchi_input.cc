@@ -3,10 +3,10 @@
  *
  * Released under the MIT license -- see MIT-LICENSE for details
  */
-#include "node.h"
-#include "v8.h"
-#include "uv.h"
-#include "nan.h"
+#include <node.h>
+#include <v8.h>
+#include <uv.h>
+#include <nan.h>
 
 #include "./inchi_input.h"
 
@@ -22,8 +22,10 @@
 /* local (non-API) functions */
 static void populate_input(Handle<Value> val, inchi_Input* in);
 static void populate_atom(const Handle<Object> atom, inchi_Atom* target);
-static void populate_ret(Handle<Object> ret, const inchi_Output& out, int result);
-static void addstring(Handle<Object> ret, const char * name, const char * value);
+static void populate_ret(Handle<Object> ret,
+                         const inchi_Output& out, int result);
+static void addstring(Handle<Object> ret,
+                      const char * name, const char * value);
 
 
 
@@ -114,7 +116,8 @@ static void populate_input(Handle<Value> val, inchi_Input* in) {
   }
 }
 
-static void addstring(Handle<Object> ret, const char * name, const char * value) {
+static void addstring(Handle<Object> ret,
+                      const char * name, const char * value) {
   if (value) {
     ret->Set(NanSymbol(name), String::New(value));
   } else {
@@ -122,7 +125,8 @@ static void addstring(Handle<Object> ret, const char * name, const char * value)
   }
 }
 
-static void populate_ret(Handle<Object> ret, const inchi_Output& out, int result) {
+static void populate_ret(Handle<Object> ret,
+                         const inchi_Output& out, int result) {
   addstring(ret, "inchi", out.szInChI);
   addstring(ret, "auxinfo", out.szAuxInfo);
   addstring(ret, "message", out.szMessage);
