@@ -1,0 +1,6 @@
+2014-01-27  Sam Mikes  <smikes@cubane.com>
+
+	* src/test/test_inchi_atom.cc (IchiAtom:atomsHaveNames): add test
+
+	* src/inchi_atom.cc (InchiAtom): Add default constructor
+	(getName): new function returns atom name as string

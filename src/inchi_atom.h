@@ -6,12 +6,20 @@
  * Released under the MIT license -- see MIT-LICENSE for details
  */
 
+#include <string>
+
 #include "inchi_dll/inchi_api.h"
 
 struct InchiAtom {
   static const int ELNAME_LEN = ATOM_EL_LEN;
 
+  /* data members */
   char elname[ELNAME_LEN];
+
+  /* constructors */
+  explicit InchiAtom(const char * name = "");
+
+  const std::string getName();
 };
 
 #endif  // SRC_INCHI_ATOM_H_

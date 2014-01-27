@@ -37,10 +37,7 @@ InchiInput::~InchiInput() {
  * @return {int} atom index
  */
 int InchiInput::addAtom(const char * elementName) {
-  InchiAtom a;
-
-  strncpy(a.elname, elementName, ATOM_EL_LEN);
-  a.elname[ATOM_EL_LEN - 1] = '\0';
+  InchiAtom a(elementName);
 
   atoms_.push_back(a);
 
