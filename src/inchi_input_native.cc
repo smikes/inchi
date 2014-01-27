@@ -5,6 +5,7 @@
  */
 #include "./inchi_input.h"
 
+#include <cstring>
 
 /**
  * Default constructor initializes everything to zero

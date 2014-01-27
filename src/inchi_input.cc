@@ -8,6 +8,8 @@
 #include <uv.h>
 #include <nan.h>
 
+#include <cstring>
+
 #include "./inchi_input.h"
 
 #include "./using_v8.h"
