@@ -47,4 +47,7 @@ tags:
 	find src deps | egrep "\.(c|h|cc|cpp)$\" | xargs etags
 	find src deps | egrep "\.(c|h|cc|cpp)$\" | xargs ebrowse
 
-.PHONY: install jslint cpplint cpptest jstest doc no-dos-endings check-coverage build tags
+clean:
+	-find . -name "*~" | xargs rm
+
+.PHONY: install jslint cpplint cpptest jstest doc no-dos-endings check-coverage build tags clean
