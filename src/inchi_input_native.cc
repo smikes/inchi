@@ -56,3 +56,16 @@ InchiAtom& InchiInput::getAtom(int atomIndex) {
 
   return atoms_[atomIndex];
 }
+
+
+/**
+ * calculate INCHI from structure
+ *
+ * @method GetInchi
+ * @return {RetValGetInchi} result code from GetINCHI API call
+ */
+int InchiInput::GetInchi() {
+  result_ = GetINCHI(&(this->in_), &(this->out_));
+
+  return result_;
+}

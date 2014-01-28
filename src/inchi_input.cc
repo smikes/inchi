@@ -51,12 +51,6 @@ InchiInput * InchiInput::Create(Handle<Value> val) {
   return input;
 }
 
-int InchiInput::GetInchi() {
-  result_ = GetINCHI(&(this->in_), &(this->out_));
-
-  return result_;
-}
-
 Handle<Object> InchiInput::GetResult() {
   Local<Object> ret = Object::New();
 
