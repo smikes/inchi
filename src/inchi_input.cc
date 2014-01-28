@@ -15,10 +15,9 @@
 #include "./using_v8.h"
 
 /**
- * Wrapper for INCHI_Input structure
- *
- * @module InChILib
- * @class  InchiInput
+
+@module Internal
+@class  InchiInput
  */
 
 /* local (non-API) functions */
@@ -35,7 +34,7 @@ static void addstring(Handle<Object> ret,
  * JavaScript object
  *
  * @method Create
- * @param {Handle<Object>} val Object handle that parallels an inchi_Input
+ * @param {Handle&lt;Object&gt;} val Object handle that parallels an inchi_Input
  */
 InchiInput * InchiInput::Create(Handle<Value> val) {
   // TODO(SOM): validation
@@ -81,10 +80,36 @@ struct GetINCHIWorker : public NanAsyncWorker {
 };
 
 /**
- * calls the "classic" GetINCHI function
- * @method GetINCHI
- * @param {Object}   molecule Description of molecule
- * @param {Function} callback Callback function
+ * @class InChILib
+ */
+
+/**
+ Constructs a molecule and calls the GetINCHI function.
+
+ This is an asynchronous version of the GetINCHI API suitable
+ for general use.
+
+ The second argument passed to callback value is an Object containing the the result code of
+ calling GetINCHI.  If the computation was successful, there will
+ be additional members with the InChI string, InChIKey, etc.
+ See {{#crossLink "GetINCHIResult"}}GetINCHIResult{{/crossLink}} for
+ full documentation
+
+ @method GetINCHI
+ @param {Object} molecule Object defining the molecule, in the format
+
+     var methanol = {
+         atom: [
+            { 'elname': 'C', neighbor: [1] },
+            { 'elname': 'O' }
+         ]
+     };
+
+
+
+ @param {Function} callback Callback Function
+ @param {String} callback.err Error encountered during the operation
+ @param {GetINCHIResult} callback.output Object containing result of GetINCHI
  */
 NAN_METHOD(GetINCHI) {
   NanScope();

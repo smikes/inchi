@@ -6,16 +6,36 @@
  * Released under the MIT license -- see MIT-LICENSE for details
  */
 
+/**
+Internal class for representing a two-atom bond
+
+@class InchiBond
+@module Internal
+ */
+
 struct InchiBond {
-InchiBond(int f, int t, int type = INCHI_BOND_TYPE_SINGLE) :
-  from(f), to(t),
-    type(type),
-    stereo(INCHI_BOND_STEREO_NONE) {
+  /**
+     Constructs a bond from one atom to another , with optional bond order and stereochemistry.
+
+     @constructor
+     @method InchiBond
+     @param {int} from  Atom index at beginning of bond
+     @param {int} to    Atom index at end of bond
+     @param {inchi_BondType} [type=INCHI_BOND_TYPE_SINGLE]  Bond type -- actually bond order,
+                             with 4 representing 'alternative'
+     @param {inchi_BondStereo2D} [stereo]
+   */
+  InchiBond(int from, int to, int type = INCHI_BOND_TYPE_SINGLE)
+  : from(from), to(to),
+    type(type), stereo(INCHI_BOND_STEREO_NONE) {
   }
 
   int from;
+
   int to;
+
   S_CHAR type;
+
   S_CHAR stereo;
 };
 

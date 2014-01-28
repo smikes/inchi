@@ -9,12 +9,13 @@
 
 #include <cstring>
 
-#include "using_v8.h"
+#include "./using_v8.h"
 
 #include "./get_inchi_data.h"
 
 /**
  *
+ * @module Internal
  * @class GetINCHIData
  */
 

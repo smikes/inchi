@@ -11,7 +11,7 @@
 /**
  * Internal InchiAtom structure
  *
- * @module InChILib
+ * @module Internal
  * @class  InchiAtom
  */
 

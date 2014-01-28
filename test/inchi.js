@@ -2,10 +2,10 @@ require('should');
 var inchi = require('../lib/inchi');
 
 describe('inchi', function () {
-    describe('version', function () {
-        it('should have a version function', function () {
-            (inchi.version).should.be.a.Function;
-            var version = inchi.version();
+    describe('getVersion', function () {
+        it('should have a getVersion function', function () {
+            (inchi.getVersion).should.be.a.Function;
+            var version = inchi.getVersion();
 
             version.algorithmVersion.should.be.exactly('1');
             version.libraryVersion.should.be.exactly('1.04');
@@ -15,13 +15,19 @@ describe('inchi', function () {
 
             function afterRead(err, data) {
                 var package = JSON.parse(data);
-                var version = inchi.version();
+                var version = inchi.getVersion();
 
                 (version.wrapperVersion).should.be.exactly(package.version);
                 done();
             }
 
             fs.readFile('package.json', afterRead);
+        });
+    });
+
+    describe('inchilib', function () {
+        it('should have a inchilib property', function () {
+            (inchi.inchilib).should.be.an.Object;
         });
     });
 });

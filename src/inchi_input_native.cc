@@ -8,6 +8,13 @@
 #include <cstring>
 #include <algorithm>
 
+#include "inchi_dll/inchi_api.h"
+
+/**
+@module Internal
+@class InchiInput
+ */
+
 /**
  * Default constructor initializes everything to zero
  *
@@ -42,11 +49,11 @@ int InchiInput::addAtom(const char * elementName) {
 }
 
 /**
- * returns a modifiable reference to an atom
+ * Get a modifiable reference to an atom
  *
  * @method getAtom
  * @param {int} atomIndex 0-based index into atom collection
- * @return {InchiAtom&} atom
+ * @return {InchiAtom& atom}
  */
 InchiAtom& InchiInput::getAtom(int atomIndex) {
   // TODO(SOM): bounds checking
@@ -54,34 +61,53 @@ InchiAtom& InchiInput::getAtom(int atomIndex) {
   return atoms_[atomIndex];
 }
 
-void InchiInput::addBond(const InchiBond& b) {
-  bonds_.push_back(b);
+/**
+ * Add a bond to the molecule
+ *
+ * @method addBond
+ * @param {InchiBond} bond   A bond between two atoms
+ */
+void InchiInput::addBond(const InchiBond& bond) {
+  bonds_.push_back(bond);
 }
 
+
+/**
+ * Helper class for converting bonds into neighbor matrix entries
+ *
+ * @module Internal
+ * @class make_bond
+ */
 struct make_bond {
-  struct GetINCHIData * data_;
+  inchi_Input * in;
 
-  explicit make_bond(struct GetINCHIData * data) :
-    data_(data) {}
+  explicit make_bond(GetINCHIData * data) :
+    in(&(data->in_)) {}
 
-  void operator()(const InchiBond& b) {
-    int from = b.from;
+  /**
+   * converts an InchiBond to a neighbor matrix entry
+   *
+   * @method operator()
+   * @param {const InchiBond&} bond   InchiBond being added to molecule
+   */
+  void operator()(const InchiBond& bond) {
+    int from = bond.from;
 
-    AT_NUM& num_bonds = data_->in_.atom[from].num_bonds;
+    AT_NUM& num_bonds = in->atom[from].num_bonds;
 
-    data_->in_.atom[from].neighbor[num_bonds]    = b.to;
-    data_->in_.atom[from].bond_type[num_bonds]   = b.type;
-    data_->in_.atom[from].bond_stereo[num_bonds] = b.stereo;
+    in->atom[from].neighbor[num_bonds]    = bond.to;
+    in->atom[from].bond_type[num_bonds]   = bond.type;
+    in->atom[from].bond_stereo[num_bonds] = bond.stereo;
 
-    num_bonds++;
+    num_bonds += 1;
   }
 };
 
 /**
- *
+ * Returns a copy of the molecule data, suitable for calling GetINCHI,
+ * which is not visible from JavaScript.
  *
  * @method tearOffGetINCHIData
- *
  */
 GetINCHIData * InchiInput::tearOffGetINCHIData() {
   GetINCHIData * data = new GetINCHIData();
