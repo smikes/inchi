@@ -13,6 +13,11 @@ SimpleString StringFrom (const std::string & s) {
   return StringFrom(s.c_str());
 }
 
+SimpleString StringFrom (const S_CHAR n) {
+  return StringFrom(long(n));
+}
+
+
 TEST(InchiAtom, creation)
 {
   InchiAtom a;
@@ -41,4 +46,12 @@ TEST(InchiAtom, shouldTruncateTooLongName)
   a.setName("AVeryLongName");
 
   CHECK_EQUAL("AVery", a.getName());
+}
+
+TEST(InchiAtom, hasDefaultIsotopes)
+{
+  InchiAtom c("C");
+
+  CHECK_EQUAL(InchiAtom::IMPLICIT_NONISOTOPIC_H,
+              c.num_iso_H[InchiAtom::NON_ISOTOPIC_H]);
 }

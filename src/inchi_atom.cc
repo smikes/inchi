@@ -23,6 +23,10 @@
  */
 InchiAtom::InchiAtom(const char * name) {
   this->setName(name);
+  this->num_iso_H[NON_ISOTOPIC_H] = IMPLICIT_NONISOTOPIC_H;
+  this->num_iso_H[PROTIUM_H] = 0;
+  this->num_iso_H[DEUTERIUM_H] = 0;
+  this->num_iso_H[TRITIUM_H] = 0;
 }
 
 /**

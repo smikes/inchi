@@ -6,6 +6,8 @@
 
 /* test for the native side of the InchiInput code */
 #include "CppUnitLite/TestHarness.h"
+
+#include "inchi_input.h"
 #include "inchi_input.h"
 
 TEST(InchiInput, creation)
