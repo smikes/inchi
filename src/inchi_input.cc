@@ -77,8 +77,8 @@ struct GetINCHIWorker : public NanAsyncWorker {
     Handle<Object> result = data_->GetResult();
 
     Local<Value> argv[] = {
-      Local<Value>::New(v8::Null()),
-      Local<Value>::New(result)
+      NanNewLocal<Value>(v8::Null()),
+      NanNewLocal<Value>(result)
     };
 
     callback->Call(2, argv);
