@@ -21,23 +21,40 @@ struct InchiInput {
   InchiInput();
   ~InchiInput();
 
-  inchi_Input in_;
-  inchi_Output out_;
+  struct GetINCHIData {
+    GetINCHIData();
+    ~GetINCHIData();
 
-  int result_;
+    inchi_Input in_;
+    inchi_Output out_;
+    int result_;
+
+    int GetInchi();
+    Handle<Object> GetResult();
+  };
+
+  struct InchiBond {
+    InchiBond(int f, int t) : from(f), to(t) {}
+
+    int from;
+    int to;
+  };
 
   std::vector<InchiAtom> atoms_;
+  std::vector<InchiBond> bonds_;
   std::vector<inchi_Stereo0D> stereo0D_;
 
   /* native api */
-  int addAtom(const char * element);
   int GetInchi();
 
+  int addAtom(const char * element);
   InchiAtom& getAtom(int i);
 
-  static InchiInput * Create(Handle<Value> val);
+  void addBond(int f, int t);
 
-  Handle<Object> GetResult();
+  GetINCHIData * tearOffGetINCHIData();
+
+  static InchiInput * Create(Handle<Value> val);
 };
 
 #endif  // SRC_INCHI_INPUT_H_

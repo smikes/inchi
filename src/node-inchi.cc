@@ -18,6 +18,7 @@
 
 #include "./inchi_input.h"
 
+NAN_METHOD(GetINCHI);
 
 void register_GetINCHI_return_codes(Handle<Object> exports) {
   /**
@@ -105,6 +106,7 @@ NAN_METHOD(GetINCHISync) {
   NanScope();
 
   InchiInput * input = NULL;
+  InchiInput::GetINCHIData * data = NULL;
   Handle<Object> ret;
 
   try {
@@ -113,15 +115,18 @@ NAN_METHOD(GetINCHISync) {
 
     input = InchiInput::Create(mol);
 
-    input->GetInchi();
+    data = input->tearOffGetINCHIData();
 
-    ret = input->GetResult();
+    data->GetInchi();
+
+    ret = data->GetResult();
   } catch(...) {
     ret = Object::New();
 
     ret->Set(NanSymbol("code"), Number::New(inchi_Ret_UNKNOWN));
   }
 
+  delete data;
   delete input;
 
   NanReturnValue(ret);
@@ -131,6 +136,7 @@ NAN_METHOD(GetINCHISync) {
 void register_functions(Handle<Object> exports) {
   NODE_SET_METHOD(exports, "getAlgorithmVersion", getAlgorithmVersion);
   NODE_SET_METHOD(exports, "GetINCHISync", GetINCHISync);
+  NODE_SET_METHOD(exports, "GetINCHI", GetINCHI);
 }
 
 void init(Handle<Object> exports) {

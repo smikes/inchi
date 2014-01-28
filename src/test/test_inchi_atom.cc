@@ -55,3 +55,12 @@ TEST(InchiAtom, hasDefaultIsotopes)
   CHECK_EQUAL(InchiAtom::IMPLICIT_NONISOTOPIC_H,
               c.num_iso_H[InchiAtom::NON_ISOTOPIC_H]);
 }
+
+TEST(InchiAtom, conversion)
+{
+  InchiAtom c("C");
+
+  inchi_Atom a = c;
+
+  CHECK_EQUAL(std::string("C"), a.elname);
+}

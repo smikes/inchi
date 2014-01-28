@@ -49,3 +49,12 @@ void InchiAtom::setName(const char * name) {
 const std::string InchiAtom::getName() {
   return elname;
 }
+
+InchiAtom::operator inchi_Atom() {
+  inchi_Atom a = {0};
+
+  memcpy(a.elname, this->elname, ELNAME_LEN);
+  memcpy(a.num_iso_H, this->num_iso_H, NUM_H_ISOTOPES+1);
+
+  return a;
+}

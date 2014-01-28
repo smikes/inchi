@@ -22,8 +22,7 @@
  */
 
 /* local (non-API) functions */
-static void populate_input(Handle<Value> val, inchi_Input* in);
-static void populate_atom(const Handle<Object> atom, inchi_Atom* target);
+static void populate_input(Handle<Value> val, InchiInput* in);
 static void populate_ret(Handle<Object> ret,
                          const inchi_Output& out, int result);
 static void addstring(Handle<Object> ret,
@@ -39,19 +38,19 @@ static void addstring(Handle<Object> ret,
  * @param {Handle<Object>} val Object handle that parallels an inchi_Input
  */
 InchiInput * InchiInput::Create(Handle<Value> val) {
-  // validation
+  // TODO(SOM): validation
 
   // create an empty InchiInput
   InchiInput * input = new InchiInput;
 
   // populate it
-  populate_input(val, &(input->in_));
+  populate_input(val, input);
 
   // return it
   return input;
 }
 
-Handle<Object> InchiInput::GetResult() {
+Handle<Object> InchiInput::GetINCHIData::GetResult() {
   Local<Object> ret = Object::New();
 
   populate_ret(ret, this->out_, result_);
@@ -59,34 +58,80 @@ Handle<Object> InchiInput::GetResult() {
   return ret;
 }
 
-void populate_atom(const Handle<Object> atom, inchi_Atom* target) {
-  // initialize atom
-  memset(target, 0, sizeof(*target));
+struct GetINCHIWorker : public NanAsyncWorker {
+  InchiInput::GetINCHIData * data_;
 
-  // atom.name is required
-  Handle<String> elname = atom->Get(NanSymbol("elname"))->ToString();
+  GetINCHIWorker(NanCallback * callback, InchiInput* input) :
+    NanAsyncWorker(callback) {
+    data_ = input->tearOffGetINCHIData();
+  }
+  ~GetINCHIWorker() {}
 
-  NanCString(elname, 0, target->elname, ATOM_EL_LEN);
-  target->elname[ATOM_EL_LEN-1] = '\0';  // ensure termination
+  void Execute() {
+    data_->GetInchi();
+  }
 
-  // populate neighbor array
+  void HandleOKCallback() {
+    NanScope();
+
+    Handle<Object> result = data_->GetResult();
+
+    Local<Value> argv[] = {
+      Local<Value>::New(v8::Null()),
+      Local<Value>::New(result)
+    };
+
+    callback->Call(2, argv);
+  }
+};
+
+/**
+ * calls the "classic" GetINCHI function
+ * @method GetINCHI
+ * @param {Object}   molecule Description of molecule
+ * @param {Function} callback Callback function
+ */
+NAN_METHOD(GetINCHI) {
+  NanScope();
+
+  InchiInput * input = NULL;
+  Handle<Object> ret;
+
+  try {
+    // TODO(SOM): validate args
+    Handle<Value> mol = args[0];
+    NanCallback * callback = new NanCallback(args[1].As<Function>());
+
+    input = InchiInput::Create(mol);
+
+    NanAsyncQueueWorker(new GetINCHIWorker(callback, input));
+  } catch(...) {
+  }
+
+  delete input;
+
+  NanReturnUndefined();
+};
+
+
+
+void add_atom(InchiInput* in, Handle<Object> atom) {
+  Handle<String> elname_string = atom->Get(NanSymbol("elname"))->ToString();
+
+  char * elname = NanCString(elname_string, 0);
+  int index = in->addAtom(elname);
+
   Handle<Array> neighbor =
     Handle<Array>::Cast(atom->Get(NanSymbol("neighbor")));
 
-  target->num_bonds = neighbor->Length();
-  for (int i = 0; i < target->num_bonds; ++i) {
-    target->neighbor[i]    = neighbor->Get(i)->ToNumber()->Value();
-
-    // TODO(SOM): bond types & stero too
-    target->bond_type[i]   = INCHI_BOND_TYPE_SINGLE;
-    target->bond_stereo[i] = INCHI_BOND_STEREO_NONE;
+  int bonds = neighbor->Length();
+  for (int i = 0; i < bonds; ++i) {
+    int bonded = neighbor->Get(i)->ToNumber()->Value();
+    in->addBond(index, bonded);
   }
-
-  // default fill atoms with default isotopes
-  target->num_iso_H[0] = -1;
 }
 
-static void populate_input(Handle<Value> val, inchi_Input* in) {
+static void populate_input(Handle<Value> val, InchiInput* in) {
   // TODO(SOM): support validation, possibly return error code
 
   // expect args[0] to be an Object, call it 'mol'
@@ -104,11 +149,9 @@ static void populate_input(Handle<Value> val, inchi_Input* in) {
   }
   Handle<Array> atom = Handle<Array>::Cast(mol->Get(NanSymbol("atom")));
 
-  in->num_atoms = atom->Length();
-  in->atom = new inchi_Atom[in->num_atoms];
-
-  for (int i = 0; i < in->num_atoms; i += 1) {
-    populate_atom(atom->Get(i)->ToObject(), &(in->atom[i]));
+  int atoms = atom->Length();
+  for (int i = 0; i < atoms; i += 1) {
+    add_atom(in, atom->Get(i)->ToObject());
   }
 }
 

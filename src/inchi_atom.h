@@ -29,6 +29,8 @@ struct InchiAtom {
   /* accessors */
   const std::string getName();
   void setName(const char *name);
+
+  operator inchi_Atom();
 };
 
 #endif  // SRC_INCHI_ATOM_H_

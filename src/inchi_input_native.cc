@@ -6,6 +6,7 @@
 #include "./inchi_input.h"
 
 #include <cstring>
+#include <algorithm>
 
 /**
  * Default constructor initializes everything to zero
@@ -14,8 +15,6 @@
  * @constructor
  */
 InchiInput::InchiInput() {
-  memset(&in_, 0, sizeof(in_));
-  memset(&out_, 0, sizeof(out_));
 }
 
 /**
@@ -24,10 +23,8 @@ InchiInput::InchiInput() {
  * @method ~InchiInput
  */
 InchiInput::~InchiInput() {
-  FreeINCHI(&out_);
-  delete in_.atom;
-  delete in_.stereo0D;
 }
+
 
 /**
  * adds an atom to the molecule
@@ -57,6 +54,53 @@ InchiAtom& InchiInput::getAtom(int atomIndex) {
   return atoms_[atomIndex];
 }
 
+void InchiInput::addBond(int f, int t) {
+  bonds_.push_back(InchiBond(f, t));
+}
+
+struct make_bond {
+  struct InchiInput::GetINCHIData * data_;
+
+  explicit make_bond(struct InchiInput::GetINCHIData * data) :
+    data_(data) {}
+
+  void operator()(const InchiInput::InchiBond& b) {
+    int from = b.from;
+
+    AT_NUM& num_bonds = data_->in_.atom[from].num_bonds;
+
+    data_->in_.atom[from].neighbor[num_bonds]    = b.to;
+    data_->in_.atom[from].bond_type[num_bonds]   = INCHI_BOND_TYPE_SINGLE;
+    data_->in_.atom[from].bond_stereo[num_bonds] = INCHI_BOND_STEREO_NONE;
+
+    num_bonds++;
+  }
+};
+
+/**
+ *
+ *
+ * @method tearOffGetINCHIData
+ *
+ */
+InchiInput::GetINCHIData * InchiInput::tearOffGetINCHIData() {
+  GetINCHIData * data = new GetINCHIData();
+
+  data->in_.num_atoms = atoms_.size();
+  data->in_.atom = new inchi_Atom[data->in_.num_atoms];
+
+  std::copy(atoms_.begin(), atoms_.end(), data->in_.atom);
+
+  std::for_each(bonds_.begin(), bonds_.end(), make_bond(data));
+
+  return data;
+}
+
+/**
+ *
+ * @class GetINCHIData
+ */
+
 
 /**
  * calculate INCHI from structure
@@ -64,8 +108,20 @@ InchiAtom& InchiInput::getAtom(int atomIndex) {
  * @method GetInchi
  * @return {RetValGetInchi} result code from GetINCHI API call
  */
-int InchiInput::GetInchi() {
-  result_ = GetINCHI(&(this->in_), &(this->out_));
+int InchiInput::GetINCHIData::GetInchi() {
+  this->result_ = GetINCHI(&(this->in_), &(this->out_));
 
-  return result_;
+  return this->result_;
+}
+
+
+InchiInput::GetINCHIData::GetINCHIData() {
+  memset(&in_, 0, sizeof(in_));
+  memset(&out_, 0, sizeof(out_));
+}
+
+InchiInput::GetINCHIData::~GetINCHIData() {
+  FreeINCHI(&out_);
+  delete in_.atom;
+  delete in_.stereo0D;
 }
