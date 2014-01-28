@@ -6,16 +6,10 @@
 
 /* test for the native side of the InchiInput code */
 #include "CppUnitLite/TestHarness.h"
-#include "inchi_atom.h"
-#include "inchi_atom.h"
+#include "./TestHelpers.h"
 
-SimpleString StringFrom (const std::string & s) {
-  return StringFrom(s.c_str());
-}
-
-SimpleString StringFrom (const S_CHAR n) {
-  return StringFrom(long(n));
-}
+#include "./inchi_atom.h"
+#include "./inchi_atom.h"
 
 
 TEST(InchiAtom, creation)

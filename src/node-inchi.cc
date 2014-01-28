@@ -106,7 +106,7 @@ NAN_METHOD(GetINCHISync) {
   NanScope();
 
   InchiInput * input = NULL;
-  InchiInput::GetINCHIData * data = NULL;
+  GetINCHIData * data = NULL;
   Handle<Object> ret;
 
   try {

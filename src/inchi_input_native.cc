@@ -54,24 +54,24 @@ InchiAtom& InchiInput::getAtom(int atomIndex) {
   return atoms_[atomIndex];
 }
 
-void InchiInput::addBond(int f, int t) {
-  bonds_.push_back(InchiBond(f, t));
+void InchiInput::addBond(const InchiBond& b) {
+  bonds_.push_back(b);
 }
 
 struct make_bond {
-  struct InchiInput::GetINCHIData * data_;
+  struct GetINCHIData * data_;
 
-  explicit make_bond(struct InchiInput::GetINCHIData * data) :
+  explicit make_bond(struct GetINCHIData * data) :
     data_(data) {}
 
-  void operator()(const InchiInput::InchiBond& b) {
+  void operator()(const InchiBond& b) {
     int from = b.from;
 
     AT_NUM& num_bonds = data_->in_.atom[from].num_bonds;
 
     data_->in_.atom[from].neighbor[num_bonds]    = b.to;
-    data_->in_.atom[from].bond_type[num_bonds]   = INCHI_BOND_TYPE_SINGLE;
-    data_->in_.atom[from].bond_stereo[num_bonds] = INCHI_BOND_STEREO_NONE;
+    data_->in_.atom[from].bond_type[num_bonds]   = b.type;
+    data_->in_.atom[from].bond_stereo[num_bonds] = b.stereo;
 
     num_bonds++;
   }
@@ -83,7 +83,7 @@ struct make_bond {
  * @method tearOffGetINCHIData
  *
  */
-InchiInput::GetINCHIData * InchiInput::tearOffGetINCHIData() {
+GetINCHIData * InchiInput::tearOffGetINCHIData() {
   GetINCHIData * data = new GetINCHIData();
 
   data->in_.num_atoms = atoms_.size();
@@ -94,34 +94,4 @@ InchiInput::GetINCHIData * InchiInput::tearOffGetINCHIData() {
   std::for_each(bonds_.begin(), bonds_.end(), make_bond(data));
 
   return data;
-}
-
-/**
- *
- * @class GetINCHIData
- */
-
-
-/**
- * calculate INCHI from structure
- *
- * @method GetInchi
- * @return {RetValGetInchi} result code from GetINCHI API call
- */
-int InchiInput::GetINCHIData::GetInchi() {
-  this->result_ = GetINCHI(&(this->in_), &(this->out_));
-
-  return this->result_;
-}
-
-
-InchiInput::GetINCHIData::GetINCHIData() {
-  memset(&in_, 0, sizeof(in_));
-  memset(&out_, 0, sizeof(out_));
-}
-
-InchiInput::GetINCHIData::~GetINCHIData() {
-  FreeINCHI(&out_);
-  delete in_.atom;
-  delete in_.stereo0D;
 }

@@ -50,22 +50,17 @@ InchiInput * InchiInput::Create(Handle<Value> val) {
   return input;
 }
 
-Handle<Object> InchiInput::GetINCHIData::GetResult() {
-  Local<Object> ret = Object::New();
-
-  populate_ret(ret, this->out_, result_);
-
-  return ret;
-}
 
 struct GetINCHIWorker : public NanAsyncWorker {
-  InchiInput::GetINCHIData * data_;
+  GetINCHIData * data_;
 
   GetINCHIWorker(NanCallback * callback, InchiInput* input) :
     NanAsyncWorker(callback) {
     data_ = input->tearOffGetINCHIData();
   }
-  ~GetINCHIWorker() {}
+  ~GetINCHIWorker() {
+    delete data_;
+  }
 
   void Execute() {
     data_->GetInchi();
@@ -127,7 +122,7 @@ void add_atom(InchiInput* in, Handle<Object> atom) {
   int bonds = neighbor->Length();
   for (int i = 0; i < bonds; ++i) {
     int bonded = neighbor->Get(i)->ToNumber()->Value();
-    in->addBond(index, bonded);
+    in->addBond(InchiBond(index, bonded));
   }
 }
 
@@ -156,12 +151,10 @@ static void populate_input(Handle<Value> val, InchiInput* in) {
 }
 
 static void addstring(Handle<Object> ret,
-                      const char * name, const char * value) {
-  if (value) {
-    ret->Set(NanSymbol(name), String::New(value));
-  } else {
-    ret->Set(NanSymbol(name), String::New(""));
-  }
+                      const char * name, const char * in) {
+  const char * value = (in ? in : "");
+
+  ret->Set(NanSymbol(name), String::New(value));
 }
 
 static void populate_ret(Handle<Object> ret,
@@ -171,4 +164,13 @@ static void populate_ret(Handle<Object> ret,
   addstring(ret, "message", out.szMessage);
   addstring(ret, "log", out.szLog);
   ret->Set(NanSymbol("code"), Number::New(result));
+}
+
+Handle<Object> GetINCHIData::GetResult() {
+  Local<Object> ret = Object::New();
+
+  populate_ret(ret, this->out_, result_);
+  addstring(ret, "inchikey", this->inchikey);
+
+  return ret;
 }
