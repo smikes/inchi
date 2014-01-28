@@ -6,6 +6,7 @@
 #include "./inchi_atom.h"
 
 #include <string>
+#include <cstring>
 
 /**
  * Internal InchiAtom structure
