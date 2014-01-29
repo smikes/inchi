@@ -51,7 +51,8 @@
         "src/inchi_input.cc",
         "src/inchi_input_native.cc",
         "src/inchi_atom.cc",
-        "src/get_inchi_data.cc"
+        "src/get_inchi_data.cc",
+        "src/get_inchi.cc"
       ],
       "conditions": [
         ['OS=="win"', {

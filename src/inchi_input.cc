@@ -10,9 +10,10 @@
 
 #include <cstring>
 
-#include "./inchi_input.h"
-
 #include "./using_v8.h"
+
+#include "./inchi_input.h"
+#include "./get_inchi_worker.h"
 
 /**
 
@@ -50,88 +51,7 @@ InchiInput * InchiInput::Create(Handle<Value> val) {
 }
 
 
-struct GetINCHIWorker : public NanAsyncWorker {
-  GetINCHIData * data_;
 
-  GetINCHIWorker(NanCallback * callback, InchiInput* input) :
-    NanAsyncWorker(callback) {
-    data_ = input->tearOffGetINCHIData();
-  }
-  ~GetINCHIWorker() {
-    delete data_;
-  }
-
-  void Execute() {
-    data_->GetInchi();
-  }
-
-  void HandleOKCallback() {
-    NanScope();
-
-    Handle<Object> result = GetResult(data_);
-
-    Local<Value> argv[] = {
-      NanNewLocal<Value>(v8::Null()),
-      NanNewLocal<Value>(result)
-    };
-
-    callback->Call(2, argv);
-  }
-};
-
-/**
- * @class InChILib
- */
-
-/**
- Constructs a molecule and calls the GetINCHI function.
-
- This is an asynchronous version of the GetINCHI API suitable
- for general use.
-
- The second argument passed to callback value is an Object containing the the result code of
- calling GetINCHI.  If the computation was successful, there will
- be additional members with the InChI string, InChIKey, etc.
- See {{#crossLink "GetINCHIResult"}}GetINCHIResult{{/crossLink}} for
- full documentation
-
- @method GetINCHI
- @param {Object} molecule Object defining the molecule, in the format
-
-     var methanol = {
-         atom: [
-            { 'elname': 'C', neighbor: [1] },
-            { 'elname': 'O' }
-         ]
-     };
-
-
-
- @param {Function} callback Callback Function
- @param {String} callback.err Error encountered during the operation
- @param {GetINCHIResult} callback.output Object containing result of GetINCHI
- */
-NAN_METHOD(GetINCHI) {
-  NanScope();
-
-  InchiInput * input = NULL;
-  Handle<Object> ret;
-
-  try {
-    // TODO(SOM): validate args
-    Handle<Value> mol = args[0];
-    NanCallback * callback = new NanCallback(args[1].As<Function>());
-
-    input = InchiInput::Create(mol);
-
-    NanAsyncQueueWorker(new GetINCHIWorker(callback, input));
-  } catch(...) {
-  }
-
-  delete input;
-
-  NanReturnUndefined();
-};
 
 
 

@@ -104,10 +104,12 @@ struct make_bond {
 };
 
 /**
- * Returns a copy of the molecule data, suitable for calling GetINCHI,
- * which is not visible from JavaScript.
+ * Makes a copy of the molecule data, suitable for calling GetINCHI.
+ * This copy is not visible from JavaScript, which makes it usable
+ * on a thread (see {{#crossLink "InChILib/GetINCHI"}}GetInChI{{/crossLink}})
  *
  * @method tearOffGetINCHIData
+ * @for InchiInput
  */
 GetINCHIData * InchiInput::tearOffGetINCHIData() {
   GetINCHIData * data = new GetINCHIData();
