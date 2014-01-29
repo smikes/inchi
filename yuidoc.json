@@ -1,6 +1,6 @@
 {
   "options": {
       "outdir": "doc",
-      "extension": ".cc,.js"
+      "extension": ".cc,.js,.h"
   }
 }

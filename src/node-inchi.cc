@@ -41,8 +41,6 @@ NAN_METHOD(getAlgorithmVersion) {
 }
 
 
-
-
 void register_functions(Handle<Object> exports) {
   NODE_SET_METHOD(exports, "getAlgorithmVersion", getAlgorithmVersion);
   NODE_SET_METHOD(exports, "GetINCHISync", GetINCHISync);

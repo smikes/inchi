@@ -7,10 +7,10 @@
  */
 
 /**
-Internal class for representing a two-atom bond
+   Internal class for representing a two-atom bond
 
-@class InchiBond
-@module Internal
+   @class InchiBond
+   @module Internal
  */
 
 struct InchiBond {
@@ -22,8 +22,9 @@ struct InchiBond {
      @param {int} from  Atom index at beginning of bond
      @param {int} to    Atom index at end of bond
      @param {inchi_BondType} [type=INCHI_BOND_TYPE_SINGLE]  Bond type -- actually bond order,
-                             with 4 representing 'alternative'
-     @param {inchi_BondStereo2D} [stereo]
+     with 4 representing 'alternative'
+     @param {inchi_BondStereo2D} [stereo=INCHI_BOND_STEREO_NONE]  Bond stereochemistry -- only
+     2D stereochemistry options available. TODO(SOM): currently has no effect on bond
    */
   InchiBond(int from, int to, int type = INCHI_BOND_TYPE_SINGLE)
   : from(from), to(to),

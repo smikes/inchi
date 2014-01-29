@@ -28,8 +28,6 @@ static void populate_ret(Handle<Object> ret,
 static void addstring(Handle<Object> ret,
                       const char * name, const char * value);
 
-
-
 /**
  * Create an InchiInput structure from a partially or fully specified
  * JavaScript object
@@ -49,11 +47,6 @@ InchiInput * InchiInput::Create(Handle<Value> val) {
   // return it
   return input;
 }
-
-
-
-
-
 
 void add_atom(InchiInput* in, Handle<Object> atom) {
   Handle<String> elname_string = atom->Get(NanSymbol("elname"))->ToString();

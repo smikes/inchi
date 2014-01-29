@@ -9,10 +9,10 @@
 #include <cstring>
 
 /**
- * Internal InchiAtom structure
- *
- * @module Internal
- * @class  InchiAtom
+   Internal representation of an atom; convertible to inchi_Atom
+
+   @module Internal
+   @class  InchiAtom
  */
 
 /**
@@ -41,20 +41,30 @@ void InchiAtom::setName(const char * name) {
 }
 
 /**
- * Get the atom's element name
- *
- * @method getName
- * @return {const std::string} element name
+   Get the atom's element name
+   @method getName
+   @return {const std::string} element name
  */
 const std::string InchiAtom::getName() {
   return elname;
 }
 
+/**
+   Conversion (cast operator) to an inchi_Atom structure
+
+   @method operator inchi_Atom()
+   @return {inchi_Atom}
+ */
 InchiAtom::operator inchi_Atom() {
-  inchi_Atom a = {0};
+  inchi_Atom a;
+  memset(&a, 0, sizeof inchi_Atom);
 
   memcpy(a.elname, this->elname, ELNAME_LEN);
   memcpy(a.num_iso_H, this->num_iso_H, NUM_H_ISOTOPES+1);
+
+  // TODO(SOM): populate remaining members, excluding
+  // neighbor, bond_type, bond_stereo, num_bonds
+  // which are populated via bonds_
 
   return a;
 }
