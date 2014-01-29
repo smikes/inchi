@@ -3,13 +3,7 @@
  *
  * Released under the MIT license -- see MIT-LICENSE for details
  */
-#include <node.h>
-#include <v8.h>
-#include <nan.h>
-
 #include <cstring>
-
-#include "./using_v8.h"
 
 #include "./get_inchi_data.h"
 

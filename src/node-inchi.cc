@@ -138,7 +138,7 @@ NAN_METHOD(GetINCHISync) {
 
     data->GetInchi();
 
-    ret = data->GetResult();
+    ret = GetResult(data);
   } catch(...) {
     ret = Object::New();
 

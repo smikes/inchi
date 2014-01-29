@@ -40,5 +40,7 @@ struct InchiInput {
   static InchiInput * Create(Handle<Value> val);
 };
 
+Handle<Object> GetResult(GetINCHIData * data);
+
 
 #endif  // SRC_INCHI_INPUT_H_

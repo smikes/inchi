@@ -68,7 +68,7 @@ struct GetINCHIWorker : public NanAsyncWorker {
   void HandleOKCallback() {
     NanScope();
 
-    Handle<Object> result = data_->GetResult();
+    Handle<Object> result = GetResult(data_);
 
     Local<Value> argv[] = {
       NanNewLocal<Value>(v8::Null()),
@@ -191,11 +191,11 @@ static void populate_ret(Handle<Object> ret,
   ret->Set(NanSymbol("code"), Number::New(result));
 }
 
-Handle<Object> GetINCHIData::GetResult() {
+Handle<Object> GetResult(GetINCHIData * data) {
   Local<Object> ret = Object::New();
 
-  populate_ret(ret, this->out_, result_);
-  addstring(ret, "inchikey", this->inchikey);
+  populate_ret(ret, data->out_, data->result_);
+  addstring(ret, "inchikey", data->inchikey);
 
   return ret;
 }

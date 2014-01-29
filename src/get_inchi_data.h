@@ -20,7 +20,6 @@ struct GetINCHIData {
   int result_;
 
   int GetInchi();
-  Handle<Object> GetResult();
 };
 
 #endif  // SRC_GET_INCHI_DATA_H_
