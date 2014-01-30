@@ -57,7 +57,7 @@ const std::string InchiAtom::getName() {
  */
 InchiAtom::operator inchi_Atom() {
   inchi_Atom a;
-  memset(&a, 0, sizeof inchi_Atom);
+  memset(&a, 0, (sizeof a));
 
   memcpy(a.elname, this->elname, ELNAME_LEN);
   memcpy(a.num_iso_H, this->num_iso_H, NUM_H_ISOTOPES+1);
