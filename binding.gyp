@@ -49,6 +49,7 @@
       "sources": [
         "src/node-inchi.cc",
         "src/molecule.cc",
+        "src/molecule_wrap.cc",
         "src/molecule_native.cc",
         "src/inchi_atom.cc",
         "src/get_inchi_data.cc",

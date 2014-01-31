@@ -30,4 +30,37 @@ describe('inchi', function () {
             (inchi.inchilib).should.be.an.Object;
         });
     });
+
+    describe('Molecule', function () {
+        it('should create a new molecule', function () {
+            var m = new inchi.Molecule();
+        });
+        it('should add some atoms', function () {
+            var m = new inchi.Molecule();
+
+            m.addAtom('C');
+
+            (m.atoms.length).should.be.exactly(1);
+            (m.atoms[0]).should.be.exactly('C');
+        });
+        it('should make bonds', function () {
+            var m = new inchi.Molecule();
+
+            m.addAtom('C');
+            m.addAtom('O');
+            m.addBond(0, 1);
+
+            (m.bonds.length).should.be.exactly(1);
+        });
+        it('should retrieve InChI code for methane', function (done) {
+            var m = new inchi.Molecule();
+
+            m.addAtom('C');
+
+            m.getInchi(function(err, i) {
+                i.should.startWith('InChI=1S/CH4/h1H4');
+                done();
+            });
+        });
+    });
 });

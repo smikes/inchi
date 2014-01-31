@@ -17,7 +17,7 @@
 #include "./using_v8.h"
 
 #include "./molecule.h"
-
+#include "./molecule_wrap.h"
 #include "./get_inchi.h"
 
 /**
@@ -45,9 +45,11 @@ void register_functions(Handle<Object> exports) {
   NODE_SET_METHOD(exports, "getAlgorithmVersion", getAlgorithmVersion);
   NODE_SET_METHOD(exports, "GetINCHISync", GetINCHISync);
   NODE_SET_METHOD(exports, "GetINCHI", GetINCHI);
+
 }
 
 void init(Handle<Object> exports) {
+
   register_GetINCHI_return_codes(exports);
   register_functions(exports);
 }
