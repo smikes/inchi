@@ -49,7 +49,7 @@
       "sources": [
         "src/node-inchi.cc",
         "src/molecule.cc",
-        "src/inchi_input_native.cc",
+        "src/molecule_native.cc",
         "src/inchi_atom.cc",
         "src/get_inchi_data.cc",
         "src/get_inchi.cc"
@@ -69,9 +69,9 @@
       "sources": [
         "src/test/TestMain.cc",
         "src/test/hello.cc",
-        "src/test/test_inchi_input.cc",
+        "src/test/test_molecule.cc",
         "src/test/test_inchi_atom.cc",
-        "src/inchi_input_native.cc",
+        "src/molecule_native.cc",
         "src/get_inchi_data.cc",
         "src/inchi_atom.cc"
       ],

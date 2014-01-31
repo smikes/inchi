@@ -18,28 +18,28 @@
 /**
 
 @module Internal
-@class  InchiInput
+@class  Molecule
  */
 
 /* local (non-API) functions */
-static void populate_input(Handle<Value> val, InchiInput* in);
+static void populate_input(Handle<Value> val, Molecule* in);
 static void populate_ret(Handle<Object> ret,
                          const inchi_Output& out, int result);
 static void addstring(Handle<Object> ret,
                       const char * name, const char * value);
 
 /**
- * Create an InchiInput structure from a partially or fully specified
+ * Create an Molecule structure from a partially or fully specified
  * JavaScript object
  *
  * @method Create
  * @param {Handle&lt;Object&gt;} val Object handle that parallels an inchi_Input
  */
-InchiInput * InchiInput::Create(Handle<Value> val) {
+Molecule * Molecule::Create(Handle<Value> val) {
   // TODO(SOM): validation
 
-  // create an empty InchiInput
-  InchiInput * input = new InchiInput;
+  // create an empty Molecule
+  Molecule * input = new Molecule;
 
   // populate it
   populate_input(val, input);
@@ -48,7 +48,7 @@ InchiInput * InchiInput::Create(Handle<Value> val) {
   return input;
 }
 
-void add_atom(InchiInput* in, Handle<Object> atom) {
+void add_atom(Molecule* in, Handle<Object> atom) {
   Handle<String> elname_string = atom->Get(NanSymbol("elname"))->ToString();
 
   char * elname = NanCString(elname_string, 0);
@@ -64,7 +64,7 @@ void add_atom(InchiInput* in, Handle<Object> atom) {
   }
 }
 
-static void populate_input(Handle<Value> val, InchiInput* in) {
+static void populate_input(Handle<Value> val, Molecule* in) {
   // TODO(SOM): support validation, possibly return error code
 
   // expect args[0] to be an Object, call it 'mol'

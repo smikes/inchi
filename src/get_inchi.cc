@@ -99,7 +99,7 @@ void register_GetINCHI_return_codes(Handle<Object> exports) {
 NAN_METHOD(GetINCHISync) {
   NanScope();
 
-  InchiInput * input = NULL;
+  Molecule * input = NULL;
   GetINCHIData * data = NULL;
   Handle<Object> ret;
 
@@ -107,7 +107,7 @@ NAN_METHOD(GetINCHISync) {
     // TODO(SOM): validate args
     Handle<Value> mol = args[0];
 
-    input = InchiInput::Create(mol);
+    input = Molecule::Create(mol);
 
     data = input->tearOffGetINCHIData();
 
@@ -156,7 +156,7 @@ NAN_METHOD(GetINCHISync) {
 NAN_METHOD(GetINCHI) {
   NanScope();
 
-  InchiInput * input = NULL;
+  Molecule * input = NULL;
   Handle<Object> ret;
 
   try {
@@ -164,7 +164,7 @@ NAN_METHOD(GetINCHI) {
     Handle<Value> mol = args[0];
     NanCallback * callback = new NanCallback(args[1].As<Function>());
 
-    input = InchiInput::Create(mol);
+    input = Molecule::Create(mol);
 
     NanAsyncQueueWorker(new GetINCHIWorker(callback, input));
   } catch(...) {

@@ -19,9 +19,9 @@
 #include "./inchi_bond.h"
 #include "./get_inchi_data.h"
 
-struct InchiInput {
-  InchiInput();
-  ~InchiInput();
+struct Molecule {
+  Molecule();
+  ~Molecule();
 
   std::vector<InchiAtom> atoms_;
   std::vector<InchiBond> bonds_;
@@ -37,7 +37,7 @@ struct InchiInput {
 
   GetINCHIData * tearOffGetINCHIData();
 
-  static InchiInput * Create(Handle<Value> val);
+  static Molecule * Create(Handle<Value> val);
 };
 
 Handle<Object> GetResult(GetINCHIData * data);

@@ -12,24 +12,24 @@
 
 /**
 @module Internal
-@class InchiInput
+@class Molecule
  */
 
 /**
  * Default constructor initializes everything to zero
  *
- * @method InchiInput
+ * @method Molecule
  * @constructor
  */
-InchiInput::InchiInput() {
+Molecule::Molecule() {
 }
 
 /**
- * Destructor: cleans up InchiInput
+ * Destructor: cleans up Molecule
  *
- * @method ~InchiInput
+ * @method ~Molecule
  */
-InchiInput::~InchiInput() {
+Molecule::~Molecule() {
 }
 
 
@@ -40,7 +40,7 @@ InchiInput::~InchiInput() {
  * @param {const char *} elementName
  * @return {int} atom index
  */
-int InchiInput::addAtom(const char * elementName) {
+int Molecule::addAtom(const char * elementName) {
   InchiAtom a(elementName);
 
   atoms_.push_back(a);
@@ -55,7 +55,7 @@ int InchiInput::addAtom(const char * elementName) {
  * @param {int} atomIndex 0-based index into atom collection
  * @return {InchiAtom& atom}
  */
-InchiAtom& InchiInput::getAtom(int atomIndex) {
+InchiAtom& Molecule::getAtom(int atomIndex) {
   // TODO(SOM): bounds checking
 
   return atoms_[atomIndex];
@@ -67,7 +67,7 @@ InchiAtom& InchiInput::getAtom(int atomIndex) {
  * @method addBond
  * @param {InchiBond} bond   A bond between two atoms
  */
-void InchiInput::addBond(const InchiBond& bond) {
+void Molecule::addBond(const InchiBond& bond) {
   bonds_.push_back(bond);
 }
 
@@ -109,9 +109,9 @@ struct make_bond {
  * on a thread (see {{#crossLink "InChILib/GetINCHI"}}GetInChI{{/crossLink}})
  *
  * @method tearOffGetINCHIData
- * @for InchiInput
+ * @for Molecule
  */
-GetINCHIData * InchiInput::tearOffGetINCHIData() {
+GetINCHIData * Molecule::tearOffGetINCHIData() {
   GetINCHIData * data = new GetINCHIData();
 
   data->in_.num_atoms = atoms_.size();

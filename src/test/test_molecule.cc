@@ -13,21 +13,21 @@
 #include "molecule.h"
 #include "molecule.h"
 
-TEST(InchiInput, creation)
+TEST(Molecule, creation)
 {
-  InchiInput in;
+  Molecule in;
 }
 
-TEST(InchiInput, addAtom)
+TEST(Molecule, addAtom)
 {
-  InchiInput in;
+  Molecule in;
 
   in.addAtom("O");
 }
 
-TEST(InchiInput, addAnotherAtom)
+TEST(Molecule, addAnotherAtom)
 {
-  InchiInput in;
+  Molecule in;
 
   in.addAtom("O");
   int result = in.addAtom("C");
@@ -35,9 +35,9 @@ TEST(InchiInput, addAnotherAtom)
   LONGS_EQUAL(result, 1);
 }
 
-TEST(InchiInput, atomsHaveNames)
+TEST(Molecule, atomsHaveNames)
 {
-  InchiInput in;
+  Molecule in;
 
   in.addAtom("C");
 
@@ -46,9 +46,9 @@ TEST(InchiInput, atomsHaveNames)
   CHECK_EQUAL(in.getAtom(0).elname, c);
 }
 
-TEST(InchiInput, makeFormaldehyde)
+TEST(Molecule, makeFormaldehyde)
 {
-  InchiInput in;
+  Molecule in;
 
   in.addAtom("C");
   in.addAtom("O");

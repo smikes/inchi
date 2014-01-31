@@ -18,15 +18,15 @@ struct GetINCHIWorker : public NanAsyncWorker {
 
 /**
    Tears off a copy of the current molecule representation,
-   so the InchiInput is still safe to access on the v8 thread
+   so the Molecule is still safe to access on the v8 thread
    while GetINCHI runs on another thread
 
    @method GetINCHIWorker
    @constructor
    @param {NanCallback *} callback Callback function to call when finished
-   @param {InchiInput *} input     Molecule representation
+   @param {Molecule *} input     Molecule representation
  */
-  GetINCHIWorker(NanCallback * callback, InchiInput* input) :
+  GetINCHIWorker(NanCallback * callback, Molecule* input) :
     NanAsyncWorker(callback) {
     data_ = input->tearOffGetINCHIData();
   }
