@@ -34,6 +34,8 @@ describe('inchi', function () {
     describe('Atom', function () {
         it('should create a new atom', function () {
             var a = new inchi.Atom('H');
+
+            a.getName().should.equal('H');
         });
     });
 

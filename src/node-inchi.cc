@@ -3,10 +3,6 @@
  *
  * Released under the MIT license -- see MIT-LICENSE for details
  */
-#include <node.h>
-#include <v8.h>
-#include <uv.h>
-
 #include <nan.h>
 
 #include <algorithm>
@@ -16,6 +12,7 @@
 
 #include "./using_v8.h"
 
+#include "./atom.h"
 #include "./molecule.h"
 #include "./molecule_wrap.h"
 #include "./get_inchi.h"
@@ -49,6 +46,7 @@ void register_functions(Handle<Object> exports) {
 }
 
 void init(Handle<Object> exports) {
+  Atom::Init(exports);
 
   register_GetINCHI_return_codes(exports);
   register_functions(exports);
