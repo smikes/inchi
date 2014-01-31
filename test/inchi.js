@@ -31,6 +31,12 @@ describe('inchi', function () {
         });
     });
 
+    describe('Atom', function () {
+        it('should create a new atom', function () {
+            var a = new inchi.Atom('H');
+        });
+    });
+
     describe('Molecule', function () {
         it('should create a new molecule', function () {
             var m = new inchi.Molecule();

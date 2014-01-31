@@ -12,7 +12,7 @@
 
 /**
 @module Internal
-@class Molecule
+@class Molecule_CC
  */
 
 /**
@@ -109,7 +109,7 @@ struct make_bond {
  * on a thread (see {{#crossLink "InChILib/GetINCHI"}}GetInChI{{/crossLink}})
  *
  * @method tearOffGetINCHIData
- * @for Molecule
+ * @for Molecule_CC
  */
 GetINCHIData * Molecule::tearOffGetINCHIData() {
   GetINCHIData * data = new GetINCHIData();

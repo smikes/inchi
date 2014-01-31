@@ -18,7 +18,7 @@
 /**
 
 @module Internal
-@class  Molecule
+@class  Molecule_CC
  */
 
 /* local (non-API) functions */
