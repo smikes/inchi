@@ -10,8 +10,8 @@
 #include "CppUnitLite/TestHarness.h"
 #include "./TestHelpers.h"
 
-#include "inchi_input.h"
-#include "inchi_input.h"
+#include "molecule.h"
+#include "molecule.h"
 
 TEST(InchiInput, creation)
 {

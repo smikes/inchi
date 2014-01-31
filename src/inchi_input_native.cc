@@ -3,7 +3,7 @@
  *
  * Released under the MIT license -- see MIT-LICENSE for details
  */
-#include "./inchi_input.h"
+#include "./molecule.h"
 
 #include <cstring>
 #include <algorithm>

@@ -10,7 +10,7 @@
 
 #include "./get_inchi.h"
 
-#include "./inchi_input.h"
+#include "./molecule.h"
 #include "./get_inchi_worker.h"
 
 #include "inchi_dll/inchi_api.h"

@@ -16,7 +16,7 @@
 
 #include "./using_v8.h"
 
-#include "./inchi_input.h"
+#include "./molecule.h"
 
 #include "./get_inchi.h"
 
