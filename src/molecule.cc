@@ -22,7 +22,7 @@
  */
 
 /* local (non-API) functions */
-static void populate_input(Handle<Value> val, Molecule* in);
+void populate_input(Handle<Value> val, Molecule* in);
 static void populate_ret(Handle<Object> ret,
                          const inchi_Output& out, int result);
 static void addstring(Handle<Object> ret,
@@ -64,7 +64,7 @@ void add_atom(Molecule* in, Handle<Object> atom) {
   }
 }
 
-static void populate_input(Handle<Value> val, Molecule* in) {
+void populate_input(Handle<Value> val, Molecule* in) {
   // TODO(SOM): support validation, possibly return error code
 
   // expect args[0] to be an Object, call it 'mol'
