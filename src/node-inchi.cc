@@ -42,11 +42,10 @@ void register_functions(Handle<Object> exports) {
   NODE_SET_METHOD(exports, "getAlgorithmVersion", getAlgorithmVersion);
   NODE_SET_METHOD(exports, "GetINCHISync", GetINCHISync);
   NODE_SET_METHOD(exports, "GetINCHI", GetINCHI);
-
 }
 
 void init(Handle<Object> exports) {
-  Atom::Init(exports);
+  Molecule_wrap::Init(exports);
 
   register_GetINCHI_return_codes(exports);
   register_functions(exports);
