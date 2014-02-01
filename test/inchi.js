@@ -60,6 +60,24 @@ describe('inchi', function () {
 
             (m.bonds.length).should.be.exactly(1);
         });
+        it('should record default order of 1 for bonds', function () {
+            var m = new inchi.Molecule();
+
+            m.addAtom('C');
+            m.addAtom('O');
+            m.addBond(0, 1);
+
+            (m.bonds[0]).order.should.be.exactly(1);
+        });
+        it('should record order for bonds', function () {
+            var m = new inchi.Molecule();
+
+            m.addAtom('C');
+            m.addAtom('O');
+            m.addBond(0, 1, 2);
+
+            (m.bonds[0]).order.should.be.exactly(2);
+        });
         it('should retrieve InChI code for methane', function (done) {
             var m = new inchi.Molecule();
 
@@ -70,5 +88,66 @@ describe('inchi', function () {
                 done();
             });
         });
+        it('should retrieve InChI code for methanol', function (done) {
+            var m = new inchi.Molecule();
+
+            m.addAtom('C');
+            m.addAtom('O');
+            m.addBond(0, 1);
+
+            m.getInchi(function(err, i) {
+                i.should.startWith('InChI=1S/CH4O/c1-2/h2H,1H3');
+                done();
+            });
+        });
+
+        it('should retrieve InChI code for formaldehyde', function (done) {
+            var m = new inchi.Molecule();
+
+            m.addAtom('C');
+            m.addAtom('O');
+            m.addBond(0, 1, 2);
+
+            m.getInchi(function(err, i) {
+                i.should.startWith('InChI=1S/CH2O/c1-2/h1H2');
+                done();
+            });
+        });
+
+        it('should retrieve InChI code for acetylene', function (done) {
+            var m = new inchi.Molecule();
+
+            m.addAtom('C');
+            m.addAtom('C');
+            m.addBond(0, 1, 3);
+
+            m.getInchi(function(err, i) {
+                i.should.startWith('InChI=1S/C2H2/c1-2/h1-2H');
+                done();
+            });
+        });
+
+        it('should retrieve InChI code for benzene', function (done) {
+            var m = new inchi.Molecule();
+
+            m.addAtom('C');
+            m.addAtom('C');
+            m.addAtom('C');
+            m.addAtom('C');
+            m.addAtom('C');
+            m.addAtom('C');
+            m.addBond(0, 1);
+            m.addBond(1, 2, 2);
+            m.addBond(2, 3);
+            m.addBond(3, 4, 2);
+            m.addBond(4, 5);
+            m.addBond(5, 0, 2);
+
+            m.getInchi(function(err, i) {
+                i.should.startWith('InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H');
+                done();
+            });
+        });
+
     });
 });
