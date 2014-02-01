@@ -28,8 +28,6 @@ struct Molecule {
   std::vector<inchi_Stereo0D> stereo0D_;
 
   /* native api */
-  int GetInchi();
-
   int addAtom(const char * element);
   InchiAtom& getAtom(int i);
 
