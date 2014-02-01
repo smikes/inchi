@@ -73,11 +73,10 @@ void Molecule_wrap::addBonds(Handle<Value> b) {
 
   // bonds is an array of v8::Object
   for (uint32_t i = 0; i < bonds->Length(); i += 1) {
-
     Handle<Object> bond = bonds->Get(i)->ToObject();
 
-    int from  = bond->Get(NanSymbol("from" ))->NumberValue();
-    int to    = bond->Get(NanSymbol("to"   ))->NumberValue();
+    int from  = bond->Get(NanSymbol("from"))->NumberValue();
+    int to    = bond->Get(NanSymbol("to"))->NumberValue();
     int order = bond->Get(NanSymbol("order"))->NumberValue();
 
     mol.addBond(InchiBond(from, to, order));
