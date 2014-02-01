@@ -122,4 +122,20 @@ describe('inchilib', function () {
             inchilib.GetINCHI(methanol, callback);
         });
     });
+
+    describe('Molecule', function () {
+
+        it('should publish a Molecule constructor', function () {
+            (inchilib.Molecule).should.be.a.Function;
+        });
+        it('should create an empty Molecule', function () {
+            var m = new inchilib.Molecule({atoms: [], bonds: []});
+        });
+        it('should have a GetInChI method', function () {
+            var m = new inchilib.Molecule({atoms: [], bonds: []});
+
+            (m.GetInChI).should.be.a.Function;
+        });
+    });
+
 });
