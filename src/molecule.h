@@ -31,9 +31,13 @@ struct Molecule {
   int addAtom(const char * element);
   InchiAtom& getAtom(int i);
 
+  AT_NUM getAtomCount();
+
   void addBond(const InchiBond& b);
 
   GetINCHIData * tearOffGetINCHIData();
+
+  static Molecule * fromInchi(const char * inchi);
 
   /* javascript api */
   static Molecule * Create(Handle<Value> val);
