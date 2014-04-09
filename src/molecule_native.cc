@@ -10,6 +10,8 @@
 
 #include "inchi_dll/inchi_api.h"
 
+#include "./get_struct_from_inchi_data.h"
+
 /**
 @module Internal
 @class Molecule_CC
@@ -60,6 +62,17 @@ InchiAtom& Molecule::getAtom(int atomIndex) {
 
   return atoms_[atomIndex];
 }
+
+/**
+ Number of atoms in molecule
+
+ @method getAtomCount
+ @return {AT_NUM} number of atoms
+*/
+AT_NUM Molecule::getAtomCount() {
+  return atoms_.size();
+}
+
 
 /**
  * Add a bond to the molecule
@@ -122,4 +135,24 @@ GetINCHIData * Molecule::tearOffGetINCHIData() {
   std::for_each(bonds_.begin(), bonds_.end(), make_bond(data));
 
   return data;
+}
+
+
+
+Molecule * Molecule::fromInchi(const char * inchi) {
+  GetStructFromINCHIData data(inchi);
+
+  int result = data.GetStructFromINCHI();
+
+  if (result != inchi_Ret_OKAY) {
+    return NULL;
+  }
+
+  Molecule * m = new Molecule;
+
+  for (int i = 0; i < data.out_.num_atoms; i += 1) {
+    m->addAtom(data.out_.atom[i].elname);
+  }
+
+  return m;
 }

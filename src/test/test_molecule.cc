@@ -46,6 +46,25 @@ TEST(Molecule, atomsHaveNames)
   CHECK_EQUAL(in.getAtom(0).elname, c);
 }
 
+TEST(Molecule, makeMethanol)
+{
+  Molecule in;
+
+  in.addAtom("C");
+  in.addAtom("O");
+
+  in.addBond(InchiBond(0, 1));
+
+  GetINCHIData * data = in.tearOffGetINCHIData();
+
+  data->GetInchi();
+
+  CHECK_EQUAL(std::string("InChI=1S/CH4O/c1-2/h2H,1H3"), data->out_.szInChI);
+  CHECK_EQUAL(std::string("OKKJLVBELUTLKV-UHFFFAOYSA-N"), data->inchikey);
+
+  delete data;
+}
+
 TEST(Molecule, makeFormaldehyde)
 {
   Molecule in;
@@ -63,4 +82,16 @@ TEST(Molecule, makeFormaldehyde)
   CHECK_EQUAL(std::string("WSFSSNUMVMOOMR-UHFFFAOYSA-N"), data->inchikey);
 
   delete data;
+}
+
+TEST(Molecule, fromInchiMethanol)
+{
+  Molecule * methanol = Molecule::fromInchi("InChI=1S/CH4O/c1-2/h2H,1H3");
+
+  CHECK_EQUAL(AT_NUM(2), methanol->getAtomCount());
+
+  CHECK_EQUAL(std::string("C"), methanol->getAtom(0).elname);
+  CHECK_EQUAL(std::string("O"), methanol->getAtom(1).elname);
+
+  delete methanol;
 }

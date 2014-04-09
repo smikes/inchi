@@ -18,4 +18,8 @@ inline SimpleString StringFrom (const S_CHAR n) {
   return StringFrom(long(n));
 }
 
+inline SimpleString StringFrom (const AT_NUM n) {
+  return StringFrom(long(n));
+}
+
 #endif  // SRC_TEST_TESTHELPERS_H_

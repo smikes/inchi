@@ -79,6 +79,7 @@ void Molecule_wrap::addBonds(Handle<Value> b) {
     int to    = bond->Get(NanSymbol("to"))->NumberValue();
     int order = bond->Get(NanSymbol("order"))->NumberValue();
 
-    mol.addBond(InchiBond(from, to, order));
+    InchiBond b = (order ? InchiBond(from, to, order) : InchiBond(from, to));
+    mol.addBond(b);
   }
 }
