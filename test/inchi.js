@@ -37,6 +37,13 @@ describe('inchi', function () {
 
             a.getName().should.equal('H');
         });
+        it('should rename a new atom', function () {
+            var a = new inchi.Atom('H');
+
+            a.getName().should.equal('H');
+            a.setName('C');
+            a.getName().should.equal('C');
+        });
     });
 
     describe('Molecule', function () {
