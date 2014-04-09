@@ -54,6 +54,7 @@
         "src/molecule_native.cc",
         "src/inchi_atom.cc",
         "src/get_inchi_data.cc",
+        "src/get_struct_from_inchi_data.cc",
         "src/get_inchi.cc"
       ],
       "conditions": [
@@ -73,8 +74,10 @@
         "src/test/hello.cc",
         "src/test/test_molecule.cc",
         "src/test/test_inchi_atom.cc",
+        "src/test/test_get_struct_from_inchi.cc",
         "src/molecule_native.cc",
         "src/get_inchi_data.cc",
+        "src/get_struct_from_inchi_data.cc",
         "src/inchi_atom.cc"
       ],
       "include_dirs": [
