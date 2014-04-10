@@ -41,9 +41,9 @@ TEST(Molecule, atomsHaveNames)
 
   in.addAtom("C");
 
-  SimpleString c("C");
+  std::string c("C");
 
-  CHECK_EQUAL(in.getAtom(0).elname, c);
+  CHECK_EQUAL(in.getAtom(0).getName(), c);
 }
 
 TEST(Molecule, makeMethanol)
@@ -90,8 +90,26 @@ TEST(Molecule, fromInchiMethanol)
 
   CHECK_EQUAL(AT_NUM(2), methanol->getAtomCount());
 
-  CHECK_EQUAL(std::string("C"), methanol->getAtom(0).elname);
-  CHECK_EQUAL(std::string("O"), methanol->getAtom(1).elname);
+  CHECK_EQUAL(std::string("C"), methanol->getAtom(0).getName());
+  CHECK_EQUAL(std::string("O"), methanol->getAtom(1).getName());
 
   delete methanol;
+}
+
+TEST(Molecule, fructoseRoundTrip)
+{
+  std::string fructoseInchi =
+    "InChI=1S/C6H12O6/c7-1-3(9)5(11)6(12)4(10)2-8/h3,5-9,11-12H,1-2H2/t3-,5-,6-/m1/s1";
+  Molecule * fructose = Molecule::fromInchi(fructoseInchi);
+
+  CHECK_EQUAL(AT_NUM(15), fructose->getAtomCount());
+
+  GetINCHIData * data = fructose->tearOffGetINCHIData();
+
+  data->GetInchi();
+
+  CHECK_EQUAL(fructoseInchi, data->out_.szInChI);
+
+  delete data;
+  delete fructose;
 }

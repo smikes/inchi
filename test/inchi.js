@@ -204,5 +204,13 @@ describe('inchi', function () {
             roundTrip(fructose, done);
         });
 
+        it('should be able to make round-trips (cholesterol)', function (done) {
+            var cholesterol = 'InChI=1S/C27H46O/c1-18(2)7-6-8-19(3)23-11-12-24' +
+                    '-22-10-9-20-17-21(28)13-15-26(20,4)25(22)14-16-27(23,24)5' +
+                    '/h9,18-19,21-25,28H,6-8,10-17H2,1-5H3/t19-,21+,22+,23-,24+' +
+                    ',25+,26+,27-/m1/s1';
+
+            roundTrip(cholesterol, done);
+        });
     });
 });
