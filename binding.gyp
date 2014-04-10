@@ -53,9 +53,10 @@
         "src/molecule_wrap.cc",
         "src/molecule_native.cc",
         "src/inchi_atom.cc",
+        "src/get_inchi.cc",
         "src/get_inchi_data.cc",
-        "src/get_struct_from_inchi_data.cc",
-        "src/get_inchi.cc"
+        "src/get_struct_from_inchi.cc",
+        "src/get_struct_from_inchi_data.cc"
       ],
       "conditions": [
         ['OS=="win"', {
