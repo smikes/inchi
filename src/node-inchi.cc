@@ -16,6 +16,7 @@
 #include "./molecule.h"
 #include "./molecule_wrap.h"
 #include "./get_inchi.h"
+#include "./get_struct_from_inchi.h"
 
 /**
  * Direct wrapper of the low-level C++ api
@@ -42,6 +43,7 @@ void register_functions(Handle<Object> exports) {
   NODE_SET_METHOD(exports, "getAlgorithmVersion", getAlgorithmVersion);
   NODE_SET_METHOD(exports, "GetINCHISync", GetINCHISync);
   NODE_SET_METHOD(exports, "GetINCHI", GetINCHI);
+  NODE_SET_METHOD(exports, "GetStructFromINCHI", GetStructFromINCHI);
 }
 
 void init(Handle<Object> exports) {
