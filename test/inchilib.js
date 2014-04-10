@@ -123,6 +123,27 @@ describe('inchilib', function () {
         });
     });
 
+    describe('GetStructFromINCHI', function () {
+        it('should be a function', function () {
+            (inchilib.GetStructFromINCHI).should.be.a.Function;
+        });
+
+        it('should convert InChI to JSON representation of inchi_OutputStruct', function(done) {
+            inchilib.GetStructFromINCHI('InChI=1S/CH4O/c1-2/h2H,1H3', function (err, obj) {
+
+                obj.should.be.an.Object;
+                obj.atom[0].should.have.property('elname', 'C');
+                obj.atom[1].should.have.property('elname', 'O');
+                obj.atom[0].bonds.should.have.length(1);
+                obj.atom[0].bonds[0].neighbor.should.be.exactly(1);
+                obj.atom[0].bonds[0].bond_type.should.be.exactly(1);
+
+                done();
+            });
+        });
+
+    });
+
     describe('Molecule', function () {
 
         it('should publish a Molecule constructor', function () {
