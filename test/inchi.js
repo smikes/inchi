@@ -188,5 +188,10 @@ describe('inchi', function () {
             roundTrip(benzene, done);
         });
 
+        it('should be able to make round-trips (caffeine)', function (done) {
+            var caffeine = 'InChI=1S/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3';
+
+            roundTrip(caffeine, done);
+        });
     });
 });
