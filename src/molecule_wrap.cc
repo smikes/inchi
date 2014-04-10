@@ -70,12 +70,36 @@ void Molecule_wrap::addAtoms(Handle<Value> a) {
   }
 }
 
+template<typename T> T getIf(Handle<Object> atom, const char * k) {
+  Handle<String> key = NanSymbol(k);
+  return getIf<T, Handle<String> >(atom, key);
+}
+
+template<typename T, typename K> T getIf(Handle<Object> atom, K key) {
+  return atom->Has(key) ? T(atom->Get(key)->NumberValue()) : 0;
+}
+
 const InchiAtom InchiAtom::makeFromObject(Handle<Object> atom) {
   char * elname = NanCString(atom->Get(NanSymbol("elname")), 0);
   InchiAtom ret(elname);
   delete[] elname;
 
-  //TODO: SOM populate other data fields
+  ret.data_.x = getIf<double>(atom, "x");
+  ret.data_.y = getIf<double>(atom, "y");
+  ret.data_.z = getIf<double>(atom, "z");
+
+  // ignore bond information; stored separately
+
+  Handle<Array> num_iso_H = atom->Get(NanSymbol("num_iso_H")).As<Array>();
+  if (!num_iso_H->IsNull() && !num_iso_H->IsUndefined()) {
+    for (int i = 0; i < (NUM_H_ISOTOPES+1); i += 1) {
+      ret.data_.num_iso_H[i] = getIf<S_CHAR>(num_iso_H, i);
+    }
+  }
+
+  ret.data_.isotopic_mass = getIf<AT_NUM>(atom, "isotopic_mass");
+  ret.data_.radical = getIf<S_CHAR>(atom, "radical");
+  ret.data_.charge = getIf<S_CHAR>(atom, "charge");
 
   return ret;
 }
@@ -115,13 +139,13 @@ const InchiStereo InchiStereo::makeFromObject(Handle<Object> stereo) {
 
   Local<Array> neighbors = stereo->Get(NanSymbol("neighbor")).As<Array>();
   for (uint32_t i = 0; i < STEREO0D_NEIGHBORS; i += 1) {
-    ret.data_.neighbor[i] = AT_NUM(neighbors->Get(i)->NumberValue());
+    ret.data_.neighbor[i] = getIf<AT_NUM>(neighbors, i);
   }
 
-  ret.data_.central_atom = AT_NUM(stereo->Get(NanSymbol("central_atom"))->NumberValue());
+  ret.data_.central_atom = getIf<AT_NUM>(stereo, "central_atom");
 
-  ret.data_.type = S_CHAR(stereo->Get(NanSymbol("type"))->NumberValue());
-  ret.data_.parity = S_CHAR(stereo->Get(NanSymbol("parity"))->NumberValue());
+  ret.data_.type = getIf<S_CHAR>(stereo, "type");
+  ret.data_.parity = getIf<S_CHAR>(stereo, "parity");
 
   return ret;
 }
