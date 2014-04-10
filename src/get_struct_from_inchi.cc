@@ -16,11 +16,13 @@ void addstring(Handle<Object> ret, const char * name, const char * value);
 NAN_METHOD(GetStructFromINCHI) {
   NanScope();
 
-  std::string inchi = NanCString(args[0], 0);
+  char * inchi = NanCString(args[0], 0);
 
   NanCallback * callback = new NanCallback(args[1].As<Function>());
 
   NanAsyncQueueWorker(new GetStructFromINCHIWorker(callback, inchi));
+
+  delete[] inchi;
 
   NanReturnUndefined();
 }
