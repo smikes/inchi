@@ -18,7 +18,7 @@
             'RuntimeTypeInfo': 'false',
             'ExceptionHandling': '1',
             'AdditionalOptions': [
-              '/MP'
+              '/MP', '/EHsc'
             ]
           },
           'VCLibrarianTool': {
