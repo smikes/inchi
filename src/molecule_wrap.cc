@@ -12,9 +12,6 @@
 #include "./get_inchi_data.h"
 #include "./get_inchi_worker.h"
 
-static Persistent<Function> m_molecule_wrap_constructor;
-
-
 void Molecule_wrap::Init(v8::Handle<v8::Object> exports) {
   Local<FunctionTemplate> tpl = FunctionTemplate::New(Molecule_wrap::New);
   tpl->SetClassName(NanSymbol("Molecule"));
@@ -23,9 +20,7 @@ void Molecule_wrap::Init(v8::Handle<v8::Object> exports) {
   // prototype
   NODE_SET_PROTOTYPE_METHOD(tpl, "GetInChI", Molecule_wrap::GetInChI);
 
-  m_molecule_wrap_constructor = Persistent<Function>::New(tpl->GetFunction());
-
-  exports->Set(NanSymbol("Molecule"), m_molecule_wrap_constructor);
+  exports->Set(NanSymbol("Molecule"), tpl->GetFunction());
 }
 
 NAN_METHOD(Molecule_wrap::New) {
