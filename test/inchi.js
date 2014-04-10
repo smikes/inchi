@@ -53,10 +53,10 @@ describe('inchi', function () {
         it('should add some atoms', function () {
             var m = new inchi.Molecule();
 
-            m.addAtom('C');
+            m.addAtom({elname: 'C'});
 
             (m.atoms.length).should.be.exactly(1);
-            (m.atoms[0]).should.be.exactly('C');
+            (m.atoms[0]).should.have.property('elname', 'C');
         });
         it('should make bonds', function () {
             var m = new inchi.Molecule();
@@ -70,8 +70,8 @@ describe('inchi', function () {
         it('should record default order of 1 for bonds', function () {
             var m = new inchi.Molecule();
 
-            m.addAtom('C');
-            m.addAtom('O');
+            m.addAtom({elname: 'C'});
+            m.addAtom({elname: 'O'});
             m.addBond(0, 1);
 
             (m.bonds[0]).order.should.be.exactly(1);
@@ -79,8 +79,8 @@ describe('inchi', function () {
         it('should record order for bonds', function () {
             var m = new inchi.Molecule();
 
-            m.addAtom('C');
-            m.addAtom('O');
+            m.addAtom({elname: 'C'});
+            m.addAtom({elname: 'O'});
             m.addBond(0, 1, 2);
 
             (m.bonds[0]).order.should.be.exactly(2);
@@ -88,7 +88,7 @@ describe('inchi', function () {
         it('should retrieve InChI code for methane', function (done) {
             var m = new inchi.Molecule();
 
-            m.addAtom('C');
+            m.addAtom({elname: 'C'});
 
             m.getInchi(function(err, i) {
                 i.should.startWith('InChI=1S/CH4/h1H4');
@@ -159,8 +159,8 @@ describe('inchi', function () {
         it('should convert InChI code to molecule', function (done) {
             inchi.Molecule.fromInchi('InChI=1S/CH4O/c1-2/h2H,1H3', function (err, mol) {
                 (mol.atomCount()).should.be.exactly(2);
-                (mol.atoms[0]).should.be.exactly("C");
-                (mol.atoms[1]).should.be.exactly("O");
+                (mol.atoms[0]).should.have.property('elname', "C");
+                (mol.atoms[1]).should.have.property('elname', "O");
 
                 done();
             });
@@ -169,6 +169,10 @@ describe('inchi', function () {
         function roundTrip(i1, done) {
             inchi.Molecule.fromInchi(i1, function (e1, mol) {
                 mol.getInchi(function (e2, i2) {
+
+                    if (i1 !== i2) {
+                        console.log(mol);
+                    }
 
                     i2.should.be.exactly(i1);
                     done();
