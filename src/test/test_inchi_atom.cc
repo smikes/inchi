@@ -47,7 +47,7 @@ TEST(InchiAtom, hasDefaultIsotopes)
   InchiAtom c("C");
 
   CHECK_EQUAL(InchiAtom::IMPLICIT_NONISOTOPIC_H,
-              c.num_iso_H[InchiAtom::NON_ISOTOPIC_H]);
+              c.data_.num_iso_H[InchiAtom::NON_ISOTOPIC_H]);
 }
 
 TEST(InchiAtom, conversion)

@@ -34,16 +34,15 @@ Molecule::Molecule() {
 Molecule::~Molecule() {
 }
 
-
 /**
  * adds an atom to the molecule
  *
  * @method addAtom
- * @param {const char *} elementName
+ * @param {const InchiAtom&} atom
  * @return {int} atom index
  */
-int Molecule::addAtom(const char * elementName) {
-  InchiAtom a(elementName);
+int Molecule::addAtom(const InchiAtom& atom) {
+  InchiAtom a(atom);
 
   atoms_.push_back(a);
 
@@ -146,7 +145,7 @@ void Molecule::addStereo(const InchiStereo& s) {
   stereo0D_.push_back(s);
 }
 
-Molecule * Molecule::fromInchi(const char * inchi) {
+Molecule * Molecule::fromInchi(const std::string& inchi) {
   GetStructFromINCHIData data(inchi);
 
   int result = data.GetStructFromINCHI();
@@ -158,7 +157,7 @@ Molecule * Molecule::fromInchi(const char * inchi) {
   Molecule * m = new Molecule;
 
   for (int i = 0; i < data.out_.num_atoms; i += 1) {
-    m->addAtom(data.out_.atom[i].elname);
+    m->addAtom(InchiAtom(data.out_.atom[i]));
   }
 
   for (int i = 0; i < data.out_.num_stereo0D; i += 1) {

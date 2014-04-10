@@ -47,14 +47,13 @@ Molecule * Molecule::Create(Handle<Value> val) {
   return input;
 }
 
-void add_atom(Molecule* in, Handle<Object> atom) {
-  Handle<String> elname_string = atom->Get(NanSymbol("elname"))->ToString();
+void add_atom(Molecule* in, Handle<Object> a) {
+  InchiAtom atom = InchiAtom::makeFromObject(a);
 
-  char * elname = NanCString(elname_string, 0);
-  int index = in->addAtom(elname);
+  int index = in->addAtom(atom);
 
   Handle<Array> neighbor =
-    Handle<Array>::Cast(atom->Get(NanSymbol("neighbor")));
+    Handle<Array>::Cast(a->Get(NanSymbol("neighbor")));
 
   int bonds = neighbor->Length();
   for (int i = 0; i < bonds; ++i) {

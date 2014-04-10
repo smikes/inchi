@@ -5,10 +5,14 @@
  *
  * Released under the MIT license -- see MIT-LICENSE for details
  */
+#include <node.h>
+#include <v8.h>
 
 #include <string>
 
 #include "inchi_dll/inchi_api.h"
+
+#include "./using_v8.h"
 
 struct InchiAtom {
   static const int     ELNAME_LEN = ATOM_EL_LEN;
@@ -20,11 +24,14 @@ struct InchiAtom {
          TRITIUM_H      = 3 };
 
   /* data members */
-  char elname[ELNAME_LEN];
-  S_CHAR num_iso_H[NUM_H_ISOTOPES+1];
+  inchi_Atom data_;
 
   /* constructors */
   explicit InchiAtom(const char * name = "");
+  explicit InchiAtom(const inchi_Atom& atom) : data_(atom) {
+  }
+
+  static const InchiAtom makeFromObject(Handle<Object> atom);
 
   /* accessors */
   const std::string getName();

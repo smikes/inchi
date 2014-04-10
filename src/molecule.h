@@ -10,6 +10,7 @@
 #include <v8.h>
 
 #include <vector>
+#include <string>
 
 #include "./using_v8.h"
 
@@ -29,7 +30,10 @@ struct Molecule {
   std::vector<InchiStereo> stereo0D_;
 
   /* native api */
-  int addAtom(const char * element);
+  int addAtom(const InchiAtom& atom);
+  int addAtom(const char * atom) {
+    return addAtom(InchiAtom(atom));
+  }
   InchiAtom& getAtom(int i);
 
   AT_NUM getAtomCount();
@@ -40,7 +44,7 @@ struct Molecule {
 
   GetINCHIData * tearOffGetINCHIData();
 
-  static Molecule * fromInchi(const char * inchi);
+  static Molecule * fromInchi(const std::string& inchi);
 
   /* javascript api */
   static Molecule * Create(Handle<Value> val);

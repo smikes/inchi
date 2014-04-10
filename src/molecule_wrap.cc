@@ -41,6 +41,7 @@ NAN_METHOD(Molecule_wrap::New) {
   m->addBonds(in->Get(NanSymbol("bonds")));
 
   m->addStereo(in->Get(NanSymbol("stereo0D")));
+
   m->Wrap(args.This());
 
   NanReturnValue(args.This());
@@ -63,10 +64,20 @@ void Molecule_wrap::addAtoms(Handle<Value> a) {
 
   // atoms is an array of v8::String
   for (uint32_t i = 0; i < atoms->Length(); i += 1) {
-    char * elname = NanCString(atoms->Get(i), 0);
-    mol.addAtom(elname);
-    delete[] elname;
+    Handle<Object> atom = atoms->Get(i)->ToObject();
+
+    mol.addAtom(InchiAtom::makeFromObject(atom));
   }
+}
+
+const InchiAtom InchiAtom::makeFromObject(Handle<Object> atom) {
+  char * elname = NanCString(atom->Get(NanSymbol("elname")), 0);
+  InchiAtom ret(elname);
+  delete[] elname;
+
+  //TODO: SOM populate other data fields
+
+  return ret;
 }
 
 void Molecule_wrap::addBonds(Handle<Value> b) {

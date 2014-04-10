@@ -22,11 +22,12 @@
  * @param {const char *} [name=""] element name
  */
 InchiAtom::InchiAtom(const char * name) {
+  memset(&(this->data_), 0, sizeof(this->data_));
   this->setName(name);
-  this->num_iso_H[NON_ISOTOPIC_H] = IMPLICIT_NONISOTOPIC_H;
-  this->num_iso_H[PROTIUM_H] = 0;
-  this->num_iso_H[DEUTERIUM_H] = 0;
-  this->num_iso_H[TRITIUM_H] = 0;
+  this->data_.num_iso_H[NON_ISOTOPIC_H] = IMPLICIT_NONISOTOPIC_H;
+  this->data_.num_iso_H[PROTIUM_H] = 0;
+  this->data_.num_iso_H[DEUTERIUM_H] = 0;
+  this->data_.num_iso_H[TRITIUM_H] = 0;
 }
 
 /**
@@ -36,8 +37,8 @@ InchiAtom::InchiAtom(const char * name) {
  * @param {const char *} name element name
  */
 void InchiAtom::setName(const char * name) {
-  strncpy(this->elname, name, ELNAME_LEN);
-  this->elname[ELNAME_LEN - 1] = '\0';
+  strncpy(this->data_.elname, name, ELNAME_LEN);
+  this->data_.elname[ELNAME_LEN - 1] = '\0';
 }
 
 /**
@@ -46,7 +47,7 @@ void InchiAtom::setName(const char * name) {
    @return {const std::string} element name
  */
 const std::string InchiAtom::getName() {
-  return elname;
+  return data_.elname;
 }
 
 /**
@@ -56,15 +57,7 @@ const std::string InchiAtom::getName() {
    @return {inchi_Atom}
  */
 InchiAtom::operator inchi_Atom() {
-  inchi_Atom a;
-  memset(&a, 0, (sizeof a));
-
-  memcpy(a.elname, this->elname, ELNAME_LEN);
-  memcpy(a.num_iso_H, this->num_iso_H, NUM_H_ISOTOPES+1);
-
-  // TODO(SOM): populate remaining members, excluding
-  // neighbor, bond_type, bond_stereo, num_bonds
-  // which are populated via bonds_
+  inchi_Atom a(this->data_);
 
   return a;
 }
