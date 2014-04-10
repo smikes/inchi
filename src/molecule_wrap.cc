@@ -72,10 +72,10 @@ void Molecule_wrap::addAtoms(Handle<Value> a) {
 
 template<typename T> T getIf(Handle<Object> atom, const char * k) {
   Handle<String> key = NanSymbol(k);
-  return getIf<T, Handle<String> >(atom, key);
+  return atom->Has(key) ? T(atom->Get(key)->NumberValue()) : 0;
 }
 
-template<typename T, typename K> T getIf(Handle<Object> atom, K key) {
+template<typename T> T getIf(Handle<Object> atom, uint32_t key) {
   return atom->Has(key) ? T(atom->Get(key)->NumberValue()) : 0;
 }
 
