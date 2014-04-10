@@ -25,8 +25,7 @@
 void populate_input(Handle<Value> val, Molecule* in);
 static void populate_ret(Handle<Object> ret,
                          const inchi_Output& out, int result);
-static void addstring(Handle<Object> ret,
-                      const char * name, const char * value);
+void addstring(Handle<Object> ret, const char * name, const char * value);
 
 /**
  * Create an Molecule structure from a partially or fully specified
@@ -88,8 +87,7 @@ void populate_input(Handle<Value> val, Molecule* in) {
   }
 }
 
-static void addstring(Handle<Object> ret,
-                      const char * name, const char * in) {
+void addstring(Handle<Object> ret, const char * name, const char * in) {
   const char * value = (in ? in : "");
 
   ret->Set(NanSymbol(name), String::New(value));
