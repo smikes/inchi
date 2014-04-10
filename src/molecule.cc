@@ -78,7 +78,7 @@ void populate_input(Handle<Value> val, Molecule* in) {
   if (!mol->Has(NanSymbol("atom")) || !mol->Get(NanSymbol("atom"))->IsArray()) {
     return;
   }
-  Handle<Array> atom = Handle<Array>::Cast(mol->Get(NanSymbol("atom")));
+  Handle<Array> atom = mol->Get(NanSymbol("atom")).As<Array>();
 
   int atoms = atom->Length();
   for (int i = 0; i < atoms; i += 1) {
