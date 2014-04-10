@@ -156,5 +156,37 @@ describe('inchi', function () {
             });
         });
 
+        it('should convert InChI code to molecule', function (done) {
+            inchi.Molecule.fromInchi('InChI=1S/CH4O/c1-2/h2H,1H3', function (err, mol) {
+                (mol.atomCount()).should.be.exactly(2);
+                (mol.atoms[0]).should.be.exactly("C");
+                (mol.atoms[1]).should.be.exactly("O");
+
+                done();
+            });
+        });
+
+        function roundTrip(i1, done) {
+            inchi.Molecule.fromInchi(i1, function (e1, mol) {
+                mol.getInchi(function (e2, i2) {
+
+                    i2.should.be.exactly(i1);
+                    done();
+                });
+            });
+        }
+
+        it('should be able to make round-trips (methanol)', function (done) {
+            var methanol = 'InChI=1S/CH4O/c1-2/h2H,1H3';
+
+            roundTrip(methanol, done);
+        });
+
+        it('should be able to make round-trips (benzene)', function (done) {
+            var benzene = 'InChI=1S/C6H6/c1-2-4-6-5-3-1/h1-6H';
+
+            roundTrip(benzene, done);
+        });
+
     });
 });
