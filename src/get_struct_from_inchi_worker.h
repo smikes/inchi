@@ -8,7 +8,7 @@
 
 #include <string>
 
-Handle<Object> GetRawStructure(const GetStructFromINCHIData& data);
+Handle<Object> MakeStructure(const GetStructFromINCHIData& data);
 
 /**
    This class, derived from NanAsyncWorker, manages
@@ -52,7 +52,7 @@ struct GetStructFromINCHIWorker : public NanAsyncWorker {
   void HandleOKCallback() {
     NanScope();
 
-    Handle<Object> result = GetRawStructure(data_);
+    Handle<Object> result = MakeStructure(data_);
 
     Local<Value> argv[] = {
       NanNewLocal<Value>(v8::Null()),

@@ -30,7 +30,7 @@ NAN_METHOD(GetStructFromINCHI) {
   NanReturnUndefined();
 }
 
-static Handle<Object> GetBond(const inchi_Atom& a, int n) {
+static Handle<Object> MakeBond(const inchi_Atom& a, int n) {
   Local<Object> ret = Object::New();
 
   ret->Set(NanSymbol("neighbor"), Number::New(a.neighbor[n]));
@@ -40,7 +40,7 @@ static Handle<Object> GetBond(const inchi_Atom& a, int n) {
   return ret;
 }
 
-static Handle<Object> GetAtom(const inchi_Atom& a) {
+static Handle<Object> MakeAtom(const inchi_Atom& a) {
   Local<Object> ret = Object::New();
 
   ret->Set(NanSymbol("x"), Number::New(a.x));
@@ -51,7 +51,7 @@ static Handle<Object> GetAtom(const inchi_Atom& a) {
   // compress neighbor, bond_type, and bond_stereo arrays
   Local<Array> bonds = Array::New();
   for (int i = 0; i < a.num_bonds; i += 1) {
-    bonds->Set(Number::New(i), GetBond(a, i));
+    bonds->Set(Number::New(i), MakeBond(a, i));
   }
   ret->Set(NanSymbol("bonds"), bonds);
 
@@ -69,7 +69,7 @@ static Handle<Object> GetAtom(const inchi_Atom& a) {
   return ret;
 }
 
-Handle<Object> GetStereo0D(const inchi_Stereo0D& stereo) {
+Handle<Object> MakeStereo0D(const inchi_Stereo0D& stereo) {
   Local<Object> ret = Object::New();
 
   Local<Array> neighbor = Array::New();
@@ -85,20 +85,20 @@ Handle<Object> GetStereo0D(const inchi_Stereo0D& stereo) {
   return ret;
 }
 
-Handle<Object> GetRawStructure(const GetStructFromINCHIData& data) {
+Handle<Object> MakeStructure(const GetStructFromINCHIData& data) {
   Local<Object> ret = Object::New();
 
   // atom -- array of atom objects
   Local<Array> atom = Array::New();
   for (int i = 0; i < data.out_.num_atoms; i += 1) {
-    atom->Set(Number::New(i), GetAtom(data.out_.atom[i]));
+    atom->Set(Number::New(i), MakeAtom(data.out_.atom[i]));
   }
   ret->Set(NanSymbol("atom"), atom);
 
   // stereo0D -- array of stereo0D objects
   Local<Array> stereo0D = Array::New();
   for (int i = 0; i < data.out_.num_stereo0D; i += 1) {
-    stereo0D->Set(Number::New(i), GetStereo0D(data.out_.stereo0D[i]));
+    stereo0D->Set(Number::New(i), MakeStereo0D(data.out_.stereo0D[i]));
   }
   ret->Set(NanSymbol("stereo0D"), stereo0D);
 
@@ -109,6 +109,7 @@ Handle<Object> GetRawStructure(const GetStructFromINCHIData& data) {
   addstring(ret, "log", data.out_.szLog);
 
   // warning flags
+  // TODO(SOM): add these
 
   return ret;
 }
