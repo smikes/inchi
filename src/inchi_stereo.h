@@ -6,7 +6,9 @@
  * Released under the MIT license -- see MIT-LICENSE for details
  */
 
-const int STEREO0D_NEIGHBORS=4;
+#include <cstring>
+
+const int STEREO0D_NEIGHBORS = 4;
 
 /**
     Internal class for representing 1-atom stereochemistry, irrespective of dimenstion
