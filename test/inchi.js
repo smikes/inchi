@@ -193,5 +193,12 @@ describe('inchi', function () {
 
             roundTrip(caffeine, done);
         });
+
+        it('should be able to make round-trips (keto-D-fructose)', function (done) {
+            var fructose = 'InChI=1S/C6H12O6/c7-1-3(9)5(11)6(12)4(10)2-8/h3,5-9,11-12H,1-2H2/t3-,5-,6-/m1/s1';
+
+            roundTrip(fructose, done);
+        });
+
     });
 });
