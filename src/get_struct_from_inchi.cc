@@ -51,14 +51,14 @@ static Handle<Object> MakeAtom(const inchi_Atom& a) {
   // compress neighbor, bond_type, and bond_stereo arrays
   Local<Array> bonds = Array::New();
   for (int i = 0; i < a.num_bonds; i += 1) {
-    bonds->Set(Number::New(i), MakeBond(a, i));
+    bonds->Set(i, MakeBond(a, i));
   }
   ret->Set(NanSymbol("bonds"), bonds);
 
   // implicit hydrogens
   Local<Array> num_iso_H = Array::New();
   for (int i = 0; i < NUM_H_ISOTOPES+1; i += 1) {
-    num_iso_H->Set(Number::New(i), Number::New(a.num_iso_H[i]));
+    num_iso_H->Set(i, Number::New(a.num_iso_H[i]));
   }
   ret->Set(NanSymbol("num_iso_H"), num_iso_H);
 
@@ -74,7 +74,7 @@ Handle<Object> MakeStereo0D(const inchi_Stereo0D& stereo) {
 
   Local<Array> neighbor = Array::New();
   for (int i = 0; i < STEREO0D_NEIGHBORS; i += 1) {
-    neighbor->Set(Number::New(i), Number::New(stereo.neighbor[i]));
+    neighbor->Set(i, Number::New(stereo.neighbor[i]));
   }
   ret->Set(NanSymbol("neighbor"), neighbor);
 
@@ -91,14 +91,14 @@ Handle<Object> MakeStructure(const GetStructFromINCHIData& data) {
   // atom -- array of atom objects
   Local<Array> atom = Array::New();
   for (int i = 0; i < data.out_.num_atoms; i += 1) {
-    atom->Set(Number::New(i), MakeAtom(data.out_.atom[i]));
+    atom->Set(i, MakeAtom(data.out_.atom[i]));
   }
   ret->Set(NanSymbol("atom"), atom);
 
   // stereo0D -- array of stereo0D objects
   Local<Array> stereo0D = Array::New();
   for (int i = 0; i < data.out_.num_stereo0D; i += 1) {
-    stereo0D->Set(Number::New(i), MakeStereo0D(data.out_.stereo0D[i]));
+    stereo0D->Set(i, MakeStereo0D(data.out_.stereo0D[i]));
   }
   ret->Set(NanSymbol("stereo0D"), stereo0D);
 
