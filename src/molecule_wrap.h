@@ -22,6 +22,7 @@ struct Molecule_wrap : public node::ObjectWrap {
 
   void addAtoms(Handle<Value> atoms);
   void addBonds(Handle<Value> bonds);
+  void addStereo(Handle<Value> stereo);
 
   Molecule mol;
 };

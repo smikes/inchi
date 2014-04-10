@@ -130,14 +130,21 @@ GetINCHIData * Molecule::tearOffGetINCHIData() {
   data->in_.num_atoms = atoms_.size();
   data->in_.atom = new inchi_Atom[data->in_.num_atoms];
 
+  data->in_.num_stereo0D = stereo0D_.size();
+  data->in_.stereo0D = new inchi_Stereo0D[data->in_.num_stereo0D];
+
   std::copy(atoms_.begin(), atoms_.end(), data->in_.atom);
 
   std::for_each(bonds_.begin(), bonds_.end(), make_bond(data));
 
+  std::copy(stereo0D_.begin(), stereo0D_.end(), data->in_.stereo0D);
+
   return data;
 }
 
-
+void Molecule::addStereo(const InchiStereo& s) {
+  stereo0D_.push_back(s);
+}
 
 Molecule * Molecule::fromInchi(const char * inchi) {
   GetStructFromINCHIData data(inchi);
@@ -152,6 +159,10 @@ Molecule * Molecule::fromInchi(const char * inchi) {
 
   for (int i = 0; i < data.out_.num_atoms; i += 1) {
     m->addAtom(data.out_.atom[i].elname);
+  }
+
+  for (int i = 0; i < data.out_.num_stereo0D; i += 1) {
+    m->addStereo(InchiStereo(data.out_.stereo0D[i]));
   }
 
   return m;

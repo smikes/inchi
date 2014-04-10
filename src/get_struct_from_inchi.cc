@@ -11,6 +11,9 @@
 #include "./get_struct_from_inchi_data.h"
 #include "./get_struct_from_inchi_worker.h"
 
+#include "./inchi_stereo.h"
+
+
 void addstring(Handle<Object> ret, const char * name, const char * value);
 
 NAN_METHOD(GetStructFromINCHI) {
@@ -66,6 +69,22 @@ static Handle<Object> GetAtom(const inchi_Atom& a) {
   return ret;
 }
 
+Handle<Object> GetStereo0D(const inchi_Stereo0D& stereo) {
+  Local<Object> ret = Object::New();
+
+  Local<Array> neighbor = Array::New();
+  for (int i = 0; i < STEREO0D_NEIGHBORS; i += 1) {
+    neighbor->Set(Number::New(i), Number::New(stereo.neighbor[i]));
+  }
+  ret->Set(NanSymbol("neighbor"), neighbor);
+
+  ret->Set(NanSymbol("central_atom"), Number::New(stereo.central_atom));
+  ret->Set(NanSymbol("type"), Number::New(stereo.type));
+  ret->Set(NanSymbol("parity"), Number::New(stereo.parity));
+
+  return ret;
+}
+
 Handle<Object> GetRawStructure(const GetStructFromINCHIData& data) {
   Local<Object> ret = Object::New();
 
@@ -77,6 +96,11 @@ Handle<Object> GetRawStructure(const GetStructFromINCHIData& data) {
   ret->Set(NanSymbol("atom"), atom);
 
   // stereo0D -- array of stereo0D objects
+  Local<Array> stereo0D = Array::New();
+  for (int i = 0; i < data.out_.num_stereo0D; i += 1) {
+    stereo0D->Set(Number::New(i), GetStereo0D(data.out_.stereo0D[i]));
+  }
+  ret->Set(NanSymbol("stereo0D"), stereo0D);
 
   // message
   addstring(ret, "message", data.out_.szMessage);

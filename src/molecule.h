@@ -17,6 +17,7 @@
 
 #include "./inchi_atom.h"
 #include "./inchi_bond.h"
+#include "./inchi_stereo.h"
 #include "./get_inchi_data.h"
 
 struct Molecule {
@@ -25,7 +26,7 @@ struct Molecule {
 
   std::vector<InchiAtom> atoms_;
   std::vector<InchiBond> bonds_;
-  std::vector<inchi_Stereo0D> stereo0D_;
+  std::vector<InchiStereo> stereo0D_;
 
   /* native api */
   int addAtom(const char * element);
@@ -34,6 +35,8 @@ struct Molecule {
   AT_NUM getAtomCount();
 
   void addBond(const InchiBond& b);
+
+  void addStereo(const InchiStereo& s);
 
   GetINCHIData * tearOffGetINCHIData();
 
