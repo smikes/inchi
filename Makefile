@@ -2,6 +2,8 @@ JSSOURCES=$(shell find bin lib -name '*.js' -print)
 CPPSOURCES=$(shell echo src/*.{cc,h})
 DOCDIRS=src lib
 
+default: build test
+
 install:
 	(unset tmp temp; npm i)
 
