@@ -54,9 +54,9 @@ struct GetStructFromINCHIWorker : public NanAsyncWorker {
 
     Handle<Object> result = MakeStructure(data_);
 
-    Local<Value> argv[] = {
-      NanNewLocal<Value>(v8::Null()),
-      NanNewLocal<Value>(result)
+    Handle<Value> argv[] = {
+      v8::Null(),
+      result
     };
 
     callback->Call(2, argv);

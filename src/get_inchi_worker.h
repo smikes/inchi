@@ -57,7 +57,7 @@ struct GetINCHIWorker : public NanAsyncWorker {
 
     Handle<Object> result = GetResult(data_);
 
-    Local<Value> argv[] = {
+    Handle<Value> argv[] = {
       NanNewLocal<Value>(v8::Null()),
       NanNewLocal<Value>(result)
     };
