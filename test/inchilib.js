@@ -157,6 +157,24 @@ describe('inchilib', function () {
 
             (m.GetInChI).should.be.a.Function;
         });
+        it('should not assert when constructor is called incorrectly', function () {
+            (function () {
+                inchilib.Molecule({atoms: [], bonds: []})
+            }).should.throw(/new operator/);
+        });
+        it('should not assert when Molecule::GetInChI is called on non-molecule', function () {
+            (function () {
+                var foo = { GetInChI: inchilib.Molecule.prototype.GetInChI };
+                foo.GetInChI(function () {
+                });
+            }).should.throw(/member function of Molecule/);
+        });
+        it('should not assert when Molecule::GetInChI is called without context', function () {
+            (function () {
+                var func = inchilib.Molecule.prototype.GetInChI;
+                func();
+            }).should.throw(/member function of Molecule/);
+        });
     });
 
 });
