@@ -78,7 +78,8 @@ int GetINCHIData::GetInchi() {
 
   this->result_ = GetINCHI(&(this->in_), &(this->out_));
 
-  if (this->result_ == inchi_Ret_OKAY) {
+  if (this->result_ == inchi_Ret_OKAY ||
+      this->result_ == inchi_Ret_WARNING) {
     GetINCHIKeyFromINCHI(this->out_.szInChI, 0, 0,
                          this->inchikey, 0, 0);
   }
