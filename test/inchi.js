@@ -156,6 +156,16 @@ describe('inchi', function () {
             });
         });
 
+        it('should retrieve InChI code for argon', function (done) {
+            var m = new inchi.Molecule;
+
+            m.addAtom({ x: 10.2967, y: -1.5283, z: -15283, elname: 'Ar' });
+            m.getInchi(function (err, i) {
+                i.should.equal('InChI=1S/Ar');
+                done();
+            });
+        });
+
         it('should convert InChI code to molecule', function (done) {
             inchi.Molecule.fromInchi('InChI=1S/CH4O/c1-2/h2H,1H3', function (err, mol) {
                 (mol.atomCount()).should.be.exactly(2);
@@ -212,5 +222,119 @@ describe('inchi', function () {
 
             roundTrip(cholesterol, done);
         });
+
+        it('should be able to make round-trips (elements)', function (done) {
+            var elements = 'InChI=1S/CH4.Ac.Ag.Al.Am.Ar.AsH3.AtH.Au.BH3.Ba.Be.Bi' +
+                    '.Bk.BrH.Ca.Cd.Ce.Cf.ClH.Cm.Co.Cr.Cs.Cu.Dy.Er.Es.Eu.FH.Fe.Fm' +
+                    '.Fr.Ga.Gd.GeH4.He.Hf.Hg.Ho.HI.In.Ir.K.Kr.La.Li.Lr.Lu.Md.Mg.' +
+                    'Mn.Mo.H3N.Na.Nb.Nd.Ne.Ni.No.Np.H2O.Os.H3P.Pa.Pb.Pd.Pm.Po.Pr' +
+                    '.Pt.Pu.Ra.Rb.Re.Rf.Rh.Rn.Ru.H2S.Sb.Sc.H2Se.H4Si.Sm.Sn.Sr.Ta' +
+                    '.Tb.Tc.H2Te.Th.Ti.Tl.Tm.U.V.W.Xe.Y.Yb.Zn.Zr.3H2.40H/h1H4;;;' +
+                    ';;;1H3;1H;;1H3;;;;;1H;;;;;1H;;;;;;;;;;1H;;;;;;1H4;;;;;1H;;;' +
+                    ';;;;;;;;;;1H3;;;;;;;;1H2;;1H3;;;;;;;;;;;;;;;;1H2;;;1H2;1H4;' +
+                    ';;;;;;1H2;;;;;;;;;;;;;3*1H;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;' +
+                    ';;;;;;;/i;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;' +
+                    ';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1+2;1+' +
+                    '1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;';
+
+            roundTrip(elements, done);
+        });
+
+        it('should be able to make round-trips (elements2)', function (done) {
+            var elements = 'InChI=1S/3CH3.Ac.Ag.Al.Am.ArCl.AsH3Se.AtRn.Au.BH3.Ba.Be.Bi.Bk.BrKr.Ca.Cd.Ce.Cf.Cm.Co.Cr.Cs.Cu.Dy.Er.Es.Eu.FNe.Fe.Fm.Fr.Ga.Gd.GeH3.He.Hf.Hg.Ho.IXe.In.Ir.K.La.Li.Lr.Lu.Md.Mg.Mn.Mo.H2N.Na.Nb.Nd.Ni.No.Np.H2O.Os.H3PS.Pa.Pb.Pd.Pm.Po.Pr.Pt.Pu.Ra.Rb.Re.Rf.Rh.Ru.Sb.Sc.H3Si.Sm.Sn.Sr.Ta.Tb.Tc.H2Te.Th.Ti.Tl.Tm.U.V.W.Y.Yb.Zn.Zr.21H/c;;;;;;;3*1-2;;;;;;;1-2;;;;;;;;;;;;;;1-2;;;;;;;;;;;1-2;;;;;;;;;;;;;;;;;;;;;1-2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;/h3*1H3;;;;;;2H,1H2;;;1H3;;;;;;;;;;;;;;;;;;;;;;;;;1H3;;;;;;;;;;;;;;;;;1H2;;;;;;;1H2;;2H,1H2;;;;;;;;;;;;;;;;;1H3;;;;;;;1H2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;/q;;;+1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1;;;;;;;;;;;;;;;;;;+1;;;;;;+1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;/p-2/i;;;;;;;;;;;1T;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1+1;;;;;;;;;;;;;;;;;;;;';
+
+            roundTrip(elements, done);
+        });
+
+        it('should handle isotopes specified directly', function (done) {
+            var m = new inchi.Molecule;
+
+            m.addAtom('C');
+            m.addAtom({elname: 'H', isotopic_mass: 2});
+            m.addBond(0, 1);
+
+            m.getInchi(function(err, i) {
+                i.should.equal("InChI=1S/CH4/h1H4/i1D");
+                done();
+            });
+        });
+
+        it('should handle isotopes specified by shift', function (done) {
+            var m = new inchi.Molecule;
+
+            m.addAtom('C');
+            m.addAtom({elname: 'H', isotopic_mass: 1 + inchi.ISOTOPIC_SHIFT_FLAG});
+            m.addBond(0, 1);
+
+            m.getInchi(function(err, i) {
+                i.should.equal("InChI=1S/CH4/h1H4/i1D");
+                done();
+            });
+        });
+
+        it('should handle isotopes specified by iso_H', function (done) {
+            var m = new inchi.Molecule;
+
+            m.addAtom('C');
+            m.atoms[0].num_iso_H = [3, 0, 1, 0];
+
+            m.getInchi(function(err, i) {
+                i.should.equal("InChI=1S/CH4/h1H4/i1D");
+                done();
+            });
+        });
     });
+
+    describe('ill-formed molecule', function () {
+        it('should complain about bonds between nonexistent atoms', function () {
+            var m = new inchi.Molecule();
+
+            m.addAtom('C');
+            m.addAtom('C');
+
+            (function () { m.addBond(1, 2); }).should.throw(/out of range/);
+        });
+    });
+
+    describe('real-life data', function () {
+        it('should read Elements_C2', function (done) {
+            var fs = require('fs'),
+                molfile = require('molfile'),
+                file = fs.readFileSync("test/fixtures/Elements_C2.sdf"),
+                mol = molfile.parseMol(String(file)),
+                m = inchi.moleculeFromMolfile(mol),
+                inchiMol = new inchi.inchilib.Molecule(m);
+
+            inchiMol.GetInChI(function (err, inchi) {
+                done();
+            });
+        });
+        it('should handle a copper-lawrencium bond', function (done) {
+            var m = new inchi.Molecule;
+            m.addAtom('Cu');
+            m.addAtom('Lr');
+            m.addBond(0, 1, 1);
+
+            m.getInchi(function (err, inchi) {
+                inchi.should.equal('InChI=1S/Cu.Lr');
+                done();
+            });
+        });
+        it('should handle zwitterions_1.#002', function (done) {
+            var m = new inchi.Molecule();
+            m.addAtom('C');
+            m.addAtom('C');
+            m.addAtom({elname: 'N', charge: 1});
+            m.addAtom({elname: 'N', charge: -1});
+            m.addBond(0, 1, 1);
+            m.addBond(1, 2, 3); // C#N triple
+            m.addBond(2, 3, 1);
+
+            m.getInchi(function (err, i) {
+                i.should.equal('InChI=1S/C2H4N2/c1-2-4-3/h3H,1H3');
+                done();
+            });
+          });
+    });
+
 });
