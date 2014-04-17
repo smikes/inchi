@@ -36,8 +36,6 @@ void addstring(Handle<Object> ret, const char * name, const char * value);
  * @param {Handle&lt;Object&gt;} val Object handle that parallels an inchi_Input
  */
 Molecule * Molecule::Create(Handle<Value> val) {
-  // TODO(SOM): validation
-
   // create an empty Molecule
   Molecule * input = new Molecule;
 
