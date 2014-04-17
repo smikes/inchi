@@ -101,10 +101,12 @@ static void populate_ret(Handle<Object> ret,
 }
 
 Handle<Object> GetResult(GetINCHIData * data) {
+  NanScope();
+
   Local<Object> ret = Object::New();
 
   populate_ret(ret, data->out_, data->result_);
   addstring(ret, "inchikey", data->inchikey);
 
-  return ret;
+  return scope.Close(ret);
 }
