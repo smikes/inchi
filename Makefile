@@ -7,7 +7,7 @@ default: build test
 install:
 	(unset tmp temp; npm i)
 
-prepublish: lint doc test no-dos-endings check-coverage
+prepublish: lint doc test no-dos-endings check-coverage jstest-slow
 
 lint: jslint cpplint doclint
 
@@ -24,6 +24,9 @@ test: cpptest jstest
 
 jstest:
 	./node_modules/.bin/mocha
+
+jstest-slow:
+	./node_modules/.bin/mocha -t 10000 test/slow
 
 build:
 	(unset tmp temp; npm run-script build)
