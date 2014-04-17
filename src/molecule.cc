@@ -14,6 +14,7 @@
 
 #include "./molecule.h"
 #include "./get_inchi_worker.h"
+#include "./inchi_lock.h"
 
 /**
 
