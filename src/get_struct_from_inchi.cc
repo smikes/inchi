@@ -31,17 +31,21 @@ NAN_METHOD(GetStructFromINCHI) {
 }
 
 static Handle<Object> MakeBond(const inchi_Atom& a, int n) {
-  Local<Object> ret = Object::New();
+  NanScope();
+
+  Handle<Object> ret = NanNewLocal<Object>(Object::New());
 
   ret->Set(NanSymbol("neighbor"), Number::New(a.neighbor[n]));
   ret->Set(NanSymbol("bond_type"), Number::New(a.bond_type[n]));
   ret->Set(NanSymbol("bond_stereo"), Number::New(a.bond_stereo[n]));
 
-  return ret;
+  return scope.Close(ret);
 }
 
 static Handle<Object> MakeAtom(const inchi_Atom& a) {
-  Local<Object> ret = Object::New();
+  NanScope();
+
+  Handle<Object> ret = NanNewLocal<Object>(Object::New());
 
   ret->Set(NanSymbol("x"), Number::New(a.x));
   ret->Set(NanSymbol("y"), Number::New(a.y));
@@ -49,30 +53,32 @@ static Handle<Object> MakeAtom(const inchi_Atom& a) {
   addstring(ret, "elname", a.elname);
 
   // compress neighbor, bond_type, and bond_stereo arrays
-  Local<Array> bonds = Array::New();
+  ret->Set(NanSymbol("bonds"), Array::New());
+  Local<Array> bonds = ret->Get(NanSymbol("bonds")).As<Array>();
   for (int i = 0; i < a.num_bonds; i += 1) {
     bonds->Set(i, MakeBond(a, i));
   }
-  ret->Set(NanSymbol("bonds"), bonds);
 
   // implicit hydrogens
-  Local<Array> num_iso_H = Array::New();
+  ret->Set(NanSymbol("num_iso_H"), Array::New());
+  Local<Array> num_iso_H = ret->Get(NanSymbol("num_iso_H")).As<Array>();
   for (int i = 0; i < NUM_H_ISOTOPES+1; i += 1) {
     num_iso_H->Set(i, Number::New(a.num_iso_H[i]));
   }
-  ret->Set(NanSymbol("num_iso_H"), num_iso_H);
 
   ret->Set(NanSymbol("isotopic_mass"), Number::New(a.isotopic_mass));
   ret->Set(NanSymbol("radical"), Number::New(a.radical));
   ret->Set(NanSymbol("charge"), Number::New(a.charge));
 
-  return ret;
+  return scope.Close(ret);
 }
 
 Handle<Object> MakeStereo0D(const inchi_Stereo0D& stereo) {
-  Local<Object> ret = Object::New();
+  NanScope();
 
-  Local<Array> neighbor = Array::New();
+  Local<Object> ret = NanNewLocal<Object>(Object::New());
+
+  Local<Array> neighbor = NanNewLocal<Array>(Array::New());
   for (int i = 0; i < STEREO0D_NEIGHBORS; i += 1) {
     neighbor->Set(i, Number::New(stereo.neighbor[i]));
   }
@@ -82,18 +88,20 @@ Handle<Object> MakeStereo0D(const inchi_Stereo0D& stereo) {
   ret->Set(NanSymbol("type"), Number::New(stereo.type));
   ret->Set(NanSymbol("parity"), Number::New(stereo.parity));
 
-  return ret;
+  return scope.Close(ret);
 }
 
 Handle<Object> MakeStructure(const GetStructFromINCHIData& data) {
-  Local<Object> ret = Object::New();
+  NanScope();
+
+  Handle<Object> ret = NanNewLocal<Object>(Object::New());
 
   // atom -- array of atom objects
-  Local<Array> atom = Array::New();
+  ret->Set(NanSymbol("atom"), Array::New());
+  Local<Array> atom = ret->Get(NanSymbol("atom")).As<Array>();
   for (int i = 0; i < data.out_.num_atoms; i += 1) {
     atom->Set(i, MakeAtom(data.out_.atom[i]));
   }
-  ret->Set(NanSymbol("atom"), atom);
 
   // stereo0D -- array of stereo0D objects
   Local<Array> stereo0D = Array::New();
@@ -111,5 +119,5 @@ Handle<Object> MakeStructure(const GetStructFromINCHIData& data) {
   // warning flags
   // TODO(SOM): add these
 
-  return ret;
+  return scope.Close(ret);
 }
