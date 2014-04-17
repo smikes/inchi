@@ -77,7 +77,7 @@ NAN_METHOD(Molecule_wrap::GetInChI) {
 void Molecule_wrap::addAtoms(Handle<Value> a) {
   Handle<Array> atoms = a.As<Array>();
 
-  // atoms is an array of v8::String
+  // atoms is an array of v8::Object
   for (uint32_t i = 0; i < atoms->Length(); i += 1) {
     Handle<Object> atom = atoms->Get(i)->ToObject();
 
