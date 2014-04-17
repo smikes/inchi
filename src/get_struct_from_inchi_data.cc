@@ -6,6 +6,7 @@
 #include <cstring>
 
 #include "./get_struct_from_inchi_data.h"
+#include "./inchi_lock.h"
 
 /**
   "Tear-off" class that contains inchi_InputINCHI and inchi_OutputStruct
@@ -69,7 +70,10 @@ int GetStructFromINCHIData::GetStructFromINCHI() {
   this->in_.szInChI = const_cast<char *>(inchi_.c_str());
   this->in_.szOptions = const_cast<char *>(options_.c_str());
 
-  this->result_ = ::GetStructFromINCHI(&(this->in_), &(this->out_));
+  {
+    Inchi_Global_Lock __lock;
+    this->result_ = ::GetStructFromINCHI(&(this->in_), &(this->out_));
+  }
 
   return this->result_;
 }

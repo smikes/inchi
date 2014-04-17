@@ -6,6 +6,7 @@
 #include <cstring>
 
 #include "./get_inchi_data.h"
+#include "./inchi_lock.h"
 
 /**
    "Tear-off" class that contains inchi_Input and inchi_Output
@@ -73,6 +74,8 @@ GetINCHIData::~GetINCHIData() {
    @return {RetValGetInchi} result code from GetINCHI API call
  */
 int GetINCHIData::GetInchi() {
+  Inchi_Global_Lock __lock;
+
   this->result_ = GetINCHI(&(this->in_), &(this->out_));
 
   if (this->result_ == inchi_Ret_OKAY) {
