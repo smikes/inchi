@@ -113,3 +113,21 @@ TEST(Molecule, fructoseRoundTrip)
   delete data;
   delete fructose;
 }
+
+TEST(Molecule, deuteroMethaneRoundTrip)
+{
+  std::string inchi =
+    "InChI=1S/CH4/h1H4/i1D";
+  Molecule * dMeth = Molecule::fromInchi(inchi);
+
+  CHECK_EQUAL(AT_NUM(1), dMeth->getAtomCount());
+
+  GetINCHIData * data = dMeth->tearOffGetINCHIData();
+
+  data->GetInchi();
+
+  CHECK_EQUAL(inchi, data->out_.szInChI);
+
+  delete data;
+  delete dMeth;
+}
