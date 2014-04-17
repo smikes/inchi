@@ -26,13 +26,15 @@
   },
   "homepage": "https://github.com/smikes/inchi",
   "devDependencies": {
-    "mocha": "~1.16.2",
+    "byline": "^4.1.1",
     "istanbul": "~0.2.1",
     "jslint": "~0.2.8",
-    "should": "~3.0.0",
-    "yuidocjs": "~0.3.47",
+    "mocha": "~1.16.2",
+    "molfile": "~0.0.3",
     "node-cpplint": "~0.1.5",
-    "tap": "~0.4.8"
+    "should": "~3.0.0",
+    "tap": "~0.4.8",
+    "yuidocjs": "~0.3.47"
   },
   "dependencies": {
     "bindings": "~1.1.1",
