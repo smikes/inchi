@@ -97,14 +97,14 @@ Handle<Object> MakeStructure(const GetStructFromINCHIData& data) {
   Handle<Object> ret = NanNewLocal<Object>(Object::New());
 
   // atom -- array of atom objects
-  ret->Set(NanSymbol("atom"), Array::New());
+  ret->Set(NanSymbol("atom"), Array::New(data.out_.num_atoms));
   Local<Array> atom = ret->Get(NanSymbol("atom")).As<Array>();
   for (int i = 0; i < data.out_.num_atoms; i += 1) {
     atom->Set(i, MakeAtom(data.out_.atom[i]));
   }
 
   // stereo0D -- array of stereo0D objects
-  Local<Array> stereo0D = Array::New();
+  Local<Array> stereo0D = Array::New(data.out_.num_stereo0D);
   for (int i = 0; i < data.out_.num_stereo0D; i += 1) {
     stereo0D->Set(i, MakeStereo0D(data.out_.stereo0D[i]));
   }
