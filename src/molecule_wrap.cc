@@ -131,6 +131,13 @@ void Molecule_wrap::addBonds(Handle<Value> b) {
     int order = bond->Get(NanSymbol("order"))->NumberValue();
 
     InchiBond b = (order ? InchiBond(from, to, order) : InchiBond(from, to));
+
+    if (bond->Has(NanSymbol("stereo"))) {
+      int stereo = bond->Get(NanSymbol("stereo"))->NumberValue();
+      fprintf(stderr, "Setting stereo to %d\n", stereo);
+      b.stereo = stereo;
+    }
+
     mol.addBond(b);
   }
 }

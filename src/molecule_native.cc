@@ -111,6 +111,10 @@ struct make_bond {
     in->atom[from].bond_type[num_bonds]   = bond.type;
     in->atom[from].bond_stereo[num_bonds] = bond.stereo;
 
+    if (bond.stereo != 0) {
+      fprintf(stderr, "setting bond stereo %d\n", bond.stereo);
+    }
+
     num_bonds += 1;
   }
 };

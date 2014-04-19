@@ -399,6 +399,38 @@ describe('inchi', function () {
                 done();
             });
         });
+        it('can round trip an ylide', function (done) {
+            var ylide = 'InChI=1S/C3H9NOS/c1-3-4(2,5)6/h6H,3H2,1-2H3/t4-/m0/s1';
+
+            roundTrip(ylide, done);
+
+        });
+        it('should generate the right inchi from ylide_to_dbond_effect.#001', function (done) {
+            var expected = 'InChI=1S/C3H9NOS/c1-3-4(2,5)6/h6H,3H2,1-2H3/t4-/m0/s1',
+                m = new inchi.Molecule();
+
+            m.addAtom('C');
+            m.addAtom('C');
+            m.addAtom('C');
+            m.addAtom({elname: 'N', charge: 1});
+            m.addAtom({elname: 'O', charge: -1});
+            m.addAtom('S');
+
+            m.addBond(0, 3);
+            m.addBond(1, 3);
+            m.addBond(2, 3);
+            m.addBond(3, 4);
+            m.bonds[3].stereo = 1;
+
+            m.addBond(3, 5);
+
+            console.log(JSON.stringify(m,null,2));
+
+            m.getInchi(function (err, i) {
+                i.should.equal(expected);
+            });
+        });
+
         it('should support isotopes', function (done) {
             // Tech_Man_Figure19
             var sdf = '\n  -ClnMol-06180618052D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    6.1181   -5.5901    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1181   -6.6327    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.0292   -7.1586    0.0000 N   0  0  3  0  0  0  0  0  0  0  0  0\n    5.2211   -7.1540    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    7.9375   -6.6292    0.0000 H   1  0  0  0  0  0  0  0  0  0  0  0\n    7.3000   -8.1708    0.0000 H   1  0  0  0  0  0  0  0  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  1  2  2  0  0  0  0\n  3  6  1  0  0  0  0\nM  ISO  2   5   2   6   2\nM  END\n>  <ID>\n_Tech_Man_Figure19 \n\n$$$$\n',

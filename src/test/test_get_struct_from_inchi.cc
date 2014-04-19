@@ -107,3 +107,19 @@ TEST(GetStructFromINCHIData, getStruct_huge) {
   CHECK_EQUAL(AT_NUM(865), data.out_.num_atoms);
   CHECK_EQUAL(std::string("C"), data.out_.atom[0].elname);
 }
+
+
+TEST(GetStructFromINCHIData, getStruct_ylide) {
+  GetStructFromINCHIData data("InChI=1S/C3H9NOS/c1-3-4(2,5)6/h6H,3H2,1-2H3/t4-/m0/s1");
+
+  int result = data.GetStructFromINCHI();
+
+  CHECK_EQUAL(long(inchi_Ret_OKAY), long(result));
+
+  CHECK_EQUAL(AT_NUM(6), data.out_.num_atoms);
+  CHECK_EQUAL(std::string("C"), data.out_.atom[0].elname);
+
+  CHECK_EQUAL(AT_NUM(1), data.out_.num_stereo0D);
+  CHECK_EQUAL(std::string("N"), data.out_.atom[ data.out_.stereo0D[0].central_atom ].elname);
+  CHECK_EQUAL(S_CHAR(2), data.out_.stereo0D[0].type);
+}

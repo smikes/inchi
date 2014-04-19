@@ -24,11 +24,12 @@ struct InchiBond {
      @param {inchi_BondType} [type=INCHI_BOND_TYPE_SINGLE]  Bond type -- actually bond order,
      with 4 representing 'alternative'
      @param {inchi_BondStereo2D} [stereo=INCHI_BOND_STEREO_NONE]  Bond stereochemistry -- only
-     2D stereochemistry options available. TODO(SOM): currently has no effect on bond
+     2D stereochemistry options available.
    */
-  InchiBond(int from, int to, int type = INCHI_BOND_TYPE_SINGLE)
+InchiBond(int from, int to, int type = INCHI_BOND_TYPE_SINGLE,
+          int stereo = INCHI_BOND_STEREO_NONE)
   : from(from), to(to),
-    type(type), stereo(INCHI_BOND_STEREO_NONE) {
+    type(type), stereo(stereo) {
   }
 
   int from;
