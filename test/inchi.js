@@ -313,7 +313,7 @@ describe('inchi', function () {
             var m = new inchi.Molecule;
             m.addAtom('Cu');
             m.addAtom('Lr');
-            m.addBond(0, 1, 1);
+            m.addBond(0, 1);
 
             m.getInchi(function (err, inchi) {
                 inchi.should.equal('InChI=1S/Cu.Lr');
@@ -326,9 +326,9 @@ describe('inchi', function () {
             m.addAtom('C');
             m.addAtom({elname: 'N', charge: 1});
             m.addAtom({elname: 'N', charge: -1});
-            m.addBond(0, 1, 1);
+            m.addBond(0, 1);
             m.addBond(1, 2, 3); // C#N triple
-            m.addBond(2, 3, 1);
+            m.addBond(2, 3);
 
             m.getInchi(function (err, i) {
                 i.should.equal('InChI=1S/C2H4N2/c1-2-4-3/h3H,1H3');
