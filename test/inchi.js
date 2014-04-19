@@ -1,5 +1,18 @@
 require('should');
 var inchi = require('../lib/inchi');
+function roundTrip(i1, done) {
+    inchi.Molecule.fromInchi(i1, function (e1, mol) {
+        mol.getInchi(function (e2, i2) {
+
+            if (i1 !== i2) {
+                console.log(mol);
+            }
+
+            i2.should.be.exactly(i1);
+            done();
+        });
+    });
+}
 
 describe('inchi', function () {
     describe('getVersion', function () {
@@ -175,20 +188,6 @@ describe('inchi', function () {
                 done();
             });
         });
-
-        function roundTrip(i1, done) {
-            inchi.Molecule.fromInchi(i1, function (e1, mol) {
-                mol.getInchi(function (e2, i2) {
-
-                    if (i1 !== i2) {
-                        console.log(mol);
-                    }
-
-                    i2.should.be.exactly(i1);
-                    done();
-                });
-            });
-        }
 
         it('should be able to make round-trips (methanol)', function (done) {
             var methanol = 'InChI=1S/CH4O/c1-2/h2H,1H3';
