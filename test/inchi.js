@@ -293,6 +293,57 @@ describe('inchi', function () {
             m.addAtom('C');
 
             (function () { m.addBond(1, 2); }).should.throw(/out of range/);
+            (function () { m.addBond(2, 1); }).should.throw(/out of range/);
+        });
+    });
+
+    describe('moleculeFromMolfile', function () {
+        it('should handle simple mol file (methane)', function () {
+            var z = {
+                atoms: [{elname: 'C'}],
+                bonds: [],
+                properties: {}
+            },
+                m = inchi.moleculeFromMolfile(z);
+
+            (m.atoms.length).should.equal(1);
+            (m.atoms[0].num_iso_H === undefined).should.be.true;
+        });
+
+        it('should handle valenceCode (methyl)', function () {
+            var z = {
+                atoms: [{elname: 'C', valenceCode: 3}],
+                bonds: [],
+                properties: {}
+            },
+                m = inchi.moleculeFromMolfile(z);
+
+            (m.atoms.length).should.equal(1);
+            (m.atoms[0].num_iso_H[0]).should.equal(3);
+        });
+
+        it('should handle valenceCode (ethyl)', function () {
+            var z = {
+                atoms: [{elname: 'C', valenceCode: 3},
+                        {elname: 'C'}],
+                bonds: [{from:1, to:2, bondType:1}],
+                properties: {}
+            },
+                m = inchi.moleculeFromMolfile(z);
+
+            (m.atoms[0].num_iso_H[0]).should.equal(2);
+        });
+
+        it('should cound bonds (ethyl)', function () {
+            var z = {
+                atoms: [{elname: 'C', valenceCode: 3},
+                        {elname: 'C'}],
+                bonds: [{from:1, to:2, bondType:1}],
+                properties: {}
+            };
+
+            (inchi.countMolfileBonds(z, 0)).should.equal(1);
+            (inchi.countMolfileBonds(z, 1)).should.equal(1);
         });
     });
 
@@ -334,7 +385,18 @@ describe('inchi', function () {
                 i.should.equal('InChI=1S/C2H4N2/c1-2-4-3/h3H,1H3');
                 done();
             });
-          });
-    });
+        });
+        it('should generate the right molecule from zwitterions_1.#002', function (done) {
+            var zwitter = '{"header":{"name":"","initials":"  ","software":"Mol2Comp","date":"2006-06-19T00:07:00.000Z","comment":""},"countLine":{"atoms":4,"bonds":3,"chiral":0,"mLines":999,"version":" V2000"},"atoms":[{"x":6.7542,"y":1.9708,"z":0,"elname":"C","massDiff":0,"chargeCode":0,"valenceCode":0},{"x":7.5792,"y":1.9708,"z":0,"elname":"C","massDiff":0,"chargeCode":0,"valenceCode":0},{"x":8.4042,"y":1.9708,"z":0,"elname":"N","massDiff":0,"chargeCode":3,"valenceCode":0},{"x":9.2292,"y":1.9708,"z":0,"elname":"N","massDiff":0,"chargeCode":5,"valenceCode":0}],"bonds":[{"from":1,"to":2,"bondType":1},{"from":2,"to":3,"bondType":3},{"from":3,"to":4,"bondType":1}],"properties":{"CHG":{"3":1,"4":-1},"":{}},"data":{"ID":"zwitterions_1.#002"}}',
+                z = JSON.parse(zwitter);
+            var m = inchi.moleculeFromMolfile(z);
 
+            (m.atoms.length).should.equal(4);
+
+            m.getInchi(function (err, i) {
+                i.should.equal('InChI=1S/C2H4N2/c1-2-4-3/h3H,1H3');
+                done();
+            });
+        });
+    });
 });
