@@ -1,5 +1,7 @@
 require('should');
-var inchi = require('../lib/inchi');
+var inchi = require('../lib/inchi'),
+    molfile = require('molfile');
+
 function roundTrip(i1, done) {
     inchi.Molecule.fromInchi(i1, function (e1, mol) {
         mol.getInchi(function (e2, i2) {
@@ -396,6 +398,24 @@ describe('inchi', function () {
                 i.should.equal('InChI=1S/C2H4N2/c1-2-4-3/h3H,1H3');
                 done();
             });
+        });
+        it('should support isotopes', function (done) {
+            // Tech_Man_Figure19
+            var sdf = '\n  -ClnMol-06180618052D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    6.1181   -5.5901    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1181   -6.6327    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.0292   -7.1586    0.0000 N   0  0  3  0  0  0  0  0  0  0  0  0\n    5.2211   -7.1540    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    7.9375   -6.6292    0.0000 H   1  0  0  0  0  0  0  0  0  0  0  0\n    7.3000   -8.1708    0.0000 H   1  0  0  0  0  0  0  0  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  1  2  2  0  0  0  0\n  3  6  1  0  0  0  0\nM  ISO  2   5   2   6   2\nM  END\n>  <ID>\n_Tech_Man_Figure19 \n\n$$$$\n',
+                expected = 'InChI=1S/CH4N2O/c2-1(3)4/h(H4,2,3,4)/i/hD2',
+                parsedMol = molfile.parseMol(sdf),
+                m = inchi.moleculeFromMolfile(parsedMol);
+
+            (parsedMol.atoms.length).should.equal(6);
+            console.log(parsedMol.atoms[5]);
+
+            console.log(m.atoms[5]);
+
+            m.getInchi(function (err, i) {
+                i.should.equal(expected);
+                done();
+            });
+
         });
     });
 });
