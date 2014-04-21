@@ -1,6 +1,6 @@
 {
   "name": "inchi",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "International Chemical Identifier (InChI) for node.js programs",
   "main": "lib/inchi.js",
   "scripts": {
