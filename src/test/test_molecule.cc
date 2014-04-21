@@ -150,30 +150,3 @@ TEST(Molecule, ylide_roundTrip) {
   delete data;
   delete dYlide;
 }
-
-TEST(Molecule, makeYlide) {
-  Molecule ylide;
-
-  ylide.addAtom("C");
-  ylide.addAtom("C");
-  ylide.addAtom("C");
-  ylide.addAtom("N");
-  ylide.addAtom("O");
-  ylide.addAtom("S");
-
-  ylide.atoms_[3].data_.charge = 1;
-  ylide.atoms_[4].data_.charge = -1;
-
-  ylide.addBond(InchiBond(0, 3));
-  ylide.addBond(InchiBond(1, 3));
-  ylide.addBond(InchiBond(2, 3));
-  ylide.addBond(InchiBond(3, 4));
-  ylide.bonds_[3].stereo = 1;
-  ylide.addBond(InchiBond(3, 5));
-
-  GetINCHIData * data = ylide.tearOffGetINCHIData();
-
-  data->GetInchi();
-
-  CHECK_EQUAL(std::string("InChI=1S/C3H9NOS/c1-3-4(2,5)6/h6H,3H2,1-2H3/t4-/m0/s1"), data->out_.szInChI);
-}
