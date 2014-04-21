@@ -2,6 +2,8 @@
 
 This module exposes the InChI API to node.js programs
 
+[![Build Status](https://travis-ci.org/smikes/inchi.png?branch=master)](https://travis-ci.org/smikes/inchi)
+
 ## API Documentation
 
 A high-level javascript api is exposed by default when you require('inchi').
