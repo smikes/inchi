@@ -134,7 +134,6 @@ void Molecule_wrap::addBonds(Handle<Value> b) {
 
     if (bond->Has(NanSymbol("stereo"))) {
       int stereo = bond->Get(NanSymbol("stereo"))->NumberValue();
-      fprintf(stderr, "Setting stereo to %d\n", stereo);
       b.stereo = stereo;
     }
 
