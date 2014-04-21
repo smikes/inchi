@@ -1,5 +1,5 @@
-#ifndef SRC_INCHI_LOCK_
-#define SRC_INCHI_LOCK_
+#ifndef SRC_INCHI_LOCK_H_
+#define SRC_INCHI_LOCK_H_
 /* inchi_lock.h
  * Copyright 2014 Cubane Canada, Inc.
  *
@@ -11,4 +11,4 @@ struct Inchi_Global_Lock {
   ~Inchi_Global_Lock();
 };
 
-#endif  // SRC_INCHI_LOCK_
+#endif  // SRC_INCHI_LOCK_H_

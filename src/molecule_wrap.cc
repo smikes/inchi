@@ -12,7 +12,8 @@
 #include "./get_inchi_data.h"
 #include "./get_inchi_worker.h"
 
-static char type_id[] = "Molecule";
+static char Molecule_id[] = "Molecule";
+static void * type_id = static_cast<void *>(Molecule_id);
 
 void Molecule_wrap::Init(v8::Handle<v8::Object> exports) {
   Local<FunctionTemplate> tpl = FunctionTemplate::New(Molecule_wrap::New);
@@ -29,7 +30,8 @@ NAN_METHOD(Molecule_wrap::New) {
   NanScope();
 
   if (!args.IsConstructCall()) {
-    return ThrowException(NanTypeError("Use the new operator to create new Molecule objects"));
+    return ThrowException(
+      NanTypeError("Use the new operator to create new Molecule objects"));
   }
 
   // check for arguments
@@ -45,7 +47,7 @@ NAN_METHOD(Molecule_wrap::New) {
 
   Handle<Object> self = args.This();
   m->Wrap(self);
-  self->SetPointerInInternalField(1, (void*)type_id);
+  self->SetPointerInInternalField(1, type_id);
 
   NanReturnValue(args.This());
 }
@@ -58,12 +60,13 @@ NAN_METHOD(Molecule_wrap::GetInChI) {
   Handle<Object> self = args.This();
 
   if (!self->IsNull() && self->InternalFieldCount() >= 2 &&
-      self->GetPointerFromInternalField(1) == (void*)type_id) {
+      self->GetPointerFromInternalField(1) == type_id) {
     m = ObjectWrap::Unwrap<Molecule_wrap>(args.This());
   }
 
   if (m == NULL) {
-    return ThrowException(NanTypeError("Molecule::GetInChI must be called as member function of Molecule"));
+    return ThrowException(NanTypeError(
+      "Molecule::GetInChI must be called as member function of Molecule"));
   }
 
   NanCallback * callback = new NanCallback(args[0].As<Function>());
