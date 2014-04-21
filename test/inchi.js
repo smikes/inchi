@@ -335,31 +335,6 @@ describe('inchi', function () {
             (m.atoms[0].num_iso_H[0]).should.equal(2);
         });
 
-        it('should cound bonds (ethyl)', function () {
-            var z = {
-                atoms: [{elname: 'C', valenceCode: 3},
-                        {elname: 'C'}],
-                bonds: [{from:1, to:2, bondType:1}],
-                properties: {}
-            };
-
-            (inchi.countMolfileBonds(z, 0)).should.equal(1);
-            (inchi.countMolfileBonds(z, 1)).should.equal(1);
-        });
-
-        it('should calculate isotopic hydrogen count', function () {
-            // valence code 15: zero valence
-            (inchi.makeNumIsoH(15,0)).should.eql([0, 0, 0, 0]);
-
-            // valence code 0: default valence
-            (inchi.makeNumIsoH(0,0)).should.eql([-1, 0, 0, 0]);
-
-            // valence code 1-14: explicit valence, less bonds
-            (inchi.makeNumIsoH(3,0)).should.eql([3, 0, 0, 0]);
-            (inchi.makeNumIsoH(3,1)).should.eql([2, 0, 0, 0]);
-            (inchi.makeNumIsoH(3,3)).should.eql([0, 0, 0, 0]);
-            (inchi.makeNumIsoH(3,4)).should.eql([0, 0, 0, 0]);
-        });
 
     });
 
@@ -461,7 +436,7 @@ describe('inchi', function () {
             var sdf = '\n  -ClnMol-06180618052D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    6.1181   -5.5901    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    6.1181   -6.6327    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    7.0292   -7.1586    0.0000 N   0  0  3  0  0  0  0  0  0  0  0  0\n    5.2211   -7.1540    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    7.9375   -6.6292    0.0000 H   1  0  0  0  0  0  0  0  0  0  0  0\n    7.3000   -8.1708    0.0000 H   1  0  0  0  0  0  0  0  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  3  5  1  0  0  0  0\n  1  2  2  0  0  0  0\n  3  6  1  0  0  0  0\nM  ISO  2   5   2   6   2\nM  END\n>  <ID>\n_Tech_Man_Figure19 \n\n$$$$\n',
                 expected = 'InChI=1S/CH4N2O/c2-1(3)4/h(H4,2,3,4)/i/hD2',
                 parsedMol = molfile.parseMol(sdf),
-                m = inchi.moleculeFromMolfile(parsedMol);
+                m = inchi.molfile.moleculeFromMolfile(parsedMol);
 
             (parsedMol.atoms.length).should.equal(6);
 
