@@ -447,7 +447,25 @@ describe('inchi', function () {
                 i.should.equal(expected);
                 done();
             });
+        });
+
+        it('should support stereochem', function (done) {
+            var sdf = '\n  Mol2Comp06180618082D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    1.7773   -5.6172    0.0000 F   0  0  0  0  0  0  0  0  0  0  0  0\n    2.7635   -6.2512    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.7967   -5.6500    0.0000 I   0  0  0  0  0  0  0  0  0  0  0  0\n    2.7588   -7.4487    0.0000 Cl  0  0  0  0  0  0  0  0  0  0  0  0\n    2.7588   -5.0536    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  0  0  0  0\n  2  3  1  0  0  0  0\n  2  4  1  0  0  0  0\n  2  5  1  1  0  0  0\nM  END\n>  <ID>\n_Tech_Man_Table09.#001 \n\n$$$$\n',
+                expected = 'InChI=1S/C2H3ClFI/c1-2(3,4)5/h1H3/t2-/m1/s1',
+                parsedMol = molfile.parseMol(sdf),
+                m = inchi.moleculeFromMolfile(parsedMol);
+
+            (parsedMol.atoms.length).should.equal(5);
+            console.log(parsedMol);
+
+            console.log(m);
+
+            m.getInchi(function (err, i) {
+                i.should.equal(expected);
+                done();
+            });
 
         });
+
     });
 });
