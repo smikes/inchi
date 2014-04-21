@@ -301,14 +301,14 @@ describe('inchi', function () {
     describe('moleculeFromMolfile', function () {
         it('should handle simple mol file (methane)', function () {
             var z = {
-                atoms: [{elname: 'C'}],
+                atoms: [{elname: 'C', valenceCode: 0}],
                 bonds: [],
                 properties: {}
             },
                 m = inchi.moleculeFromMolfile(z);
 
             (m.atoms.length).should.equal(1);
-            (m.atoms[0].num_iso_H === undefined).should.be.true;
+            (m.atoms[0].num_iso_H).should.eql([-1, 0, 0, 0]);
         });
 
         it('should handle valenceCode (methyl)', function () {
@@ -346,6 +346,21 @@ describe('inchi', function () {
             (inchi.countMolfileBonds(z, 0)).should.equal(1);
             (inchi.countMolfileBonds(z, 1)).should.equal(1);
         });
+
+        it('should calculate isotopic hydrogen count', function () {
+            // valence code 15: zero valence
+            (inchi.makeNumIsoH(15,0)).should.eql([0, 0, 0, 0]);
+
+            // valence code 0: default valence
+            (inchi.makeNumIsoH(0,0)).should.eql([-1, 0, 0, 0]);
+
+            // valence code 1-14: explicit valence, less bonds
+            (inchi.makeNumIsoH(3,0)).should.eql([3, 0, 0, 0]);
+            (inchi.makeNumIsoH(3,1)).should.eql([2, 0, 0, 0]);
+            (inchi.makeNumIsoH(3,3)).should.eql([0, 0, 0, 0]);
+            (inchi.makeNumIsoH(3,4)).should.eql([0, 0, 0, 0]);
+        });
+
     });
 
     describe('real-life data', function () {
@@ -409,27 +424,37 @@ describe('inchi', function () {
             var expected = 'InChI=1S/C3H9NOS/c1-3-4(2,5)6/h6H,3H2,1-2H3/t4-/m0/s1',
                 m = new inchi.Molecule();
 
-            m.addAtom('C');
-            m.addAtom('C');
-            m.addAtom('C');
-            m.addAtom({elname: 'N', charge: 1});
-            m.addAtom({elname: 'O', charge: -1});
-            m.addAtom('S');
+            m.addAtom({elname: 'N', x: 6.3, y: -4.8, charge: 1});
+            m.addAtom({elname: 'O', x: 8.7, y: -4.8, charge: -1});
+            m.addAtom({elname: 'S', x: 6.3, y: -6.45});
+            m.addAtom({elname: 'C', x: 6.3, y: -3.51});
+            m.addAtom({elname: 'C', x: 4.1, y: -4.85});
+            m.addAtom({elname: 'C', x: 3.4, y: -3.51});
 
-            m.addBond(0, 3);
-            m.addBond(1, 3);
-            m.addBond(2, 3);
-            m.addBond(3, 4);
-            m.bonds[3].stereo = 1;
-
-            m.addBond(3, 5);
-
-            console.log(JSON.stringify(m,null,2));
+            m.addBond(0, 1, 1, 1);
+            m.addBond(2, 0);
+            m.addBond(3, 0);
+            m.addBond(4, 0);
+            m.addBond(5, 4);
 
             m.getInchi(function (err, i) {
                 i.should.equal(expected);
+                done();
             });
         });
+
+        it('should generate the right inchi from ylide_to_dbond_effect.#001', function (done) {
+            var string = '\n  Mol2Comp06180618072D\n\n  6  5  0  0  0  0  0  0  0  0999 V2000\n    6.3006   -4.8579    0.0000 N   0  3  0  0  0  0  0  0  0  0  0  0\n    8.7014   -4.8579    0.0000 O   0  5  0  0  0  0  0  0  0  0  0  0\n    6.3006   -6.4584    0.0000 S   0  0  0  0  0  0  0  0  0  0  0  0\n    6.3006   -3.5166    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    4.1703   -4.8579    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.3701   -3.5166    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  1  2  1  1  0  0  0\n  3  1  1  0  0  0  0\n  4  1  1  0  0  0  0\n  5  1  1  0  0  0  0\n  6  5  1  0  0  0  0\nM  CHG  2   1   1   2  -1\nM  END\n>  <ID>\nylide_to_dbond_effect.#001 \n\n',
+                parsed = molfile.parseMol(string),
+                expected = 'InChI=1S/C3H9NOS/c1-3-4(2,5)6/h6H,3H2,1-2H3/t4-/m0/s1',
+                m = new inchi.moleculeFromMolfile(parsed);
+
+            m.getInchi(function (err, i) {
+                i.should.equal(expected);
+                done();
+            });
+        });
+
 
         it('should support isotopes', function (done) {
             // Tech_Man_Figure19
@@ -439,9 +464,6 @@ describe('inchi', function () {
                 m = inchi.moleculeFromMolfile(parsedMol);
 
             (parsedMol.atoms.length).should.equal(6);
-            console.log(parsedMol.atoms[5]);
-
-            console.log(m.atoms[5]);
 
             m.getInchi(function (err, i) {
                 i.should.equal(expected);
@@ -456,9 +478,21 @@ describe('inchi', function () {
                 m = inchi.moleculeFromMolfile(parsedMol);
 
             (parsedMol.atoms.length).should.equal(5);
-            console.log(parsedMol);
 
-            console.log(m);
+            m.getInchi(function (err, i) {
+                i.should.equal(expected);
+                done();
+            });
+
+        });
+
+        it('should correctly render molecule tt', function (done) {
+            var sdf = '\n  -ClnMol-06180618052D\n\n  5  4  0  0  0  0  0  0  0  0999 V2000\n    0.1167   -5.2167    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.9125   -5.0000    0.0000 C   0  0  3  0  0  2  0  0  0  0  0  0\n    1.1250   -4.2000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    1.7375   -5.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    0.9083   -5.8250    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n  2  3  1  0  0  0  0\n  1  2  1  0  0  0  0\n  2  4  1  0  0  0  0\n  2  5  1  0  0  0  0\nM  END\n>  <ID>\ntt \n\n$$$$\n',
+                expected = 'InChI=1S/C5H12/c1-5(2,3)4/h1-4H3',
+                parsedMol = molfile.parseMol(sdf),
+                m = inchi.moleculeFromMolfile(parsedMol);
+
+            (parsedMol.atoms.length).should.equal(5);
 
             m.getInchi(function (err, i) {
                 i.should.equal(expected);
