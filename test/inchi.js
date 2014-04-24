@@ -191,6 +191,22 @@ describe('inchi', function () {
             });
         });
 
+        describe('reporting errors from invalid inchi codes', function () {
+            it('should fail on invalid atom', function (done) {
+                inchi.Molecule.fromInchi('InChI=1S/Cz', function (err, mol) {
+                    (err).should.not.equal(null);
+                    done();
+                });
+            });
+
+            it('should fail on illegal bonds', function (done) {
+                inchi.Molecule.fromInchi('InChI=1S/C/c1-3', function (err, mol) {
+                    (err).should.not.equal(null);
+                    done();
+                });
+            });
+        });
+
         it('should be able to make round-trips (methanol)', function (done) {
             var methanol = 'InChI=1S/CH4O/c1-2/h2H,1H3';
 

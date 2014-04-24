@@ -43,17 +43,13 @@ struct GetStructFromINCHIWorker : public NanAsyncWorker {
 
      @method Execute
   */
-  void Execute() {
-    data_.GetStructFromINCHI();
-    QueueFinish();
-  }
+  void Execute();
 
   /**
      Constructs result value, passes it to callback
      @method
   */
   void HandleOKCallback();
-
 };
 
 #endif  // SRC_GET_STRUCT_FROM_INCHI_WORKER_H_
