@@ -5,7 +5,6 @@
  */
 #include "./molecule.h"
 
-#include <cstring>
 #include <algorithm>
 
 #include "inchi_dll/inchi_api.h"

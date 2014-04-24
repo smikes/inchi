@@ -3,9 +3,9 @@
  *
  * Released under the MIT license -- see MIT-LICENSE for details
  */
-#include <cstring>
-
 #include "./get_inchi_data.h"
+
+#include <cstring>
 
 /**
    "Tear-off" class that contains inchi_Input and inchi_Output
@@ -48,9 +48,9 @@
  @method GetINCHIData
 */
 GetINCHIData::GetINCHIData() {
-  memset(&in_, 0, sizeof(in_));
-  memset(&out_, 0, sizeof(out_));
-  strncpy(inchikey, "", INCHIKEY_SIZE);
+  std::memset(&in_, 0, sizeof(in_));
+  std::memset(&out_, 0, sizeof(out_));
+  std::strncpy(inchikey, "", INCHIKEY_SIZE);
   result_ = inchi_Ret_UNKNOWN;
 }
 

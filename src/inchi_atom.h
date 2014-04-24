@@ -12,8 +12,6 @@
 
 #include "inchi_dll/inchi_api.h"
 
-#include "./using_v8.h"
-
 struct InchiAtom {
   static const int     ELNAME_LEN = ATOM_EL_LEN;
   static const S_CHAR  IMPLICIT_NONISOTOPIC_H = -1;
@@ -30,8 +28,6 @@ struct InchiAtom {
   explicit InchiAtom(const char * name = "");
   explicit InchiAtom(const inchi_Atom& atom) : data_(atom) {
   }
-
-  static const InchiAtom makeFromObject(Handle<Object> atom);
 
   /* accessors */
   const std::string getName();

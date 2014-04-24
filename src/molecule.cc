@@ -5,12 +5,12 @@
  */
 #include <nan.h>
 
-#include <cstring>
-
 #include "./using_v8.h"
 
 #include "./molecule.h"
 #include "./get_inchi_worker.h"
+
+#include "./node_inchi.h"
 
 /**
 
@@ -43,7 +43,7 @@ Molecule * Molecule::Create(Handle<Value> val) {
 }
 
 void add_atom(Molecule* in, Handle<Object> a) {
-  InchiAtom atom = InchiAtom::makeFromObject(a);
+  InchiAtom atom = InchiAtom_makeFromObject(a);
 
   int index = in->addAtom(atom);
 

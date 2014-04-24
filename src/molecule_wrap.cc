@@ -14,6 +14,8 @@
 
 #include "./inchi_queue.h"
 
+#include "./node_inchi.h"
+
 static char Molecule_id[] = "Molecule";
 static void * type_id = static_cast<void *>(Molecule_id);
 
@@ -88,7 +90,7 @@ void Molecule_wrap::addAtoms(Handle<Value> a) {
   for (uint32_t i = 0; i < atoms->Length(); i += 1) {
     Handle<Object> atom = atoms->Get(i)->ToObject();
 
-    mol.addAtom(InchiAtom::makeFromObject(atom));
+    mol.addAtom(InchiAtom_makeFromObject(atom));
   }
 }
 
@@ -101,7 +103,7 @@ template<typename T> T getIf(Handle<Object> atom, uint32_t key) {
   return atom->Has(key) ? T(atom->Get(key)->NumberValue()) : 0;
 }
 
-const InchiAtom InchiAtom::makeFromObject(Handle<Object> atom) {
+const InchiAtom InchiAtom_makeFromObject(Handle<Object> atom) {
   char * elname = NanCString(atom->Get(NanSymbol("elname")), 0);
   InchiAtom ret(elname);
   delete[] elname;
