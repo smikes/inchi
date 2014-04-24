@@ -49,7 +49,7 @@ NAN_METHOD(Molecule_wrap::New) {
 
   Handle<Object> self = args.This();
   m->Wrap(self);
-  self->SetPointerInInternalField(1, type_id);
+  NanSetInternalFieldPointer(self, 1, type_id);
 
   NanReturnValue(args.This());
 }
@@ -62,7 +62,7 @@ NAN_METHOD(Molecule_wrap::GetInChI) {
   Handle<Object> self = args.This();
 
   if (!self->IsNull() && self->InternalFieldCount() >= 2 &&
-      self->GetPointerFromInternalField(1) == type_id) {
+      NanGetInternalFieldPointer(self, 1) == type_id) {
     m = ObjectWrap::Unwrap<Molecule_wrap>(args.This());
   }
 
