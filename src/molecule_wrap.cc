@@ -32,8 +32,9 @@ NAN_METHOD(Molecule_wrap::New) {
   NanScope();
 
   if (!args.IsConstructCall()) {
-    return ThrowException(
+    ThrowException(
       NanTypeError("Use the new operator to create new Molecule objects"));
+    NanReturnUndefined();
   }
 
   // check for arguments
@@ -67,8 +68,9 @@ NAN_METHOD(Molecule_wrap::GetInChI) {
   }
 
   if (m == NULL) {
-    return ThrowException(NanTypeError(
+    ThrowException(NanTypeError(
       "Molecule::GetInChI must be called as member function of Molecule"));
+    NanReturnUndefined();
   }
 
   NanCallback * callback = new NanCallback(args[0].As<Function>());
