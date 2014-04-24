@@ -53,46 +53,13 @@ describe('inchilib', function () {
                 obj.atom[0].should.have.property('elname', 'C');
                 obj.atom[1].should.have.property('elname', 'O');
                 obj.atom[0].bonds.should.have.length(1);
-                obj.atom[0].bonds[0].neighbor.should.be.exactly(1);
-                obj.atom[0].bonds[0].bond_type.should.be.exactly(1);
+                obj.atom[0].bonds[0].neighbor.should.equal(1);
+                obj.atom[0].bonds[0].bond_type.should.equal(1);
 
                 done();
             });
         });
 
-    });
-
-    describe('Molecule', function () {
-
-        it('should publish a Molecule constructor', function () {
-            (inchilib.Molecule).should.be.a.Function;
-        });
-        it('should create an empty Molecule', function () {
-            var m = new inchilib.Molecule({atoms: [], bonds: []});
-        });
-        it('should have a GetInChI method', function () {
-            var m = new inchilib.Molecule({atoms: [], bonds: []});
-
-            (m.GetInChI).should.be.a.Function;
-        });
-        it('should not assert when constructor is called incorrectly', function () {
-            (function () {
-                inchilib.Molecule({atoms: [], bonds: []})
-            }).should.throw(/new operator/);
-        });
-        it('should not assert when Molecule::GetInChI is called on non-molecule', function () {
-            (function () {
-                var foo = { GetInChI: inchilib.Molecule.prototype.GetInChI };
-                foo.GetInChI(function () {
-                });
-            }).should.throw(/member function of Molecule/);
-        });
-        it('should not assert when Molecule::GetInChI is called without context', function () {
-            (function () {
-                var func = inchilib.Molecule.prototype.GetInChI;
-                func();
-            }).should.throw(/member function of Molecule/);
-        });
     });
 
 });

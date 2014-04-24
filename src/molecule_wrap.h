@@ -15,16 +15,13 @@ struct Molecule_wrap : public node::ObjectWrap {
   Molecule_wrap() {}
   ~Molecule_wrap() {}
 
-  static NAN_METHOD(New);
-  static NAN_METHOD(GetInChI);
-
-  static void Init(v8::Handle<v8::Object> exports);
-
   void addAtoms(Handle<Value> atoms);
   void addBonds(Handle<Value> bonds);
   void addStereo(Handle<Value> stereo);
 
   Molecule mol;
 };
+
+NAN_METHOD(GetInChIFromMolecule);
 
 #endif  // SRC_MOLECULE_WRAP_H_

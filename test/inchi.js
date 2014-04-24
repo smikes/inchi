@@ -46,21 +46,6 @@ describe('inchi', function () {
         });
     });
 
-    describe('Atom', function () {
-        it('should create a new atom', function () {
-            var a = new inchi.Atom('H');
-
-            a.getName().should.equal('H');
-        });
-        it('should rename a new atom', function () {
-            var a = new inchi.Atom('H');
-
-            a.getName().should.equal('H');
-            a.setName('C');
-            a.getName().should.equal('C');
-        });
-    });
-
     describe('Molecule', function () {
         it('should create a new molecule', function () {
             var m = new inchi.Molecule();
@@ -360,10 +345,9 @@ describe('inchi', function () {
                 molfile = require('molfile'),
                 file = fs.readFileSync("test/fixtures/Elements_C2.sdf"),
                 mol = molfile.parseMol(String(file)),
-                m = inchi.moleculeFromMolfile(mol),
-                inchiMol = new inchi.inchilib.Molecule(m);
+                m = inchi.moleculeFromMolfile(mol);
 
-            inchiMol.GetInChI(function (err, inchi) {
+            inchi.inchilib.GetInChIFromMolecule(m, function (err, inchi) {
                 done();
             });
         });

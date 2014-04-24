@@ -11,7 +11,6 @@
 #include "./using_v8.h"
 
 NAN_METHOD(GetINCHI);
-NAN_METHOD(GetINCHISync);
 
 void register_GetINCHI_return_codes(Handle<Object> exports);
 

@@ -72,13 +72,12 @@ describe('inchi-slow', function () {
                     pending += 1;
                     var mol = molfile.parseMol(String(chunk));
                     var m = inchi.moleculeFromMolfile(mol);
-                    var inchiMol =  new inchilib.Molecule(m);
 
                     var target = [];
                     actual.push(target);
-                    inchiMol.GetInChI(function (err, result) {
+                    m.getInchi(function (err, i) {
                         target[0] = mol.data.ID.trim();
-                        target[1] = result.inchi;
+                        target[1] = i;
                         gotten();
                     });
 
