@@ -3,9 +3,6 @@
  *
  * Released under the MIT license -- see MIT-LICENSE for details
  */
-#include <node.h>
-#include <v8.h>
-#include <uv.h>
 #include <nan.h>
 
 #include <cstring>
