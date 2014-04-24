@@ -26,7 +26,7 @@ jstest:
 	./node_modules/.bin/mocha
 
 jstest-slow:
-	./node_modules/.bin/mocha -t 10000 test/slow
+	./node_modules/.bin/mocha -t 10000 -s 5000 test/slow
 
 build:
 	(unset tmp temp; npm run-script build)
