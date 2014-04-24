@@ -71,60 +71,6 @@ void register_GetINCHI_return_codes(Handle<Object> exports) {
   NODE_DEFINE_CONSTANT(exports, inchi_Ret_EOF);
 }
 
-/**
- Constructs a molecule and calls the GetINCHI function.
-
- This is a *synchronous* version of the GetINCHI API and should
- not generally be used.
-
- The return value is an Object containing the the result code of
- calling GetINCHI.  If the computation was successful, there will
- be additional members with the InChI string, InChIKey, etc.
- See {{#crossLink "GetINCHIResult"}}GetINCHIResult{{/crossLink}} for
- full documentation
-
- @method GetINCHISync
- @for InChILib
- @param {Object} molecule Object defining the molecule, in the format:
-
-     var methanol = {
-         atom: [
-            { 'elname': 'C', neighbor: [1] },
-            { 'elname': 'O' }
-         ]
-     };
-
- @return {GetINCHIResult} output Object containing result of GetINCHI
- */
-NAN_METHOD(GetINCHISync) {
-  NanScope();
-
-  Molecule * input = NULL;
-  GetINCHIData * data = NULL;
-  Handle<Object> ret;
-
-  try {
-    // TODO(SOM): validate args
-    Handle<Value> mol = args[0];
-
-    input = Molecule::Create(mol);
-
-    data = input->tearOffGetINCHIData();
-
-    data->GetInchi();
-
-    ret = GetResult(data);
-  } catch(...) {
-    ret = Object::New();
-
-    ret->Set(NanSymbol("code"), Number::New(inchi_Ret_UNKNOWN));
-  }
-
-  delete data;
-  delete input;
-
-  NanReturnValue(ret);
-};
 
 /**
  Constructs a molecule and calls the GetINCHI function.
