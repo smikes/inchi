@@ -55,9 +55,12 @@
         "src/inchi_atom.cc",
         "src/get_inchi.cc",
         "src/get_inchi_data.cc",
+        "src/get_inchi_worker.cc",
         "src/get_struct_from_inchi.cc",
+        "src/get_struct_from_inchi_data.cc",
+        "src/get_struct_from_inchi_worker.cc",
         "src/inchi_lock.cc",
-        "src/get_struct_from_inchi_data.cc"
+        "src/inchi_queue.cc"
       ],
       "conditions": [
         ['OS=="win"', {
@@ -80,7 +83,6 @@
         "src/molecule_native.cc",
         "src/get_inchi_data.cc",
         "src/get_struct_from_inchi_data.cc",
-        "src/inchi_lock.cc",
         "src/inchi_atom.cc"
       ],
       "include_dirs": [

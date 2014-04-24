@@ -12,6 +12,8 @@
 #include "./get_inchi_data.h"
 #include "./get_inchi_worker.h"
 
+#include "./inchi_queue.h"
+
 static char Molecule_id[] = "Molecule";
 static void * type_id = static_cast<void *>(Molecule_id);
 
@@ -71,7 +73,7 @@ NAN_METHOD(Molecule_wrap::GetInChI) {
 
   NanCallback * callback = new NanCallback(args[0].As<Function>());
 
-  NanAsyncQueueWorker(new GetINCHIWorker(callback, &(m->mol)));
+  Enqueue(new GetINCHIWorker(callback, &(m->mol)));
 
   NanReturnUndefined();
 }

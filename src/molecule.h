@@ -50,6 +50,4 @@ struct Molecule {
   static Molecule * Create(Handle<Value> val);
 };
 
-Handle<Object> GetResult(GetINCHIData * data);
-
 #endif  // SRC_MOLECULE_H_

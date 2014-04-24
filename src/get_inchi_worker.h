@@ -6,6 +6,13 @@
  * Released under the MIT license -- see MIT-LICENSE for details
  */
 
+#include <nan.h>
+
+#include "./molecule.h"
+#include "./get_inchi_data.h"
+
+#include "./inchi_queue.h"
+
 /**
    This class, derived from NanAsyncWorker, manages asynchronous
    calls to GetINCHI
@@ -45,6 +52,7 @@ struct GetINCHIWorker : public NanAsyncWorker {
 */
   void Execute() {
     data_->GetInchi();
+    QueueFinish();
   }
 
 /**
@@ -52,18 +60,7 @@ struct GetINCHIWorker : public NanAsyncWorker {
 
    @method HandleOKCallback
 */
-  void HandleOKCallback() {
-    NanScope();
-
-    Handle<Object> result = GetResult(data_);
-
-    Handle<Value> argv[] = {
-      NanNewLocal<Value>(v8::Null()),
-      NanNewLocal<Value>(result)
-    };
-
-    callback->Call(2, argv);
-  }
+  void HandleOKCallback();
 };
 
 #endif  // SRC_GET_INCHI_WORKER_H_

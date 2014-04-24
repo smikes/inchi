@@ -17,7 +17,6 @@
 #include "./molecule_wrap.h"
 #include "./get_inchi.h"
 #include "./get_struct_from_inchi.h"
-#include "./inchi_lock.h"
 
 /**
  * Direct wrapper of the low-level C++ api

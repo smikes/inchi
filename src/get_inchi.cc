@@ -12,6 +12,7 @@
 
 #include "./molecule.h"
 #include "./get_inchi_worker.h"
+#include "./inchi_queue.h"
 
 #include "inchi_dll/inchi_api.h"
 
@@ -112,7 +113,7 @@ NAN_METHOD(GetINCHI) {
 
     input = Molecule::Create(mol);
 
-    NanAsyncQueueWorker(new GetINCHIWorker(callback, input));
+    Enqueue(new GetINCHIWorker(callback, input));
   } catch(...) {
   }
 

@@ -13,6 +13,7 @@
 
 #include "./inchi_stereo.h"
 
+#include "./inchi_queue.h"
 
 void addstring(Handle<Object> ret, const char * name, const char * value);
 
@@ -23,7 +24,7 @@ NAN_METHOD(GetStructFromINCHI) {
 
   NanCallback * callback = new NanCallback(args[1].As<Function>());
 
-  NanAsyncQueueWorker(new GetStructFromINCHIWorker(callback, inchi));
+  Enqueue(new GetStructFromINCHIWorker(callback, inchi));
 
   delete[] inchi;
 

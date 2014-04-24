@@ -6,9 +6,11 @@
  * Released under the MIT license -- see MIT-LICENSE for details
  */
 
+#include <nan.h>
+
 #include <string>
 
-Handle<Object> MakeStructure(const GetStructFromINCHIData& data);
+#include "./inchi_queue.h"
 
 /**
    This class, derived from NanAsyncWorker, manages
@@ -43,24 +45,15 @@ struct GetStructFromINCHIWorker : public NanAsyncWorker {
   */
   void Execute() {
     data_.GetStructFromINCHI();
+    QueueFinish();
   }
 
   /**
      Constructs result value, passes it to callback
      @method
   */
-  void HandleOKCallback() {
-    NanScope();
+  void HandleOKCallback();
 
-    Handle<Object> result = MakeStructure(data_);
-
-    Handle<Value> argv[] = {
-      v8::Null(),
-      result
-    };
-
-    callback->Call(2, argv);
-  }
 };
 
 #endif  // SRC_GET_STRUCT_FROM_INCHI_WORKER_H_
