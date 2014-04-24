@@ -13,8 +13,7 @@
 Handle<Object> GetResult(GetINCHIData * data);
 void QueueFinish();
 
-void GetINCHIWorker::HandleOKCallback()
-{
+void GetINCHIWorker::HandleOKCallback() {
   NanScope();
 
   Handle<Object> result = GetResult(data_);

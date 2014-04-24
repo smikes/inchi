@@ -73,7 +73,6 @@ GetINCHIData::~GetINCHIData() {
    @return {RetValGetInchi} result code from GetINCHI API call
  */
 int GetINCHIData::GetInchi() {
-
   this->result_ = GetINCHI(&(this->in_), &(this->out_));
 
   if (this->result_ == inchi_Ret_OKAY ||
