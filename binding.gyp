@@ -47,7 +47,7 @@
         "deps/inchi/inchi.gyp:libINCHIAPI"
       ],
       "sources": [
-        "src/node-inchi.cc",
+        "src/node_inchi.cc",
         "src/molecule.cc",
         "src/atom.cc",
         "src/molecule_wrap.cc",
