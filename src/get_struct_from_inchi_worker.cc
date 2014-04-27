@@ -20,6 +20,8 @@ Handle<Object> MakeStructure(const GetStructFromINCHIData& data);
 void GetStructFromINCHIWorker::HandleOKCallback() {
   NanScope();
 
+  QueueFinish();
+
   Handle<Object> result = MakeStructure(data_);
 
   Handle<Value> argv[] = {
@@ -38,6 +40,4 @@ void GetStructFromINCHIWorker::Execute() {
     // TODO(SOM): would like to return result_ -- maybe on Error object?
     this->errmsg = strdup(data_.out_.szMessage);
   }
-
-  QueueFinish();
 }

@@ -52,7 +52,6 @@ struct GetINCHIWorker : public NanAsyncWorker {
 */
   void Execute() {
     data_->GetInchi();
-    QueueFinish();
   }
 
 /**

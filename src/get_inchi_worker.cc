@@ -11,10 +11,11 @@
 #include "./get_inchi_worker.h"
 
 Handle<Object> GetResult(GetINCHIData * data);
-void QueueFinish();
 
 void GetINCHIWorker::HandleOKCallback() {
   NanScope();
+
+  QueueFinish();
 
   Handle<Object> result = GetResult(data_);
 
