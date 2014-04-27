@@ -50,9 +50,7 @@ struct GetINCHIWorker : public NanAsyncWorker {
 
    @method Execute
 */
-  void Execute() {
-    data_->GetInchi();
-  }
+  void Execute();
 
 /**
    Constructs result value, passes it to callback

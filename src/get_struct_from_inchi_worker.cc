@@ -14,6 +14,7 @@
 #include "./get_struct_from_inchi_worker.h"
 
 #include "./inchi_queue.h"
+#include "./inchi_lock.h"
 
 Handle<Object> MakeStructure(const GetStructFromINCHIData& data);
 
@@ -33,7 +34,10 @@ void GetStructFromINCHIWorker::HandleOKCallback() {
 }
 
 void GetStructFromINCHIWorker::Execute() {
-  data_.GetStructFromINCHI();
+  {
+    Inchi_Global_Lock __lock;
+    data_.GetStructFromINCHI();
+  }
 
   if (data_.result_ != inchi_Ret_OKAY &&
       data_.result_ != inchi_Ret_WARNING) {

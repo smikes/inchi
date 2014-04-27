@@ -9,6 +9,7 @@
 #include "./using_v8.h"
 
 #include "./get_inchi_worker.h"
+#include "./inchi_lock.h"
 
 Handle<Object> GetResult(GetINCHIData * data);
 
@@ -25,4 +26,10 @@ void GetINCHIWorker::HandleOKCallback() {
   };
 
   callback->Call(2, argv);
+}
+
+void GetINCHIWorker::Execute() {
+  Inchi_Global_Lock __lock;
+
+  data_->GetInchi();
 }
