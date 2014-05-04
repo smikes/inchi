@@ -20,11 +20,16 @@ void addstring(Handle<Object> ret, const char * name, const char * value);
 NAN_METHOD(GetStructFromINCHI) {
   NanScope();
 
-  char * inchi = NanCString(args[0], 0);
+  size_t inchiLen = 0;
+  char * inchi =
+    reinterpret_cast<char *>(NanRawString(args[0], Nan::ASCII,
+                                          &inchiLen, NULL, 0, 0));
 
   NanCallback * callback = new NanCallback(args[1].As<Function>());
 
-  Enqueue(new GetStructFromINCHIWorker(callback, inchi));
+  std::string inchiS(inchi, inchiLen);
+
+  Enqueue(new GetStructFromINCHIWorker(callback, inchiS));
 
   delete[] inchi;
 
