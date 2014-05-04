@@ -22,6 +22,8 @@ doclint:
 
 test: cpptest jstest
 
+test-slow: jstest-slow
+
 jstest:
 	./node_modules/.bin/mocha
 
