@@ -79,7 +79,7 @@ Handle<Object> MakeStereo0D(const inchi_Stereo0D& stereo) {
 
   Local<Object> ret = NanNewLocal<Object>(Object::New());
 
-  Local<Array> neighbor = NanNewLocal<Array>(Array::New());
+  Local<Array> neighbor = NanNewLocal<Array>(Array::New(STEREO0D_NEIGHBORS));
   for (int i = 0; i < STEREO0D_NEIGHBORS; i += 1) {
     neighbor->Set(i, Number::New(stereo.neighbor[i]));
   }
@@ -117,8 +117,22 @@ Handle<Object> MakeStructure(const GetStructFromINCHIData& data) {
   // log
   addstring(ret, "log", data.out_.szLog);
 
+  // return code
+  ret->Set(NanSymbol("result"), Number::New(data.result_));
+
   // warning flags
-  // TODO(SOM): add these
+  Local<Array> flags = Array::New(2);
+  flags->Set(0, Array::New(2));
+  flags->Set(1, Array::New(2));
+
+  for (int x = 0; x < 2; x += 1) {
+    for (int y = 0; y < 2; y += 1) {
+      Local<Value> flag = Number::New(data.out_.WarningFlags[x][y]);
+      flags->Get(x).As<Array>()->Set(y, flag);
+    }
+  }
+
+  ret->Set(NanSymbol("WarningFlags"), flags);
 
   return scope.Close(ret);
 }
