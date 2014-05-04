@@ -21,8 +21,6 @@ Handle<Object> MakeStructure(const GetStructFromINCHIData& data);
 void GetStructFromINCHIWorker::HandleOKCallback() {
   NanScope();
 
-  QueueFinish();
-
   Handle<Object> result = MakeStructure(data_);
 
   Handle<Value> argv[] = {
