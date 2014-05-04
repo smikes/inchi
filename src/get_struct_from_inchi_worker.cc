@@ -32,14 +32,6 @@ void GetStructFromINCHIWorker::HandleOKCallback() {
 }
 
 void GetStructFromINCHIWorker::Execute() {
-  {
     Inchi_Global_Lock __lock;
     data_.GetStructFromINCHI();
-  }
-
-  if (data_.result_ != inchi_Ret_OKAY &&
-      data_.result_ != inchi_Ret_WARNING) {
-    // TODO(SOM): would like to return result_ -- maybe on Error object?
-    this->errmsg = strdup(data_.out_.szMessage);
-  }
 }
