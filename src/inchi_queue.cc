@@ -17,6 +17,3 @@ static std::deque<NanAsyncWorker *> queue;
 void Enqueue(NanAsyncWorker* w) {
   NanAsyncQueueWorker(w);
 }
-
-void QueueFinish() {
-}

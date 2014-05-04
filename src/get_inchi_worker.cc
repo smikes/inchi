@@ -16,8 +16,6 @@ Handle<Object> GetResult(GetINCHIData * data);
 void GetINCHIWorker::HandleOKCallback() {
   NanScope();
 
-  QueueFinish();
-
   Handle<Object> result = GetResult(data_);
 
   Handle<Value> argv[] = {
