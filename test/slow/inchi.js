@@ -5,11 +5,12 @@ var inchi = require('../../lib/inchi'),
     fs = require('fs'),
     byline = require('byline'),
     util = require('util'),
-    molfile = require('molfile');
+    molfile = require('molfile'),
+    Molecule = require('ichem-molecule');
 
 describe('inchi-slow', function () {
     function roundTrip(i1, done) {
-        inchi.Molecule.fromInchi(i1, function (e1, mol) {
+        Molecule.fromInchi(i1, function (e1, mol) {
             mol.getInchi(function (e2, i2) {
 
                 if (i1 !== i2) {
