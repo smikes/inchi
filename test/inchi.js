@@ -1,9 +1,12 @@
 require('should');
 var inchi = require('../lib/inchi'),
-    molfile = require('molfile');
+    molfile = require('molfile'),
+    Molecule = require('ichem-molecule');
+
+
 
 function roundTrip(i1, done) {
-    inchi.Molecule.fromInchi(i1, function (e1, mol) {
+    Molecule.fromInchi(i1, function (e1, mol) {
         mol.getInchi(function (e2, i2) {
 
             if (i1 !== i2) {
@@ -47,46 +50,8 @@ describe('inchi', function () {
     });
 
     describe('Molecule', function () {
-        it('should create a new molecule', function () {
-            var m = new inchi.Molecule();
-        });
-        it('should add some atoms', function () {
-            var m = new inchi.Molecule();
-
-            m.addAtom({elname: 'C'});
-
-            (m.atoms.length).should.be.exactly(1);
-            (m.atoms[0]).should.have.property('elname', 'C');
-        });
-        it('should make bonds', function () {
-            var m = new inchi.Molecule();
-
-            m.addAtom('C');
-            m.addAtom('O');
-            m.addBond(0, 1);
-
-            (m.bonds.length).should.be.exactly(1);
-        });
-        it('should record default order of 1 for bonds', function () {
-            var m = new inchi.Molecule();
-
-            m.addAtom({elname: 'C'});
-            m.addAtom({elname: 'O'});
-            m.addBond(0, 1);
-
-            (m.bonds[0]).order.should.be.exactly(1);
-        });
-        it('should record order for bonds', function () {
-            var m = new inchi.Molecule();
-
-            m.addAtom({elname: 'C'});
-            m.addAtom({elname: 'O'});
-            m.addBond(0, 1, 2);
-
-            (m.bonds[0]).order.should.be.exactly(2);
-        });
         it('should retrieve InChI code for methane', function (done) {
-            var m = new inchi.Molecule();
+            var m = new Molecule();
 
             m.addAtom({elname: 'C'});
 
@@ -96,7 +61,7 @@ describe('inchi', function () {
             });
         });
         it('should retrieve InChI code for methanol', function (done) {
-            var m = new inchi.Molecule();
+            var m = new Molecule();
 
             m.addAtom('C');
             m.addAtom('O');
@@ -109,7 +74,7 @@ describe('inchi', function () {
         });
 
         it('should retrieve InChI code for formaldehyde', function (done) {
-            var m = new inchi.Molecule();
+            var m = new Molecule();
 
             m.addAtom('C');
             m.addAtom('O');
@@ -122,7 +87,7 @@ describe('inchi', function () {
         });
 
         it('should retrieve InChI code for acetylene', function (done) {
-            var m = new inchi.Molecule();
+            var m = new Molecule();
 
             m.addAtom('C');
             m.addAtom('C');
@@ -135,7 +100,7 @@ describe('inchi', function () {
         });
 
         it('should retrieve InChI code for benzene', function (done) {
-            var m = new inchi.Molecule();
+            var m = new Molecule();
 
             m.addAtom('C');
             m.addAtom('C');
@@ -157,7 +122,7 @@ describe('inchi', function () {
         });
 
         it('should retrieve InChI code for argon', function (done) {
-            var m = new inchi.Molecule;
+            var m = new Molecule;
 
             m.addAtom({ x: 10.2967, y: -1.5283, z: -15283, elname: 'Ar' });
             m.getInchi(function (err, i) {
@@ -167,7 +132,7 @@ describe('inchi', function () {
         });
 
         it('should convert InChI code to molecule', function (done) {
-            inchi.Molecule.fromInchi('InChI=1S/CH4O/c1-2/h2H,1H3', function (err, mol) {
+            Molecule.fromInchi('InChI=1S/CH4O/c1-2/h2H,1H3', function (err, mol) {
                 (mol.atomCount()).should.be.exactly(2);
                 (mol.atoms[0]).should.have.property('elname', "C");
                 (mol.atoms[1]).should.have.property('elname', "O");
@@ -178,14 +143,14 @@ describe('inchi', function () {
 
         describe('reporting errors from invalid inchi codes', function () {
             it('should fail on invalid atom', function (done) {
-                inchi.Molecule.fromInchi('InChI=1S/Cz', function (err, mol) {
+                Molecule.fromInchi('InChI=1S/Cz', function (err, mol) {
                     (err).should.not.equal(null);
                     done();
                 });
             });
 
             it('should fail on illegal bonds', function (done) {
-                inchi.Molecule.fromInchi('InChI=1S/C/c1-3', function (err, mol) {
+                Molecule.fromInchi('InChI=1S/C/c1-3', function (err, mol) {
                     (err).should.not.equal(null);
                     done();
                 });
@@ -249,7 +214,7 @@ describe('inchi', function () {
         });
 
         it('should handle isotopes specified directly', function (done) {
-            var m = new inchi.Molecule;
+            var m = new Molecule;
 
             m.addAtom('C');
             m.addAtom({elname: 'H', isotopic_mass: 2});
@@ -262,7 +227,7 @@ describe('inchi', function () {
         });
 
         it('should handle isotopes specified by shift', function (done) {
-            var m = new inchi.Molecule;
+            var m = new Molecule;
 
             m.addAtom('C');
             m.addAtom({elname: 'H', isotopic_mass: 1 + inchi.ISOTOPIC_SHIFT_FLAG});
@@ -275,7 +240,7 @@ describe('inchi', function () {
         });
 
         it('should handle isotopes specified by iso_H', function (done) {
-            var m = new inchi.Molecule;
+            var m = new Molecule;
 
             m.addAtom('C');
             m.atoms[0].num_iso_H = [3, 0, 1, 0];
@@ -289,7 +254,7 @@ describe('inchi', function () {
 
     describe('ill-formed molecule', function () {
         it('should complain about bonds between nonexistent atoms', function () {
-            var m = new inchi.Molecule();
+            var m = new Molecule();
 
             m.addAtom('C');
             m.addAtom('C');
@@ -352,7 +317,7 @@ describe('inchi', function () {
             });
         });
         it('should handle a copper-lawrencium bond', function (done) {
-            var m = new inchi.Molecule;
+            var m = new Molecule;
             m.addAtom('Cu');
             m.addAtom('Lr');
             m.addBond(0, 1);
@@ -363,7 +328,7 @@ describe('inchi', function () {
             });
         });
         it('should handle zwitterions_1.#002', function (done) {
-            var m = new inchi.Molecule();
+            var m = new Molecule();
             m.addAtom('C');
             m.addAtom('C');
             m.addAtom({elname: 'N', charge: 1});
@@ -397,7 +362,7 @@ describe('inchi', function () {
         });
         it('should generate the right inchi from ylide_to_dbond_effect.#001', function (done) {
             var expected = 'InChI=1S/C3H9NOS/c1-3-4(2,5)6/h6H,3H2,1-2H3/t4-/m0/s1',
-                m = new inchi.Molecule();
+                m = new Molecule();
 
             m.addAtom({elname: 'N', x: 6.3, y: -4.8, charge: 1});
             m.addAtom({elname: 'O', x: 8.7, y: -4.8, charge: -1});
