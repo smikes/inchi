@@ -41,7 +41,6 @@ NAN_METHOD(getAlgorithmVersion) {
 
 void register_functions(Handle<Object> exports) {
   NODE_SET_METHOD(exports, "getAlgorithmVersion", getAlgorithmVersion);
-  NODE_SET_METHOD(exports, "GetINCHI", GetINCHI);
   NODE_SET_METHOD(exports, "GetInChIFromMolecule", GetInChIFromMolecule);
   NODE_SET_METHOD(exports, "GetStructFromINCHI", GetStructFromINCHI);
 }
