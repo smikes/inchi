@@ -28,7 +28,7 @@ describe('inchilib', function () {
             function callback(err, result) {
                 (result.inchi).should.startWith('InChI=1S/CH4O/c1-2/h2H,1H3');
                 (result.auxinfo).should.startWith('AuxInfo=1/0/N:1,2/rA:2CO');
-                (result.code).should.be.exactly(inchilib.inchi_Ret_OKAY);
+                (result.result).should.be.exactly(inchilib.inchi_Ret_OKAY);
                 (result.message).should.equal(''); // no error message
                 (result.log).should.startWith('Generating standard InChI\nInput format: MOLfile\n' +
                                               'Output format: Plain text\nFull Aux. info\n' +

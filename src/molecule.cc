@@ -93,7 +93,7 @@ static void populate_ret(Handle<Object> ret,
   addstring(ret, "auxinfo", out.szAuxInfo);
   addstring(ret, "message", out.szMessage);
   addstring(ret, "log", out.szLog);
-  ret->Set(NanSymbol("code"), Number::New(result));
+  ret->Set(NanSymbol("result"), Number::New(result));
 }
 
 Handle<Object> GetResult(GetINCHIData * data) {
