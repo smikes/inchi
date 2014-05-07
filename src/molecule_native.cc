@@ -104,6 +104,13 @@ struct make_bond {
   void operator()(const InchiBond& bond) {
     int from = bond.from;
 
+    // clamp array index to legitimate values
+    if (from < 0) {
+      from = 0;
+    } else if (from >= in->num_atoms) {
+      from = in->num_atoms - 1;
+    }
+
     AT_NUM& num_bonds = in->atom[from].num_bonds;
 
     in->atom[from].neighbor[num_bonds]    = bond.to;
