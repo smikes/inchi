@@ -30,15 +30,15 @@
     "istanbul": "~0.2.1",
     "jslint": "~0.2.8",
     "mocha": "~1.16.2",
-    "molfile": "~0.0.3",
+    "molfile": "~0.0.5",
     "node-cpplint": "~0.1.5",
     "should": "~3.0.0",
     "tap": "~0.4.8",
     "yuidocjs": "~0.3.47",
-    "ichem-molecule": "~0.0.0"
+    "ichem-molecule": "~0.0.2"
   },
   "optionalDependencies": {
-    "ichem-molecule": "~0.0.0"
+    "ichem-molecule": "~0.0.2"
   },
   "dependencies": {
     "bindings": "~1.1.1",

@@ -155,6 +155,18 @@ describe('invalid inputs to GetStructFromINCHI', function () {
             });
         });
 
+        it('should fail gracefully when stereo is invalid (2)', function (done) {
+            inchilib.GetINCHI({
+                atoms: [{elname: 'C'}],
+                stereo0D: ['foo']
+            }, function (err, struct) {
+                (struct.result).should.equal(inchi.inchilib.inchi_Ret_WARNING);
+                (struct.inchi).should.equal('InChI=1S/CH4/h1H4');
+                (struct.message).should.match(/Wrong 0D stereo descriptor/);
+                done();
+            });
+        });
+
         it('should fail gracefully when stereo refers to nonexistent atom', function (done) {
             var mol = {
                 atoms: [{elname: 'C'}],
@@ -189,6 +201,47 @@ describe('invalid inputs to GetStructFromINCHI', function () {
             inchilib.GetINCHI(mol, function (err, struct) {
                 (struct.result).should.equal(inchi.inchilib.inchi_Ret_ERROR);
                 (struct.message).should.match(/Too many atoms/);
+                done();
+            });
+        });
+
+        it('should fail gracefully when bond to nonexistent atom', function (done) {
+            var mol = {
+                atoms: [{elname: 'C'}, {elname: 'C'}],
+                bonds:[],
+                stereo0D: []
+            };
+
+            mol.bonds.push({from: 0, to: 2, order: 1});
+
+            inchilib.GetINCHI(mol, function (err, struct) {
+                (struct.result).should.equal(inchi.inchilib.inchi_Ret_FATAL);
+                (struct.message).should.match(/Bond to nonexistent atom/);
+                done();
+            });
+        });
+
+        it('should fail gracefully when too many bonds', function (done) {
+            var mol = {
+                atoms: [{elname: 'C'}],
+                bonds:[],
+                stereo0D: []
+            };
+
+            for (var i = 0; i < 1022; i += 1) {
+                mol.atoms.push(mol.atoms[0]);
+            }
+
+            for (var i = 2; i < 1019; i += 1) {
+                mol.bonds.push({from: i, to: i-2, order: 1});
+                mol.bonds.push({from: i, to: i-1, order: 1});
+                mol.bonds.push({from: i, to: i+1, order: 1});
+                mol.bonds.push({from: i, to: i+2, order: 1});
+            }
+
+            inchilib.GetINCHI(mol, function (err, struct) {
+                (struct.result).should.equal(inchi.inchilib.inchi_Ret_WARNING);
+                (struct.message).should.match(/Omitted undefined stereo/);
                 done();
             });
         });
