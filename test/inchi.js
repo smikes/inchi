@@ -312,7 +312,7 @@ describe('inchi', function () {
                 mol = molfile.parseMol(String(file)),
                 m = inchi.moleculeFromMolfile(mol);
 
-            inchi.inchilib.GetInChIFromMolecule(m, function (err, inchi) {
+            inchi.inchilib.GetINCHI(m, function (err, inchi) {
                 done();
             });
         });
@@ -349,8 +349,8 @@ describe('inchi', function () {
 
             (m.atoms.length).should.equal(4);
 
-            m.getInchi(function (err, i) {
-                i.should.equal('InChI=1S/C2H4N2/c1-2-4-3/h3H,1H3');
+            inchi.inchilib.GetINCHI(m, function (err, r) {
+                (r.inchi).should.equal('InChI=1S/C2H4N2/c1-2-4-3/h3H,1H3');
                 done();
             });
         });
