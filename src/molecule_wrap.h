@@ -11,8 +11,8 @@
 #include "./molecule.h"
 #include "./using_v8.h"
 
-struct Molecule_wrap : public node::ObjectWrap {
-  Molecule_wrap() {}
+struct Molecule_wrap {
+  explicit Molecule_wrap(Handle<Value> in);
   ~Molecule_wrap() {}
 
   void addAtoms(Handle<Value> atoms);

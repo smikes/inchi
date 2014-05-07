@@ -16,23 +16,39 @@
 
 #include "./node_inchi.h"
 
+template<typename T> T getIf(Handle<Object> atom, const char * k) {
+  Handle<String> key = NanSymbol(k);
+  return atom->Has(key) ? T(atom->Get(key)->NumberValue()) : 0;
+}
+
+template<typename T> T getIf(Handle<Object> atom, uint32_t key) {
+  return atom->Has(key) ? T(atom->Get(key)->NumberValue()) : 0;
+}
+
+
+
 NAN_METHOD(GetINCHI) {
   NanScope();
 
-  Handle<Object> in = args[0]->ToObject();
   NanCallback * callback = new NanCallback(args[1].As<Function>());
 
-  Molecule_wrap * m = new Molecule_wrap;
-
-  m->addAtoms(in->Get(NanSymbol("atoms")));
-
-  m->addBonds(in->Get(NanSymbol("bonds")));
-
-  m->addStereo(in->Get(NanSymbol("stereo0D")));
+  Molecule_wrap * m = new Molecule_wrap(args[0]);
 
   Enqueue(new GetINCHIWorker(callback, &(m->mol)));
 
+  delete m;
+
   NanReturnUndefined();
+}
+
+Molecule_wrap::Molecule_wrap(Handle<Value> obj) {
+  Handle<Object> in = obj->ToObject();
+
+  addAtoms(in->Get(NanSymbol("atoms")));
+
+  addBonds(in->Get(NanSymbol("bonds")));
+
+  addStereo(in->Get(NanSymbol("stereo0D")));
 }
 
 void Molecule_wrap::addAtoms(Handle<Value> a) {
@@ -46,15 +62,6 @@ void Molecule_wrap::addAtoms(Handle<Value> a) {
   }
 }
 
-template<typename T> T getIf(Handle<Object> atom, const char * k) {
-  Handle<String> key = NanSymbol(k);
-  return atom->Has(key) ? T(atom->Get(key)->NumberValue()) : 0;
-}
-
-template<typename T> T getIf(Handle<Object> atom, uint32_t key) {
-  return atom->Has(key) ? T(atom->Get(key)->NumberValue()) : 0;
-}
-
 const InchiAtom InchiAtom_makeFromObject(Handle<Object> atom) {
   char * elname = NanCString(atom->Get(NanSymbol("elname")), 0);
   InchiAtom ret(elname);
@@ -63,8 +70,6 @@ const InchiAtom InchiAtom_makeFromObject(Handle<Object> atom) {
   ret.data_.x = getIf<double>(atom, "x");
   ret.data_.y = getIf<double>(atom, "y");
   ret.data_.z = getIf<double>(atom, "z");
-
-  // ignore bond information; stored separately
 
   Handle<Array> num_iso_H = atom->Get(NanSymbol("num_iso_H")).As<Array>();
   if (!num_iso_H->IsNull() && !num_iso_H->IsUndefined()) {
@@ -83,23 +88,30 @@ const InchiAtom InchiAtom_makeFromObject(Handle<Object> atom) {
 void Molecule_wrap::addBonds(Handle<Value> b) {
   Handle<Array> bonds = b.As<Array>();
 
-  // bonds is an array of v8::Object
+  if (bonds->IsNull() || bonds->IsUndefined()) {
+    return;
+  }
+
   for (uint32_t i = 0; i < bonds->Length(); i += 1) {
     Handle<Object> bond = bonds->Get(i)->ToObject();
 
-    int from  = bond->Get(NanSymbol("from"))->NumberValue();
-    int to    = bond->Get(NanSymbol("to"))->NumberValue();
-    int order = bond->Get(NanSymbol("order"))->NumberValue();
-
-    InchiBond b = (order ? InchiBond(from, to, order) : InchiBond(from, to));
-
-    if (bond->Has(NanSymbol("stereo"))) {
-      int stereo = bond->Get(NanSymbol("stereo"))->NumberValue();
-      b.stereo = stereo;
-    }
-
-    mol.addBond(b);
+    mol.addBond(InchiBond_makeFromObject(bond));
   }
+}
+
+const InchiBond InchiBond_makeFromObject(Handle<Object> bond) {
+  int from  = bond->Get(NanSymbol("from"))->NumberValue();
+  int to    = bond->Get(NanSymbol("to"))->NumberValue();
+  int order = bond->Get(NanSymbol("order"))->NumberValue();
+
+  InchiBond b = (order ? InchiBond(from, to, order) : InchiBond(from, to));
+
+  if (bond->Has(NanSymbol("stereo"))) {
+    int stereo = bond->Get(NanSymbol("stereo"))->NumberValue();
+    b.stereo = stereo;
+  }
+
+  return b;
 }
 
 void Molecule_wrap::addStereo(Handle<Value> s) {
