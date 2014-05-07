@@ -22,6 +22,6 @@ struct Molecule_wrap : public node::ObjectWrap {
   Molecule mol;
 };
 
-NAN_METHOD(GetInChIFromMolecule);
+NAN_METHOD(GetINCHI);
 
 #endif  // SRC_MOLECULE_WRAP_H_

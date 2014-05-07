@@ -6,13 +6,8 @@
  * Released under the MIT license -- see MIT-LICENSE for details
  */
 
-#include <node.h>
-#include <v8.h>
-
 #include <vector>
 #include <string>
-
-#include "./using_v8.h"
 
 #include "inchi_dll/inchi_api.h"
 
@@ -35,19 +30,14 @@ struct Molecule {
     return addAtom(InchiAtom(atom));
   }
   InchiAtom& getAtom(int i);
-
   AT_NUM getAtomCount();
 
   void addBond(const InchiBond& b);
-
   void addStereo(const InchiStereo& s);
 
   GetINCHIData * tearOffGetINCHIData();
 
   static Molecule * fromInchi(const std::string& inchi);
-
-  /* javascript api */
-  static Molecule * Create(Handle<Value> val);
 };
 
 #endif  // SRC_MOLECULE_H_

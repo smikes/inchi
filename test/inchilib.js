@@ -15,32 +15,6 @@ describe('inchilib', function () {
         });
     });
 
-    describe('GetINCHI', function () {
-
-        it('should convert simple molecules correctly, asynchronously', function (done) {
-            var methanol = {
-                atom: [
-                    { elname: 'C', neighbor: [1] },
-                    { elname: 'O', neighbor: [0] }
-                ]
-            };
-
-            function callback(err, result) {
-                (result.inchi).should.startWith('InChI=1S/CH4O/c1-2/h2H,1H3');
-                (result.auxinfo).should.startWith('AuxInfo=1/0/N:1,2/rA:2CO');
-                (result.result).should.be.exactly(inchilib.inchi_Ret_OKAY);
-                (result.message).should.equal(''); // no error message
-                (result.log).should.startWith('Generating standard InChI\nInput format: MOLfile\n' +
-                                              'Output format: Plain text\nFull Aux. info\n' +
-                                              'No timeoutUp to 1024 atoms per structure');
-
-                done();
-            }
-
-            inchilib.GetINCHI(methanol, callback);
-        });
-    });
-
     describe('GetStructFromINCHI', function () {
         it('should be a function', function () {
             (inchilib.GetStructFromINCHI).should.be.a.Function;

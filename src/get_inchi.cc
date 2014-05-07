@@ -79,20 +79,24 @@ void register_GetINCHI_return_codes(Handle<Object> exports) {
  This is an asynchronous version of the GetINCHI API suitable
  for general use.
 
- The second argument passed to callback value is an Object containing the the result code of
+ The second argument passed to callback is an Object containing the the result code of
  calling GetINCHI.  If the computation was successful, there will
  be additional members with the InChI string, InChIKey, etc.
  See {{#crossLink "GetINCHIResult"}}GetINCHIResult{{/crossLink}} for
  full documentation
 
  @method GetINCHI
- @for InChILib
+ @for inchilib
  @param {Object} molecule Object defining the molecule, in the format
 
      var methanol = {
-         atom: [
-            { 'elname': 'C', neighbor: [1] },
+         atoms: [
+            { 'elname': 'C' },
             { 'elname': 'O' }
+         ],
+         bonds: [
+         ],
+         stereo0D: [
          ]
      };
 
@@ -100,27 +104,6 @@ void register_GetINCHI_return_codes(Handle<Object> exports) {
  @param {String} callback.err Error encountered during the operation
  @param {GetINCHIResult} callback.output Object containing result of GetINCHI
  */
-NAN_METHOD(GetINCHI) {
-  NanScope();
-
-  Molecule * input = NULL;
-  Handle<Object> ret;
-
-  try {
-    // TODO(SOM): validate args
-    Handle<Value> mol = args[0];
-    NanCallback * callback = new NanCallback(args[1].As<Function>());
-
-    input = Molecule::Create(mol);
-
-    Enqueue(new GetINCHIWorker(callback, input));
-  } catch(...) {
-  }
-
-  delete input;
-
-  NanReturnUndefined();
-};
 
 /**
  The GetINCHIResult Object will always contain a ``code`` member which
@@ -132,7 +115,7 @@ NAN_METHOD(GetINCHI) {
  When the ``code`` represents an error, the ``message`` member may be
  present, giving more information about the error.
 
- @module InChILib
+ @module inchilib
  @class GetINCHIResult
  */
 /**

@@ -37,8 +37,6 @@ struct InchiStereo {
   explicit InchiStereo(const inchi_Stereo0D& s) : data_(s) {
   }
 
-  static const InchiStereo makeFromObject(Handle<Object>);
-
   operator const inchi_Stereo0D() {
     return data_;
   }

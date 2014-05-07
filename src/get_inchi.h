@@ -10,8 +10,6 @@
 
 #include "./using_v8.h"
 
-NAN_METHOD(GetINCHI);
-
 void register_GetINCHI_return_codes(Handle<Object> exports);
 
 #endif  // SRC_GET_INCHI_H_

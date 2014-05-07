@@ -16,7 +16,7 @@
 
 #include "./node_inchi.h"
 
-NAN_METHOD(GetInChIFromMolecule) {
+NAN_METHOD(GetINCHI) {
   NanScope();
 
   Handle<Object> in = args[0]->ToObject();
@@ -112,11 +112,11 @@ void Molecule_wrap::addStereo(Handle<Value> s) {
   for (uint32_t i = 0; i < stereos->Length(); i += 1) {
     Handle<Object> stereo = stereos->Get(i)->ToObject();
 
-    mol.addStereo(InchiStereo::makeFromObject(stereo));
+    mol.addStereo(InchiStereo_makeFromObject(stereo));
   }
 }
 
-const InchiStereo InchiStereo::makeFromObject(Handle<Object> stereo) {
+const InchiStereo InchiStereo_makeFromObject(Handle<Object> stereo) {
   InchiStereo ret;
 
   Local<Array> neighbors = stereo->Get(NanSymbol("neighbor")).As<Array>();
