@@ -8,6 +8,8 @@ var inchi = require('../../lib/inchi'),
     molfile = require('molfile'),
     Molecule = require('ichem-molecule');
 
+Molecule.extendWith('inchi', inchi);
+
 describe('inchi-slow', function () {
     function roundTrip(i1, done) {
         Molecule.fromInchi(i1, function (e1, mol) {
