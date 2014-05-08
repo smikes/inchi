@@ -1,6 +1,6 @@
 {
   "name": "inchi",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "International Chemical Identifier (InChI) for node.js programs",
   "main": "lib/inchi.js",
   "scripts": {
@@ -35,10 +35,7 @@
     "should": "~3.0.0",
     "tap": "~0.4.8",
     "yuidocjs": "~0.3.47",
-    "ichem-molecule": "~0.0.2"
-  },
-  "optionalDependencies": {
-    "ichem-molecule": "~0.0.2"
+    "ichem-molecule": "~0.0.3"
   },
   "dependencies": {
     "bindings": "~1.1.1",
